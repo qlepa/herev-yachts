@@ -1,0 +1,35 @@
+[
+  {
+    "id": "warsaw-01",
+    "name": "Herev Warsaw",
+    "city": "Warsaw",
+    "country": "PL",
+    "address": "ul. Wiertnicza 1, 02-952 Warszawa",
+    "lat": 52.1645,
+    "lng": 21.0764,
+    "brandKeys": ["galeon", "saxdor"],
+    "dealerId": "dealer-01"
+  },
+  {
+    "id": "gdynia-01",
+    "name": "Herev Gdynia",
+    "city": "Gdynia",
+    "country": "PL",
+    "address": "ul. Portowa 12, 81-350 Gdynia",
+    "lat": 54.5189,
+    "lng": 18.5305,
+    "brandKeys": ["galeon", "parker", "chris-craft"],
+    "dealerId": "dealer-01"
+  },
+  {
+    "id": "mallorca-01",
+    "name": "Herev Mallorca",
+    "city": "Palma de Mallorca",
+    "country": "ES",
+    "address": "Passeig Marítim 12, 07014 Palma",
+    "lat": 39.5696,
+    "lng": 2.6502,
+    "brandKeys": ["saxdor", "de-antonio"],
+    "dealerId": "dealer-01"
+  }
+]

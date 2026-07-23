@@ -1,0 +1,21 @@
+---
+interface Props {
+  href: string;
+  on?: 'paper' | 'ink';
+  class?: string;
+}
+
+const { href, on = 'paper', class: cls } = Astro.props;
+const color = on === 'ink' ? 'text-gilt' : 'text-teal';
+---
+
+<a
+  href={href}
+  class:list={[
+    'font-mono font-semibold text-[13px] tracking-mono inline-flex items-center gap-1 hover:opacity-80 transition-opacity',
+    color,
+    cls,
+  ]}
+>
+  <slot />
+</a>

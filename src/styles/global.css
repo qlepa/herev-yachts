@@ -1,5 +1,89 @@
 @import "tailwindcss";
 
+@import "@fontsource-variable/fraunces/wght.css";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "@fontsource/ibm-plex-mono/700.css";
+
 @theme {
-  /* tokeny z design-handoffu wejdą tutaj w kroku 2 */
+  /* === COLOUR === */
+  --color-ink:   #0F252E;
+  --color-paper: #ECEFEE;
+  --color-white: #FFFFFF;
+  --color-teal:  #2C6E77;
+  --color-brass: #94702F;
+  --color-gilt:  #C9A45E;
+  --color-mist:  #C6CDCC;
+
+  /* Alpha tokens — used as var() in components; Tailwind cannot generate
+     scan-time utilities from rgba() values. */
+  --color-line:        rgba(15,37,46,.14);
+  --color-line-strong: rgba(15,37,46,.28);
+  --color-ink-70:      rgba(15,37,46,.70);
+  --color-ink-55:      rgba(15,37,46,.55);
+  --color-paper-72:    rgba(236,239,238,.72);
+  --color-line-on-ink: rgba(236,239,238,.14);
+
+  /* === TYPOGRAPHY === */
+  --font-display: 'Fraunces Variable', serif;
+  --font-body:    'Inter Variable', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', monospace;
+
+  /* Type scale */
+  --text-hero:  4rem;       /* 64px */
+  --text-h1:    3.25rem;    /* 52px */
+  --text-h2:    2.25rem;    /* 36px */
+  --text-h3:    1.5rem;     /* 24px */
+  --text-title: 1.25rem;    /* 20px */
+  --text-lg:    1.0625rem;  /* 17px */
+  --text-body:  0.9375rem;  /* 15px */
+  --text-sm:    0.875rem;   /* 14px */
+  --text-label: 0.6875rem;  /* 11px */
+  --text-micro: 0.625rem;   /* 10px */
+
+  /* Letter spacing */
+  --tracking-wordmark: 0.24em;
+  --tracking-label:    0.30em;
+  --tracking-mono:     0.16em;
+  --tracking-tight:   -0.01em;
+
+  /* === SPACING — named semantic tokens (Tailwind default scale untouched) === */
+  --spacing-gutter:  2.75rem;   /* 44px — page horizontal gutter */
+  --spacing-section: 4.375rem;  /* 70px — section vertical rhythm */
+
+  /* === RADIUS === */
+  --radius-cta:  2px;
+  --radius-soft: 6px;
+  --radius-pill: 999px;
+
+  /* === ELEVATION === */
+  --shadow-card:  0 24px 60px -30px rgba(15,37,46,.50);
+  --shadow-panel: 0 30px 70px -34px rgba(15,37,46,.55);
+
+  /* === MOTION === */
+  --ease-herev:     cubic-bezier(.2,.6,.2,1);
+  --duration-image: 0.8s;
+  --duration-hero:  9s;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    line-height: 1.65;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    line-height: 1.08;
+    letter-spacing: var(--tracking-tight);
+  }
 }

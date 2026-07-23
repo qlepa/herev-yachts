@@ -1,0 +1,36 @@
+---
+interface Props {
+  brandNames: string[];
+  awardsLine?: string;
+}
+
+const { brandNames, awardsLine } = Astro.props;
+---
+
+<section class="bg-ink py-10">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+
+    <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
+      {brandNames.map((name, i) => (
+        <>
+          <span
+            class="font-display text-white uppercase tracking-[.16em] select-none"
+            style="font-size: 17px; font-weight: 380;"
+          >
+            {name}
+          </span>
+          {i < brandNames.length - 1 && (
+            <span class="text-[var(--color-line-on-ink)] font-mono text-[18px]">·</span>
+          )}
+        </>
+      ))}
+    </div>
+
+    {awardsLine && (
+      <p class="font-mono text-micro tracking-mono text-center text-[var(--color-paper-72)] opacity-50 mt-6 uppercase">
+        {awardsLine}
+      </p>
+    )}
+
+  </div>
+</section>

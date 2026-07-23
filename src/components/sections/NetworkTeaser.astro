@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import TextLink from '../ui/TextLink.astro';
+
+interface Stat {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  stats: Stat[];
+  image: ImageMetadata;
+  imageAlt: string;
+  imageCaption: string;
+  linkLabel: string;
+  linkHref: string;
+}
+
+const { eyebrow, heading, body, stats, image, imageAlt, imageCaption, linkLabel, linkHref } =
+  Astro.props;
+---
+
+<section class="bg-paper py-section">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+
+      <!-- Text + stats -->
+      <div>
+        <SectionLabel text={eyebrow} class="mb-4" />
+        <h2 class="font-display text-h2 text-ink mb-5" style="font-weight: 400;">
+          {heading}
+        </h2>
+        <p class="text-[var(--color-ink-70)] text-body leading-relaxed mb-10 max-w-[420px]">
+          {body}
+        </p>
+
+        <!-- Stats trio -->
+        <div class="grid grid-cols-3 gap-6 mb-10" style="border-top: 1px solid var(--color-line);">
+          {stats.map((stat) => (
+            <div class="pt-6">
+              <span
+                class="font-display text-ink block mb-1"
+                style="font-size: 2.5rem; font-weight: 360; line-height: 1;"
+              >
+                {stat.value}
+              </span>
+              <span class="font-mono font-bold text-label tracking-label text-[var(--color-ink-55)] uppercase">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        <TextLink href={linkHref}>{linkLabel}</TextLink>
+      </div>
+
+      <!-- Image -->
+      <div class="relative overflow-hidden" style="aspect-ratio: 4/3;">
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[600, 1000]}
+          sizes="(min-width: 768px) 50vw, 100vw"
+          loading="lazy"
+          class="w-full h-full object-cover"
+        />
+        <p
+          class="absolute bottom-4 left-4 font-mono font-bold text-white text-micro tracking-mono uppercase"
+          style="text-shadow: 0 1px 4px rgba(15,37,46,.6);"
+        >
+          {imageCaption}
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>

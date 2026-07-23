@@ -1,0 +1,14 @@
+---
+interface Props {
+  text: string;
+  on?: 'paper' | 'ink';
+  class?: string;
+}
+
+const { text, on = 'paper', class: cls } = Astro.props;
+const color = on === 'ink' ? 'text-gilt' : 'text-brass';
+---
+
+<p class:list={['font-mono font-bold text-label tracking-label uppercase', color, cls]}>
+  {text}
+</p>

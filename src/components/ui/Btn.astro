@@ -1,0 +1,32 @@
+---
+interface Props {
+  variant: 'gilt' | 'ink' | 'white' | 'ghost' | 'outline';
+  href?: string;
+  type?: 'button' | 'submit';
+  disabled?: boolean;
+  class?: string;
+}
+
+const { variant, href, type = 'button', disabled, class: cls } = Astro.props;
+
+const base =
+  'inline-flex items-center gap-3 px-[26px] py-[15px] font-body font-semibold text-sm rounded-soft transition-colors cursor-pointer';
+
+const variants: Record<Props['variant'], string> = {
+  gilt:    'bg-gilt text-ink hover:bg-[#b8923d]',
+  ink:     'bg-ink text-white hover:bg-[#1a3a47]',
+  white:   'bg-white text-ink hover:bg-paper',
+  ghost:   'bg-white/10 border border-white/40 text-white hover:bg-white/20',
+  outline: 'bg-paper border border-[var(--color-line-strong)] font-mono font-semibold text-[13px]',
+};
+---
+
+{href ? (
+  <a href={href} class:list={[base, variants[variant], cls]}>
+    <slot />
+  </a>
+) : (
+  <button type={type} disabled={disabled} class:list={[base, variants[variant], cls]}>
+    <slot />
+  </button>
+)}

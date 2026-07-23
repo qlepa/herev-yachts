@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import HeroSection from '../../components/sections/HeroSection.astro';
+import FleetStrip from '../../components/sections/FleetStrip.astro';
+import TrustBand from '../../components/sections/TrustBand.astro';
+import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
+import LeadModule from '../../components/sections/LeadModule.astro';
+import NetworkTeaser from '../../components/sections/NetworkTeaser.astro';
+import StickyMobileCta from '../../components/StickyMobileCta.astro';
+import { getLocalePaths, type Locale } from '../../lib/i18n';
+import { getTranslations } from '../../lib/i18n-strings';
+import { getYachtHero } from '../../lib/images';
+import { metresToFeet } from '../../lib/format';
+import type { CategoryKey } from '../../content.config';
+import locations from '../../data/locations.json';
+import homepageHero from '../../assets/site/homepage-hero.jpeg';
+import marinaPic from '../../assets/site/cannes-marina.avif';
+import leadPic from '../../assets/site/lead-image.avif';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = getTranslations(lang);
+
+const brandDisplayMap: Record<string, string> = {
+  galeon:       'GALEON',
+  parker:       'PARKER',
+  saxdor:       'SAXDOR',
+  'de-antonio': 'DE ANTONIO',
+  'chris-craft': 'CHRIS-CRAFT',
+};
+
+const brandOrder: Record<string, number> = {
+  galeon: 1, parker: 2, saxdor: 3, 'de-antonio': 4, 'chris-craft': 5,
+};
+
+const featuredYachts = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && e.data.featured && !e.data.draft,
+);
+
+featuredYachts.sort(
+  (a, b) => (brandOrder[a.data.brand] ?? 9) - (brandOrder[b.data.brand] ?? 9),
+);
+
+const yachtCards = await Promise.all(
+  featuredYachts.map(async (y) => ({
+    translationKey: y.data.translationKey,
+    name:           y.data.name,
+    brandDisplay:   brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase(),
+    loaM:           y.data.lengthM,
+    loaFt:          metresToFeet(y.data.lengthM),
+    priceEur:       y.data.priceEur,
+    categoryLabel:  y.data.category
+      ? t.categories[y.data.category as CategoryKey]
+      : undefined,
+    image:          await getYachtHero(y.data.translationKey, y.data.draft),
+    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+  })),
+);
+
+const countryCount = new Set(locations.map((l) => l.country)).size;
+const networkStats = [
+  { value: String(locations.length), label: t.network.locations },
+  { value: '5',                      label: t.network.brands },
+  { value: String(countryCount),     label: t.network.countries },
+];
+---
+
+<Layout lang={lang} title={t.meta.title} description={t.meta.description}>
+
+  <SiteHeader
+    lang={lang}
+    variant="transparent"
+    currentPath={`/${lang}/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    <HeroSection
+      eyebrow={t.hero.eyebrow}
+      heading={t.hero.heading}
+      subtext={t.hero.subtext}
+      cta1Label={t.hero.cta1}
+      cta1Href={`/${lang}/brands/`}
+      cta2Label={t.hero.cta2}
+      cta2Href={`/${lang}/yachts/`}
+      image={homepageHero}
+      imageAlt="A Saxdor yacht under way on open water"
+    />
+
+    <FleetStrip
+      yachts={yachtCards}
+      eyebrow={t.fleet.eyebrow}
+      heading={t.fleet.heading}
+      subheading={t.fleet.subheading}
+      viewAllLabel={t.fleet.viewAll}
+      viewAllHref={`/${lang}/yachts/`}
+      enquireLabel={t.fleet.enquire}
+      priceOnRequestLabel={t.fleet.priceOnRequest}
+    />
+
+    <TrustBand
+      brandNames={['GALEON', 'PARKER', 'SAXDOR', 'DE ANTONIO', 'CHRIS-CRAFT']}
+    />
+
+    <AdvisoryGrid
+      eyebrow={t.advisory.eyebrow}
+      heading={t.advisory.heading}
+      steps={t.advisory.steps}
+    />
+
+    <LeadModule
+      eyebrow={t.lead.eyebrow}
+      heading={t.lead.heading}
+      subtext={t.lead.subtext}
+      ctaLabel={t.lead.cta}
+      image={leadPic}
+      imageAlt="Galeon yacht cockpit interior"
+      orCallLabel={t.lead.orCall}
+      fallbackContact={t.lead.fallbackContact}
+      namePlaceholder={t.lead.namePlaceholder}
+      contactPlaceholder={t.lead.contactPlaceholder}
+      modelPlaceholder={t.lead.modelPlaceholder}
+      messagePlaceholder={t.lead.messagePlaceholder}
+    />
+
+    <NetworkTeaser
+      eyebrow={t.network.eyebrow}
+      heading={t.network.heading}
+      body={t.network.body}
+      stats={networkStats}
+      image={marinaPic}
+      imageAlt="Marina with yachts at sunset"
+      imageCaption={t.network.imageCaption}
+      linkLabel={t.network.linkLabel}
+      linkHref={`/${lang}/network/`}
+    />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+  <StickyMobileCta
+    enquireLabel={t.nav.enquire}
+    callLabel={t.nav.call}
+    callNumber="+48 800 100 200"
+    enquireHref={`/${lang}/#lead`}
+  />
+
+</Layout>

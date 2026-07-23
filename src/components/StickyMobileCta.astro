@@ -1,0 +1,34 @@
+---
+interface Props {
+  enquireLabel: string;
+  callLabel: string;
+  callNumber: string;
+  enquireHref: string;
+}
+
+const { enquireLabel, callLabel, callNumber, enquireHref } = Astro.props;
+---
+
+<div
+  class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-[var(--color-line)]"
+  style="height: 72px;"
+  aria-label="Quick actions"
+>
+  <div class="flex h-full">
+    <a
+      href={enquireHref}
+      class="flex-1 flex items-center justify-center bg-gilt font-body font-semibold text-sm text-ink"
+    >
+      {enquireLabel}
+    </a>
+    <a
+      href={`tel:${callNumber.replace(/\s/g, '')}`}
+      class="flex-1 flex items-center justify-center bg-ink font-body font-semibold text-sm text-white border-l border-[var(--color-line-on-ink)]"
+    >
+      {callLabel}
+    </a>
+  </div>
+</div>
+
+<!-- Spacer so footer is not hidden behind sticky bar on mobile -->
+<div class="h-[72px] md:hidden" aria-hidden="true" />

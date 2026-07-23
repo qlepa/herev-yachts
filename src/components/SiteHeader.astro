@@ -1,0 +1,122 @@
+---
+import type { Locale } from '../lib/i18n';
+import { LOCALES } from '../lib/i18n';
+import type { NavStrings } from '../lib/i18n-strings';
+import Btn from './ui/Btn.astro';
+
+interface Props {
+  lang: Locale;
+  variant: 'transparent' | 'ink';
+  currentPath: string;
+  nav: NavStrings;
+}
+
+const { lang, variant, currentPath, nav } = Astro.props;
+
+const headerClass =
+  variant === 'transparent'
+    ? 'absolute top-0 left-0 right-0 z-20 text-white'
+    : 'sticky top-0 z-20 bg-ink text-white shadow-panel';
+
+const navLinks = [
+  { label: nav.fleet,   href: `/${lang}/yachts/` },
+  { label: nav.brands,  href: `/${lang}/brands/` },
+  { label: nav.compare, href: `/${lang}/compare/` },
+  { label: nav.network, href: `/${lang}/network/` },
+  { label: nav.journal, href: `/${lang}/journal/` },
+];
+
+const langLabels: Record<Locale, string> = {
+  en: 'EN', pl: 'PL', es: 'ES', it: 'IT', ru: 'RU',
+};
+---
+
+<header class={headerClass}>
+  <div class="max-w-[1440px] mx-auto px-gutter flex items-center justify-between h-[72px]">
+
+    <!-- Wordmark -->
+    <a
+      href={`/${lang}/`}
+      class="font-display text-[22px] tracking-wordmark uppercase font-light leading-none shrink-0"
+      style="font-weight: 340;"
+    >
+      HEREV
+    </a>
+
+    <!-- Desktop nav -->
+    <nav class="hidden md:flex items-center gap-7" aria-label="Main navigation">
+      {navLinks.map(({ label, href }) => (
+        <a
+          href={href}
+          class:list={[
+            'font-body text-sm font-medium transition-opacity hover:opacity-70',
+            currentPath === href ? 'opacity-100' : 'opacity-80',
+          ]}
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+
+    <!-- Desktop: lang switcher + CTA -->
+    <div class="hidden md:flex items-center gap-6 shrink-0">
+      <div class="flex items-center gap-[6px] font-mono text-micro tracking-mono opacity-60">
+        {LOCALES.map((l, i) => (
+          <>
+            <a
+              href={`/${l}/`}
+              class:list={[
+                'hover:opacity-100 transition-opacity',
+                l === lang ? 'opacity-100 font-bold' : 'opacity-60',
+              ]}
+            >
+              {langLabels[l]}
+            </a>
+            {i < LOCALES.length - 1 && <span class="opacity-30">·</span>}
+          </>
+        ))}
+      </div>
+      <Btn variant={variant === 'transparent' ? 'white' : 'gilt'} href={`/${lang}/#lead`}>
+        {nav.enquire}
+      </Btn>
+    </div>
+
+    <!-- Mobile: hamburger (CSS-only) -->
+    <details class="md:hidden relative">
+      <summary
+        class="list-none cursor-pointer w-10 h-10 flex flex-col justify-center gap-[6px] items-center"
+        aria-label="Open navigation"
+      >
+        <span class="block w-6 h-px bg-current"></span>
+        <span class="block w-6 h-px bg-current"></span>
+        <span class="block w-6 h-px bg-current"></span>
+      </summary>
+      <nav
+        class="absolute right-0 top-12 bg-ink text-white min-w-[200px] flex flex-col py-4 shadow-panel z-30"
+        aria-label="Mobile navigation"
+      >
+        {navLinks.map(({ label, href }) => (
+          <a href={href} class="px-6 py-3 font-body text-sm hover:bg-white/10 transition-colors">
+            {label}
+          </a>
+        ))}
+        <div class="border-t border-[var(--color-line-on-ink)] mt-2 pt-2 px-6">
+          <a href={`/${lang}/#lead`} class="block py-3 font-semibold text-gilt">
+            {nav.enquire}
+          </a>
+        </div>
+        <div class="flex gap-3 px-6 py-2 font-mono text-micro tracking-mono opacity-60">
+          {LOCALES.map((l) => (
+            <a
+              href={`/${l}/`}
+              class:list={['hover:opacity-100', l === lang ? 'opacity-100 font-bold' : '']}
+            >
+              {langLabels[l]}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </details>
+
+  </div>
+</header>

@@ -1,0 +1,70 @@
+---
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import TextLink from '../ui/TextLink.astro';
+import FleetCard from '../FleetCard.astro';
+
+interface YachtCardData {
+  translationKey: string;
+  name: string;
+  brandDisplay: string;
+  loaM: number;
+  loaFt: string;
+  priceEur?: number;
+  categoryLabel?: string;
+  image: ImageMetadata | null;
+  href: string;
+}
+
+interface Props {
+  yachts: YachtCardData[];
+  eyebrow: string;
+  heading: string;
+  subheading: string;
+  viewAllLabel: string;
+  viewAllHref: string;
+  enquireLabel: string;
+  priceOnRequestLabel: string;
+}
+
+const { yachts, eyebrow, heading, subheading, viewAllLabel, viewAllHref, enquireLabel, priceOnRequestLabel } =
+  Astro.props;
+---
+
+<section class="py-section bg-paper overflow-hidden">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+      <div>
+        <SectionLabel text={eyebrow} class="mb-3" />
+        <h2 class="font-display text-h2 text-ink" style="font-weight: 400;">
+          {heading}
+        </h2>
+        <p class="text-[var(--color-ink-70)] text-body mt-3 max-w-[480px]">{subheading}</p>
+      </div>
+      <TextLink href={viewAllHref} class="shrink-0 self-start md:self-auto">
+        {viewAllLabel}
+      </TextLink>
+    </div>
+
+    <!-- Cards — horizontally scrollable on mobile, row on desktop -->
+    <div class="flex flex-col gap-6 md:flex-row md:gap-5 md:overflow-x-auto md:pb-4 -mx-gutter px-gutter">
+      {yachts.map((yacht) => (
+        <FleetCard
+          name={yacht.name}
+          brandDisplay={yacht.brandDisplay}
+          loaM={yacht.loaM}
+          loaFt={yacht.loaFt}
+          priceEur={yacht.priceEur}
+          categoryLabel={yacht.categoryLabel}
+          image={yacht.image}
+          href={yacht.href}
+          enquireLabel={enquireLabel}
+          priceOnRequestLabel={priceOnRequestLabel}
+        />
+      ))}
+    </div>
+
+  </div>
+</section>

@@ -5,31 +5,45 @@ docs/kontrakt-api-lead.md, docs/kontrakt-locations.md.
 Cel MVP: demo do dyskusji z biznesem (scope / tech / wizual).
 Bez ram czasowych — liczy się kompletność poniższych kroków.
 
-## Krok 1 — szkielet
+## Krok 1 — szkielet ✅ DONE
 
-Astro + strict TS, deploy Vercel od pierwszego commita, i18n
-(pl/en/de, lokalizowane slugi), content collections: yachts, brands,
-dealers (semantyka pól jak niżej) + locations
-(docs/kontrakt-locations.md), fixtures, helper obrazów (brak hero.jpg
-opublikowanego jachtu = błąd builda), CI: build + typecheck na PR.
+Astro + strict TS, deploy Vercel via GitHub integration (adapter
+lokalnie dodany w kroku 5), i18n (en/pl/es/it/ru, lokalizowane slugi),
+content collections: yachts, brands, dealers (semantyka pól jak niżej)
++ locations (docs/kontrakt-locations.md), fixtures, helper obrazów
+(brak hero.jpg opublikowanego jachtu = błąd builda),
+CI: build + typecheck + test na PR.
 
-Blokujące TODO (pyta user): klucze 5 brandów, potwierdzenie locale
-`de`, źródło danych lokalizacji.
+Decyzje zrealizowane: brandy = galeon, parker, saxdor, de-antonio,
+chris-craft; locale de zastąpiony przez es/it/ru; lokalizacje = 3
+demo-showroomy w locations.json.
 
 Semantyka pól (zamrożona): jacht wymagane translationKey, name,
 brand (enum), year, lengthM, cabins; opcjonalne beamM, draftM, berths,
-maxSpeedKn, priceEur, muxPlaybackId, seo{title<=60, description<=160};
-featured default false, draft DEFAULT TRUE. Brak priceEur = "cena na
-zapytanie", filtr cenowy pomija. Brand: brandKey, name, tagline<=120,
-website?, muxPlaybackId?, defaultDealer, order, seo. Dealer: dealerId,
-name, email, phone?, brands[], pipedriveOptionLabel; niepubliczny.
+maxSpeedKn, priceEur, muxPlaybackId, category (enum: flybridge|hardtop|
+open|weekender|day|grand-tourer|runabout — dodane w kroku 2, surowa
+wartość w content, uppercase+separator+tłumaczenie w UI),
+seo{title<=60, description<=160}; featured default false,
+draft DEFAULT TRUE. Brak priceEur = "cena na zapytanie", filtr cenowy
+pomija. Brand: brandKey, name, tagline<=120, website?, muxPlaybackId?,
+defaultDealer, order, seo. Dealer: dealerId, name, email, phone?,
+brands[], pipedriveOptionLabel; niepubliczny.
 
 ## Krok 2 — strona główna jako poligon design systemu
 
-Wejście: wybrany przez usera kierunek wizualny (referencje/prototyp)
-w briefie. Implementacja landingu na fixtures i RÓWNOLEGLE ekstrakcja
-design systemu: tokeny (typografia, paleta, spacing) + komponenty
-bazowe (layout, header/footer, hero, karta, sekcja, przycisk, CTA).
+Wejście: docs/design-handoff/ — tokeny, spec komponentów i mockupy
+stron z Claude Design (referencja wizualna; przy konflikcie
+generycznych instrukcji z bundle'a z CLAUDE.md wygrywa CLAUDE.md).
+
+Zadanie 1: migracja tokenów z handoffu do @theme
+w src/styles/global.css — od tego momentu @theme jest jedynym
+źródłem prawdy stylów, handoff pozostaje read-only.
+
+Zadanie 2: implementacja landingu wg mockupu, na fixtures,
+i RÓWNOLEGLE ekstrakcja design systemu: komponenty bazowe (layout,
+header/footer, hero, karta, sekcja, przycisk, CTA) stylowane
+wyłącznie tokenami z @theme.
+
 Zero client JS. Premium = typografia + whitespace. Pipeline obrazów
 wg budżetów od pierwszego zdjęcia. Mux: player na hero (poster jako
 LCP). KRYTERIUM WYJŚCIA: podstronę brandu da się złożyć z istniejących
@@ -54,6 +68,8 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 
 ## Krok 5 — wyspy + endpoint
 
+- Przywrócić @astrojs/vercel adapter (usunięty w kroku 1 dla
+  static-only buildu; wymagany dla endpointów SSR) + output: 'server'.
 - Filtr jachtów: client:visible, dane jako props z builda, stan w URL
   query params. Pole tekstowe wyszukiwania: dopasowanie po
   name/brand (placeholder funkcjonalny, bez rozbudowy).
@@ -82,18 +98,18 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 
 Sitemap per locale, canonicale, hreflang (po translationKey),
 schema.org (Product/Offer, Organization, BreadcrumbList,
-LocalBusiness), OG images, GA4 + baner zgód w 3 językach (Consent
+LocalBusiness), OG images, GA4 + baner zgód w 5 językach (Consent
 Mode v2, zero beaconów przed zgodą).
 
 ## Krok 8 — hardening + seed demo
 
 Edge case'y /api/lead, Lighthouse >= 95 mobile, test formularza
-i porównywarki w 3 językach. Seed danych demo: jachty per brand,
+i porównywarki w 5 językach. Seed danych demo: jachty per brand,
 lokalizacje świat (realne showroomy z publicznych stron brandów,
 jeśli dane produkcyjne nie dotarły) — na preview deploy, nie prod.
 
 ## Poza MVP — nie implementuj, nie przygotowuj
 
-Języki 4-6, konfigurator, newsletter, pełnotekstowa wyszukiwarka
+Konfigurator, newsletter, pełnotekstowa wyszukiwarka
 z podpowiedziami, automatyczny routing regionalny leadów, blog w 3.
 języku, preview mode Sanity, browser geolocation.

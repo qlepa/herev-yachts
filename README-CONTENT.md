@@ -19,9 +19,11 @@ językowe.
 
 ```
 yachts/
-  pl/aurora-42.md
   en/aurora-42.md
-  de/aurora-42.md
+  pl/aurora-42.md
+  es/aurora-42.md
+  it/aurora-42.md
+  ru/aurora-42.md
 zdjecia/
   aurora-42/
     hero.jpg
@@ -64,8 +66,8 @@ przezroczystym tle) i `hero.jpg`.
 
 ## Terminy integracyjne
 
-- Komplet treści PL: **[DATA — uzupełnia dev, koniec kroku 3]**
-- Tłumaczenia EN + trzeci język: **[DATA — ok. dnia 26]**
+- Komplet treści PL + EN: **[DATA — uzupełnia dev, koniec kroku 3]**
+- Tłumaczenia ES + IT + RU: **[DATA — ok. dnia 26]**
 
 Jacht/brand bez wersji językowej po terminie = ta wersja językowa
 startuje bez niego i dochodzi po premierze. Strona się przez to

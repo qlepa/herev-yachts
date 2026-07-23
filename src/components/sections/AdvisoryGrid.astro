@@ -1,0 +1,53 @@
+---
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Step {
+  number: string;
+  title: string;
+  body: string;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  steps: Step[];
+}
+
+const { eyebrow, heading, steps } = Astro.props;
+---
+
+<section class="py-section bg-paper">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+
+    <SectionLabel text={eyebrow} class="mb-4" />
+    <h2
+      class="font-display text-h2 text-ink max-w-[560px] mb-12"
+      style="font-weight: 400;"
+    >
+      {heading}
+    </h2>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-3 gap-0"
+      style="border-top: 1px solid var(--color-line-strong);"
+    >
+      {steps.map((step) => (
+        <div class="pt-8 pb-10 md:pr-10 border-b md:border-b-0 border-[var(--color-line)]">
+          <span
+            class="font-mono font-bold text-brass block mb-4"
+            style="font-size: 11px; letter-spacing: .30em;"
+          >
+            {step.number}
+          </span>
+          <h3 class="font-display text-h3 text-ink mb-3" style="font-weight: 400;">
+            {step.title}
+          </h3>
+          <p class="text-[var(--color-ink-70)] text-body leading-relaxed">
+            {step.body}
+          </p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

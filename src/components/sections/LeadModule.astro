@@ -1,0 +1,131 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import Btn from '../ui/Btn.astro';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  subtext: string;
+  ctaLabel: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  callNumber?: string;
+  orCallLabel: string;
+  fallbackContact: string;
+  namePlaceholder: string;
+  contactPlaceholder: string;
+  modelPlaceholder: string;
+  messagePlaceholder: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  subtext,
+  ctaLabel,
+  image,
+  imageAlt,
+  callNumber,
+  orCallLabel,
+  fallbackContact,
+  namePlaceholder,
+  contactPlaceholder,
+  modelPlaceholder,
+  messagePlaceholder,
+} = Astro.props;
+
+const inputBase =
+  'w-full bg-transparent border-b border-[rgba(236,239,238,.3)] text-white placeholder-white/40 py-3 px-0 text-sm font-body focus:outline-none focus:border-white/60 transition-colors';
+---
+
+<section id="lead" class="bg-ink text-white">
+  <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-2">
+
+    <!-- Image (left, 42%) -->
+    <div class="relative hidden md:block" style="min-height: 560px;">
+      <Image
+        src={image}
+        alt={imageAlt}
+        widths={[600, 900]}
+        sizes="42vw"
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0"
+        style="background: linear-gradient(90deg, transparent 60%, rgba(15,37,46,.6) 100%);"
+      />
+    </div>
+
+    <!-- Form (right) -->
+    <div class="px-gutter py-14 md:py-20">
+      <SectionLabel text={eyebrow} on="ink" class="mb-5" />
+      <h2
+        class="font-display text-h2 text-white mb-4 max-w-[420px]"
+        style="font-weight: 400;"
+      >
+        {heading}
+      </h2>
+      <p class="text-[var(--color-paper-72)] text-body leading-relaxed mb-10 max-w-[380px]">
+        {subtext}
+      </p>
+
+      <!--
+        Step 2: form is visual only — submit is disabled.
+        Endpoint + Turnstile added in Step 5.
+      -->
+      <form aria-label="Enquiry form" novalidate>
+        <div class="space-y-6 mb-8">
+          <input
+            type="text"
+            name="name"
+            placeholder={namePlaceholder}
+            autocomplete="name"
+            class={inputBase}
+          />
+          <input
+            type="text"
+            name="contact"
+            placeholder={contactPlaceholder}
+            autocomplete="email"
+            class={inputBase}
+          />
+          <input
+            type="text"
+            name="model"
+            placeholder={modelPlaceholder}
+            class={inputBase}
+          />
+          <textarea
+            name="message"
+            placeholder={messagePlaceholder}
+            rows="3"
+            class={`${inputBase} resize-none`}
+          />
+        </div>
+
+        <Btn variant="gilt" type="submit" disabled class="w-full justify-center">
+          {ctaLabel}
+        </Btn>
+
+        <p class="text-[var(--color-paper-72)] text-micro font-mono tracking-mono mt-4 text-center uppercase">
+          {/* Form submission active in Step 5 · */}
+          <a href={`mailto:${fallbackContact}`} class="underline hover:text-gilt transition-colors">
+            {fallbackContact}
+          </a>
+          {callNumber && (
+            <>
+              {' '}· {orCallLabel}{' '}
+              <a href={`tel:${callNumber.replace(/\s/g, '')}`} class="underline hover:text-gilt transition-colors">
+                {callNumber}
+              </a>
+            </>
+          )}
+        </p>
+      </form>
+    </div>
+
+  </div>
+</section>
