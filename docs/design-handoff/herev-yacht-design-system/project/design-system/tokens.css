@@ -1,0 +1,83 @@
+/* HEREV Design System — Design Tokens
+ * v1.0 · Architectural-editorial meets precision-instrument.
+ * Consume: import "./tokens.css"; then use var(--herev-*).
+ * Namespace --herev-* to avoid collisions in a host app.
+ */
+:root{
+  /* ── Colour · core ─────────────────────────────── */
+  --herev-ink:          #0F252E;   /* Sea Ink   — primary dark: headers, footers, lead modules */
+  --herev-paper:        #ECEFEE;   /* Chart Paper — primary light surface */
+  --herev-white:        #FFFFFF;   /* card surface */
+  --herev-teal:         #2C6E77;   /* Water Teal — links, secondary accent */
+  --herev-brass:        #94702F;   /* Brass — labels, the waterline motif, accents on light */
+  --herev-gilt:         #C9A45E;   /* Gilt — primary CTA, accents on ink */
+  --herev-mist:         #C6CDCC;   /* canvas / page backdrop */
+
+  /* ── Colour · lines & alphas on ink ────────────── */
+  --herev-line:         rgba(15,37,46,.14);   /* hairline divider on light */
+  --herev-line-strong:  rgba(15,37,46,.28);   /* input border, emphatic rule */
+  --herev-ink-70:       rgba(15,37,46,.70);   /* body text on paper */
+  --herev-ink-55:       rgba(15,37,46,.55);   /* muted mono labels on paper */
+  --herev-paper-72:     rgba(236,239,238,.72);/* body text on ink */
+  --herev-line-on-ink:  rgba(236,239,238,.14);/* divider on ink */
+
+  /* ── Type · families ───────────────────────────── */
+  --herev-font-display: 'Fraunces', serif;              /* headings, wordmark */
+  --herev-font-body:    'Inter', system-ui, sans-serif; /* running text, UI */
+  --herev-font-mono:    'IBM Plex Mono', monospace;        /* specs, labels, the "instrument" voice */
+
+  /* ── Type · scale (px) ─────────────────────────── */
+  --herev-text-hero:  64px;   /* homepage h1 */
+  --herev-text-h1:    52px;   /* model detail h1 */
+  --herev-text-h2:    36px;   /* section heads */
+  --herev-text-h3:    24px;   /* sub-heads */
+  --herev-text-title: 20px;   /* card titles */
+  --herev-text-lg:    17px;   /* lead paragraph */
+  --herev-text-body:  15px;   /* body */
+  --herev-text-sm:    14px;   /* dense body / UI */
+  --herev-text-label: 11px;   /* mono eyebrow */
+  --herev-text-micro: 10px;   /* mono caption */
+
+  /* ── Type · weight ─────────────────────────────── */
+  --herev-w-display-light: 340;  /* wordmark, hero */
+  --herev-w-display:       400;  /* headings */
+  --herev-w-display-med:   450;  /* card titles */
+  --herev-w-body:          400;
+  --herev-w-medium:        500;
+  --herev-w-semibold:      600;  /* CTAs, nav */
+  --herev-w-mono-bold:     700;
+
+  /* ── Type · tracking (letter-spacing) ──────────── */
+  --herev-track-wordmark: .24em;  /* HEREV caps */
+  --herev-track-label:    .30em;  /* mono eyebrows */
+  --herev-track-mono:     .16em;  /* mono captions */
+  --herev-track-tight:   -.01em;  /* large Fraunces heads */
+
+  /* ── Space scale (px) ──────────────────────────── */
+  --herev-space-1:  4px;
+  --herev-space-2:  8px;
+  --herev-space-3:  12px;
+  --herev-space-4:  16px;
+  --herev-space-5:  20px;
+  --herev-space-6:  26px;
+  --herev-space-7:  34px;
+  --herev-space-8:  44px;   /* page gutter */
+  --herev-space-9:  56px;
+  --herev-space-10: 70px;   /* section rhythm */
+  --herev-space-11: 90px;
+
+  /* ── Radius — the house is sharp ───────────────── */
+  --herev-radius-none: 0;      /* default: everything squares off */
+  --herev-radius-cta:  2px;    /* mobile CTAs */
+  --herev-radius-soft: 6px;    /* form controls — softened boxed inputs */
+  --herev-radius-pill: 999px;
+
+  /* ── Elevation ─────────────────────────────────── */
+  --herev-shadow-card:  0 24px 60px -30px rgba(15,37,46,.50);
+  --herev-shadow-panel: 0 30px 70px -34px rgba(15,37,46,.55);
+
+  /* ── Motion ────────────────────────────────────── */
+  --herev-ease:       cubic-bezier(.2,.6,.2,1);
+  --herev-dur-image:  .8s;   /* image hover scale */
+  --herev-dur-hero:   9s;    /* hero ken-burns */
+}

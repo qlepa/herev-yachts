@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#C6CDCC;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#2C6E77;text-decoration:none}
+a:hover{color:#94702F}
+::selection{background:#C9A45E;color:#0F252E}
+img{display:block}
+input,button,textarea,select{font-family:inherit}
+button{cursor:pointer}
+</style>
+</helmet>
+
+<div style="--ink:#0F252E;--paper:#ECEFEE;--brass:#94702F;--gilt:#C9A45E;--teal:#2C6E77;--white:#fff;--line:rgba(15,37,46,.14);--line2:rgba(15,37,46,.28);color:var(--ink);padding:56px 40px 110px;display:flex;flex-direction:column;align-items:center;gap:2px">
+
+<div style="width:1120px;max-width:100%;background:var(--paper);border:1px solid var(--line);box-shadow:0 30px 70px -34px rgba(15,37,46,.55)">
+
+  <!-- ===== MASTHEAD ===== -->
+  <div style="display:flex;align-items:stretch;border-bottom:1px solid var(--line2)">
+    <div style="flex:1;padding:60px 60px 54px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:24px;justify-content:center">
+      <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.34em;color:var(--brass)">THE DESIGN SYSTEM · v1.0</div>
+      <div>
+        <div style="font-family:'Fraunces',serif;font-weight:340;font-size:72px;line-height:.9;letter-spacing:.22em;text-indent:.22em">HEREV</div>
+        <svg viewBox="0 0 380 12" width="300" height="10" style="display:block;margin:18px 0 12px" preserveAspectRatio="none">
+          <path d="M0 6 H150 q10 0 20 -4 q10 4 20 4 H380" fill="none" stroke="#94702F" stroke-width="1.2"></path>
+          <line x1="0" y1="2" x2="0" y2="10" stroke="#94702F" stroke-width="1.2"></line>
+          <line x1="380" y1="2" x2="380" y2="10" stroke="#94702F" stroke-width="1.2"></line>
+        </svg>
+        <div style="font:400 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:rgba(15,37,46,.6)">EST. MMXXIV · AUTHORISED REPRESENTATION</div>
+      </div>
+      <p style="margin:0;font-size:15px;line-height:1.7;max-width:440px;color:rgba(15,37,46,.72);text-wrap:pretty">Architectural editorial meets precision instrument. Deep sea ink, brass and gilt, a single teal. Fraunces for display, Inter for text, IBM&nbsp;Plex&nbsp;Mono as the house instrument voice. This page is the canonical reference — tokens live beside it in <span style="font:700 12px 'IBM Plex Mono',monospace">/design-system</span>.</p>
+    </div>
+    <div style="flex:0 0 300px;background:var(--ink);color:var(--paper);padding:44px 40px;display:flex;flex-direction:column;justify-content:space-between">
+      <div style="font:700 10px/1.8 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--gilt)">CONTENTS</div>
+      <div style="display:flex;flex-direction:column;gap:11px;font:400 12px/1 'IBM Plex Mono',monospace;letter-spacing:.06em;color:rgba(236,239,238,.82)">
+        <span>01 · COLOUR</span>
+        <span>02 · TYPOGRAPHY</span>
+        <span>03 · SPACE · RADIUS · ELEVATION</span>
+        <span>04 · THE WATERLINE MOTIF</span>
+        <span>05 · BUTTONS</span>
+        <span>06 · FORM CONTROLS</span>
+        <span>07 · CARDS &amp; SPEC ROW</span>
+        <span>08 · CONSUMING THE TOKENS</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 01 COLOUR ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:30px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">01</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Colour</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)">
+      <sc-for list="{{ colors }}" as="c" hint-placeholder-count="6">
+        <div style="background:var(--paper);padding:0">
+          <div style="{{ c.swatch }}">
+            <span style="font:700 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;opacity:.85">{{ c.name }}</span>
+            <span style="font:400 13px 'IBM Plex Mono',monospace">{{ c.hex }}</span>
+          </div>
+          <div style="padding:14px 16px 18px;display:flex;flex-direction:column;gap:7px">
+            <span style="font:700 11px/1 'IBM Plex Mono',monospace;color:var(--teal);letter-spacing:.04em">{{ c.token }}</span>
+            <span style="font-size:12.5px;line-height:1.55;color:rgba(15,37,46,.66)">{{ c.role }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="margin-top:22px;display:flex;gap:20px;flex-wrap:wrap">
+      <sc-for list="{{ lines }}" as="l" hint-placeholder-count="2">
+        <div style="display:flex;align-items:center;gap:12px">
+          <span style="width:54px;height:34px;background:var(--white);border:1px solid var(--line);position:relative"><span style="{{ l.bar }}"></span></span>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <span style="font:700 11px 'IBM Plex Mono',monospace;color:var(--teal)">{{ l.token }}</span>
+            <span style="font-size:11.5px;color:rgba(15,37,46,.6)">{{ l.role }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ===== 02 TYPOGRAPHY ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:34px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">02</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Typography</h2>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0;border-top:1px solid var(--line2)">
+      <!-- Fraunces -->
+      <div style="display:flex;gap:40px;padding:28px 0;border-bottom:1px solid var(--line)">
+        <div style="flex:0 0 190px;display:flex;flex-direction:column;gap:8px">
+          <span style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass)">DISPLAY</span>
+          <span style="font-family:'Fraunces',serif;font-weight:450;font-size:20px">Fraunces</span>
+          <span style="font:400 11px/1.6 'IBM Plex Mono',monospace;color:rgba(15,37,46,.6)">--herev-font-display<br>wght 340 · 360 · 400 · 450<br>track −.01em on large heads</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center">
+          <div style="font-family:'Fraunces',serif;font-weight:360;font-size:54px;line-height:1;letter-spacing:-.01em">The sea, on your terms.</div>
+          <div style="font-family:'Fraunces',serif;font-weight:400;font-size:32px;line-height:1">A short, deliberate selection</div>
+        </div>
+      </div>
+      <!-- Inter -->
+      <div style="display:flex;gap:40px;padding:28px 0;border-bottom:1px solid var(--line)">
+        <div style="flex:0 0 190px;display:flex;flex-direction:column;gap:8px">
+          <span style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass)">BODY</span>
+          <span style="font-weight:600;font-size:20px">Inter</span>
+          <span style="font:400 11px/1.6 'IBM Plex Mono',monospace;color:rgba(15,37,46,.6)">--herev-font-body<br>wght 400 · 500 · 600<br>lg 17 / body 15 / sm 14</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:10px;justify-content:center;max-width:560px">
+          <p style="margin:0;font-size:17px;line-height:1.6;color:rgba(15,37,46,.82)">Considered, quiet, precise — the grotesque carries every line of running text and every piece of interface copy.</p>
+          <p style="margin:0;font-size:14px;line-height:1.6;color:rgba(15,37,46,.66)">Secondary and dense copy sits at 14px. Weight 600 marks CTAs and navigation; 500 for links; 400 for prose.</p>
+        </div>
+      </div>
+      <!-- IBM Plex Mono -->
+      <div style="display:flex;gap:40px;padding:28px 0">
+        <div style="flex:0 0 190px;display:flex;flex-direction:column;gap:8px">
+          <span style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass)">INSTRUMENT</span>
+          <span style="font:700 20px 'IBM Plex Mono',monospace">IBM Plex Mono</span>
+          <span style="font:400 11px/1.6 'IBM Plex Mono',monospace;color:rgba(15,37,46,.6)">--herev-font-mono<br>labels · specs · captions<br>track .16em – .34em</span>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:14px;justify-content:center">
+          <div style="font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.30em;color:var(--brass)">AUTHORISED REPRESENTATION · FIVE ATELIERS</div>
+          <div style="font:700 16px/1.6 'IBM Plex Mono',monospace;color:var(--ink)">LOA 15.65 m&nbsp;&nbsp;·&nbsp;&nbsp;BEAM 4.55 m&nbsp;&nbsp;·&nbsp;&nbsp;32 KN</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 03 SPACE / RADIUS / ELEVATION ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:34px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">03</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Space · Radius · Elevation</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:48px">
+      <!-- spacing -->
+      <div>
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass);margin-bottom:18px">SPACE SCALE · 4px BASE</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <sc-for list="{{ spaces }}" as="s" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:16px">
+              <span style="{{ s.bar }}"></span>
+              <span style="font:700 11px 'IBM Plex Mono',monospace;color:var(--teal);width:120px">{{ s.token }}</span>
+              <span style="font:400 11px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55)">{{ s.note }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <!-- radius + elevation -->
+      <div style="display:flex;flex-direction:column;gap:34px">
+        <div>
+          <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass);margin-bottom:18px">RADIUS · THE HOUSE IS SHARP</div>
+          <div style="display:flex;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><div style="width:64px;height:44px;background:var(--ink);border-radius:0"></div><span style="font:700 10px 'IBM Plex Mono',monospace">none · 0</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><div style="width:64px;height:44px;background:var(--ink);border-radius:6px"></div><span style="font:700 10px 'IBM Plex Mono',monospace">soft · 6px</span></div>
+            <div style="display:flex;flex-direction:column;gap:8px;align-items:center"><div style="width:64px;height:44px;background:rgba(15,37,46,.1);border:1px solid var(--line2);border-radius:999px"></div><span style="font:400 10px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.5)">pill · rare</span></div>
+          </div>
+          <p style="margin:12px 0 0;font-size:12.5px;line-height:1.5;color:rgba(15,37,46,.6);max-width:280px">Interactive controls — buttons <em>and</em> inputs — share a single soft 6px. Structural surfaces (cards, panels, image blocks) stay square.</p>
+        </div>
+        <div>
+          <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass);margin-bottom:18px">ELEVATION</div>
+          <div style="display:flex;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:80px;height:52px;background:var(--white);box-shadow:0 24px 60px -30px rgba(15,37,46,.5)"></div><span style="font:700 10px 'IBM Plex Mono',monospace">card</span></div>
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:center"><div style="width:80px;height:52px;background:var(--white);box-shadow:0 30px 70px -34px rgba(15,37,46,.55)"></div><span style="font:700 10px 'IBM Plex Mono',monospace">panel</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 04 WATERLINE MOTIF ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line);background:rgba(15,37,46,.02)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:14px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">04</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">The waterline &amp; length scale</h2>
+    </div>
+    <p style="margin:0 0 30px;font-size:14px;line-height:1.65;color:rgba(15,37,46,.7);max-width:600px;text-wrap:pretty">The one signature device. Length overall (LOA) is the single spec that compares across all five marques, so it becomes a recurring brass rule — under the wordmark, along the hero, and on every fleet card as a position within the 8–16&nbsp;m band.</p>
+    <div style="display:flex;flex-direction:column;gap:28px">
+      <!-- full scale -->
+      <div style="background:var(--white);border:1px solid var(--line);padding:26px 28px">
+        <div style="display:flex;justify-content:space-between;font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:rgba(15,37,46,.55);margin-bottom:14px"><span>LENGTH OVERALL — WHERE A MODEL SITS IN THE FLEET</span><span>15.65 M / 51′4″</span></div>
+        <div style="position:relative;height:40px">
+          <div style="position:absolute;left:0;right:0;top:20px;height:2px;background:var(--line2)"></div>
+          <div style="position:absolute;left:0;top:20px;height:2px;width:82%;background:var(--brass)"></div>
+          <div style="position:absolute;left:82%;top:8px;transform:translateX(-50%);width:11px;height:11px;background:var(--brass);border-radius:50%"></div>
+          <div style="position:absolute;left:0;top:28px;font:700 10px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.5)">8 M</div>
+          <div style="position:absolute;right:0;top:28px;font:700 10px 'IBM Plex Mono',monospace;color:var(--brass)">16 M</div>
+        </div>
+      </div>
+      <!-- tick ruler + card bar -->
+      <div style="display:grid;grid-template-columns:1fr 240px;gap:24px;align-items:center">
+        <div style="background:var(--ink);padding:22px 26px">
+          <div style="display:flex;justify-content:space-between;font:400 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:rgba(255,255,255,.7);margin-bottom:10px"><span>FLEET SIZE RANGE · LENGTH OVERALL (LOA)</span><span>8 M — 16 M</span></div>
+          <svg viewBox="0 0 900 16" width="100%" height="14" preserveAspectRatio="none"><line x1="0" y1="8" x2="900" y2="8" stroke="rgba(255,255,255,.5)" stroke-width="1"></line><g stroke="rgba(255,255,255,.5)" stroke-width="1"><line x1="1" y1="2" x2="1" y2="14"></line><line x1="112" y1="4" x2="112" y2="12"></line><line x1="225" y1="2" x2="225" y2="14"></line><line x1="337" y1="4" x2="337" y2="12"></line><line x1="450" y1="2" x2="450" y2="14"></line><line x1="562" y1="4" x2="562" y2="12"></line><line x1="675" y1="2" x2="675" y2="14"></line><line x1="787" y1="4" x2="787" y2="12"></line><line x1="899" y1="2" x2="899" y2="14"></line></g></svg>
+        </div>
+        <div style="background:var(--white);border:1px solid var(--line);padding:16px 18px">
+          <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:rgba(15,37,46,.55);margin-bottom:9px">CARD VARIANT</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span style="font:700 10px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55);width:44px">51′4″</span>
+            <div style="flex:1;height:3px;background:rgba(15,37,46,.12);position:relative"><div style="position:absolute;left:0;top:0;height:3px;width:82%;background:var(--brass)"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 05 BUTTONS ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:32px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">05</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Buttons</h2>
+    </div>
+    <!-- on paper -->
+    <div style="{{ paperPanel }}">
+      <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--brass)">ON PAPER</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+        <button style="{{ btnPrimary }}">Speak with an advisor <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+        <button style="{{ btnInk }}">Request information <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+        <button style="{{ btnTeal }}">Open the configurator <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+        <button style="{{ btnOutline }}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0F252E" stroke-width="1.6"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg> SAVE
+        </button>
+        <a href="#" style="font:600 13px 'IBM Plex Mono',monospace;color:var(--teal)">Enquire →</a>
+        <a href="#" style="font:600 13px 'IBM Plex Mono',monospace;letter-spacing:.04em;border-bottom:1px solid var(--line2);padding-bottom:4px;color:var(--ink)">VIEW ALL 5 MARQUES →</a>
+      </div>
+    </div>
+    <!-- on ink -->
+    <div style="margin-top:18px;background:var(--ink);padding:30px 32px;display:flex;flex-direction:column;gap:20px">
+      <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--gilt)">ON INK</div>
+      <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+        <button style="{{ btnGilt }}">Speak with an advisor <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+        <button style="{{ btnWhite }}">Explore by brand <span style="font-family:'IBM Plex Mono',monospace">→</span></button>
+        <button style="{{ btnGhost }}">Find by length &amp; price <span style="font-family:'IBM Plex Mono',monospace">↧</span></button>
+        <a href="#" style="font:600 13px 'IBM Plex Mono',monospace;color:var(--gilt)">AUTHORISED REPRESENTATIVE →</a>
+      </div>
+    </div>
+    <p style="margin:16px 0 0;font:400 11.5px/1.6 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55)">Padding 15px 26px · weight 600 · 14px · radius 6px (shared with inputs). Gilt is the single loudest CTA; ink and white are equal-weight primaries by surface; teal signals configuration; outline is the save/secondary.</p>
+  </section>
+
+  <!-- ===== 06 FORM CONTROLS ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:32px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">06</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Form controls</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <!-- boxed, on paper -->
+      <div style="background:var(--white);border:1px solid var(--line);padding:30px 32px">
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--brass);margin-bottom:18px">BOXED · ON PAPER / WHITE</div>
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <input placeholder="Full name" style="background:#fff;border:1px solid rgba(15,37,46,.16);border-radius:6px;padding:13px 14px;font-size:14px;outline:none">
+          <input placeholder="Email or phone" style="background:#fff;border:1px solid rgba(15,37,46,.16);border-radius:6px;padding:13px 14px;font-size:14px;outline:none">
+          <div style="background:#fff;border:1px solid rgba(15,37,46,.16);border-radius:6px;padding:13px 14px;font:400 13px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.6)">Model: Galeon 500 FLY</div>
+          <textarea placeholder="Anything you'd like us to know? — optional" rows="2" style="background:#fff;border:1px solid rgba(15,37,46,.16);border-radius:6px;padding:13px 14px;font-size:14px;outline:none;resize:none"></textarea>
+          <button style="{{ btnInk }}">Request information →</button>
+        </div>
+      </div>
+      <!-- underline, on ink -->
+      <div style="background:var(--ink);padding:30px 32px">
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--gilt);margin-bottom:18px">UNDERLINE · ON INK</div>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <input placeholder="Full name" style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none">
+          <input placeholder="Email or phone" style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none">
+          <select style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:rgba(236,239,238,.85);padding:12px 2px;font-size:15px;outline:none">
+            <option style="color:#000">Model of interest — optional</option>
+            <option style="color:#000">Galeon 500 FLY</option>
+          </select>
+          <button style="{{ btnGiltForm }}">Speak with an advisor →</button>
+        </div>
+      </div>
+    </div>
+    <p style="margin:16px 0 0;font:400 11.5px/1.6 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55)">Two register: hairline underline on ink (hero / inline lead), 1px boxed on light (sidebar / mobile). Placeholders in mono where the field states a fixed value, else Inter.</p>
+  </section>
+
+  <!-- ===== 07 CARDS & SPEC ROW ===== -->
+  <section style="padding:52px 60px 56px;border-bottom:1px solid var(--line2)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:32px">
+      <span style="background:var(--ink);color:var(--paper);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">07</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em">Cards &amp; spec row</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:300px 1fr;gap:40px;align-items:start">
+      <!-- fleet card -->
+      <div>
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--brass);margin-bottom:16px">FLEET CARD</div>
+        <div style="{{ cardStyle }}">
+          <div style="position:relative;aspect-ratio:4/3.2;overflow:hidden;background:var(--ink)">
+            <img src="assets/galeon-450-running.avif" alt="Galeon 500 FLY" style="width:100%;height:100%;object-fit:cover">
+            <span style="position:absolute;left:14px;top:13px;font:700 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)">GALEON</span>
+            <span style="position:absolute;right:11px;top:10px;width:34px;height:34px;background:rgba(15,37,46,.42);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="#C9A45E"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg></span>
+          </div>
+          <div style="padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px">
+            <div>
+              <div style="font-family:'Fraunces',serif;font-weight:450;font-size:20px;line-height:1.1">500 FLY</div>
+              <div style="font:400 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--teal);margin-top:6px">CRUISER · FLYBRIDGE</div>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+                <span style="font:700 10px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55);width:44px">51′4″</span>
+                <div style="flex:1;height:3px;background:rgba(15,37,46,.12);position:relative"><div style="position:absolute;left:0;top:0;height:3px;width:82%;background:var(--brass)"></div></div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px">
+                <span style="font:700 12px 'IBM Plex Mono',monospace">from €1,190,000</span>
+                <a href="#" style="font:600 12px 'IBM Plex Mono',monospace;color:var(--teal)">Enquire →</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- spec row + labels -->
+      <div>
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--brass);margin-bottom:16px">SPECIFICATION ROW</div>
+        <div style="border-top:1px solid var(--line2)">
+          <sc-for list="{{ specs }}" as="sp" hint-placeholder-count="5">
+            <div style="display:flex;justify-content:space-between;align-items:baseline;padding:15px 0;border-bottom:1px solid var(--line)">
+              <span style="font:400 12px 'IBM Plex Mono',monospace;letter-spacing:.12em;color:rgba(15,37,46,.6)">{{ sp.k }}</span>
+              <span style="font:700 15px 'IBM Plex Mono',monospace;text-align:right">{{ sp.v }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="margin-top:28px;font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--brass);margin-bottom:14px">LABELS &amp; TAGS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center">
+          <span style="font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.30em;color:var(--brass)">FEATURED FLEET · MMXXVI</span>
+          <span style="background:var(--ink);color:var(--paper);font:700 11px 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">01</span>
+          <span style="font-family:'Fraunces',serif;font-weight:380;font-size:16px;letter-spacing:.16em;color:var(--ink)">DE ANTONIO</span>
+          <span style="font:400 10.5px 'IBM Plex Mono',monospace;letter-spacing:.14em;color:rgba(15,37,46,.5)">FLEET / GALEON / <span style="color:var(--ink)">500 FLY</span></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== 08 CONSUMING TOKENS ===== -->
+  <section style="padding:52px 60px 58px;background:var(--ink);color:var(--paper)">
+    <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:26px">
+      <span style="background:var(--gilt);color:var(--ink);font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.16em;padding:6px 9px">08</span>
+      <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:30px;margin:0;letter-spacing:-.01em;color:#fff">Consuming the tokens</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+      <div style="border:1px solid rgba(236,239,238,.16);padding:24px 26px">
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--gilt);margin-bottom:14px">CSS CUSTOM PROPERTIES</div>
+        <pre style="margin:0;font:400 12px/1.7 'IBM Plex Mono',monospace;color:rgba(236,239,238,.86);white-space:pre-wrap">@import "./design-system/tokens.css";
+
+.cta{
+  background:var(--herev-gilt);
+  color:var(--herev-ink);
+  font-family:var(--herev-font-body);
+  font-weight:var(--herev-w-semibold);
+  border-radius:var(--herev-radius-none);
+}</pre>
+      </div>
+      <div style="border:1px solid rgba(236,239,238,.16);padding:24px 26px">
+        <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.24em;color:var(--gilt);margin-bottom:14px">TAILWIND PRESET</div>
+        <pre style="margin:0;font:400 12px/1.7 'IBM Plex Mono',monospace;color:rgba(236,239,238,.86);white-space:pre-wrap">// tailwind.config.js
+module.exports = {
+  presets:[require(
+    './design-system/tailwind.config.js')],
+};
+
+// markup
+&lt;button class="bg-gilt text-ink
+  font-body font-semibold rounded-none"&gt;</pre>
+      </div>
+    </div>
+    <div style="margin-top:22px;display:flex;gap:44px;flex-wrap:wrap;font:400 11.5px/1.7 'IBM Plex Mono',monospace;color:rgba(236,239,238,.6)">
+      <span>design-system/tokens.css</span>
+      <span>design-system/tokens.json</span>
+      <span>design-system/tailwind.config.js</span>
+      <span style="color:var(--gilt)">design-system/README.md — dev handoff</span>
+    </div>
+  </section>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;previewOnDark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Preview&quot;},&quot;radiusStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Soft 6px (house)&quot;,&quot;Sharp 0&quot;,&quot;Rounded 12px&quot;],&quot;default&quot;:&quot;Soft 6px (house)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Preview&quot;}}">
+class Component extends DCLogic {
+  renderVals(){
+    const onDark = this.props.previewOnDark ?? false;
+    const rs = this.props.radiusStyle ?? 'Soft 6px (house)';
+    const rad = rs === 'Rounded 12px' ? '12px' : rs === 'Sharp 0' ? '0' : '6px';
+
+    const swatch = (bg, text) => ({
+      background:bg, color:text, padding:'22px 16px', height:'96px',
+      display:'flex', flexDirection:'column', justifyContent:'space-between'
+    });
+    const colors = [
+      { name:'SEA INK',    hex:'#0F252E', token:'--herev-ink',   role:'Primary dark — headers, footers, lead modules', swatch:swatch('#0F252E','#ECEFEE') },
+      { name:'CHART PAPER',hex:'#ECEFEE', token:'--herev-paper', role:'Primary light surface', swatch:{...swatch('#ECEFEE','#0F252E'), border:'1px solid rgba(15,37,46,.14)'} },
+      { name:'WATER TEAL', hex:'#2C6E77', token:'--herev-teal',  role:'Links, secondary accent', swatch:swatch('#2C6E77','#fff') },
+      { name:'BRASS',      hex:'#94702F', token:'--herev-brass', role:'Labels, the waterline motif, accents on light', swatch:swatch('#94702F','#fff') },
+      { name:'GILT',       hex:'#C9A45E', token:'--herev-gilt',  role:'Primary CTA, accents on ink', swatch:swatch('#C9A45E','#0F252E') },
+      { name:'WHITE',      hex:'#FFFFFF', token:'--herev-white', role:'Card surface', swatch:{...swatch('#FFFFFF','#0F252E'), border:'1px solid rgba(15,37,46,.14)'} },
+    ];
+    const lines = [
+      { token:'--herev-line', role:'hairline divider on light', bar:{position:'absolute',left:0,right:0,top:'50%',height:'1px',background:'rgba(15,37,46,.14)'} },
+      { token:'--herev-line-strong', role:'input border · emphatic rule', bar:{position:'absolute',left:0,right:0,top:'50%',height:'1px',background:'rgba(15,37,46,.28)'} },
+    ];
+
+    const scale = [16,20,26,34,44,56,70];
+    const noteMap = {44:'· page gutter',70:'· section rhythm'};
+    const spaces = scale.map(px=>({
+      token:'--herev-space · '+px+'px',
+      note:noteMap[px]||'',
+      bar:{ display:'inline-block', width:px+'px', height:'16px', background:'#94702F' }
+    }));
+
+    const specs = [
+      { k:'LENGTH OVERALL', v:'15.65 m / 51′4″' },
+      { k:'BEAM',           v:'4.55 m' },
+      { k:'ENGINES',        v:'2 × Volvo D8 600 hp' },
+      { k:'MAX SPEED',      v:'32 knots' },
+      { k:'CE CATEGORY',    v:'B — Offshore' },
+    ];
+
+    const paperPanel = { background:'#fff', border:'1px solid rgba(15,37,46,.14)', padding:'30px 32px', display:'flex', flexDirection:'column', gap:'20px' };
+    const base = { border:'none', fontWeight:600, fontSize:'14px', letterSpacing:'.02em', padding:'15px 26px', display:'inline-flex', alignItems:'center', gap:'12px', borderRadius:rad, cursor:'pointer' };
+    return {
+      colors, lines, spaces, specs, paperPanel,
+      cardStyle:{ background:'#fff', border:'1px solid rgba(15,37,46,.14)', display:'flex', flexDirection:'column', width:'300px', borderRadius:rad, overflow:'hidden' },
+      btnPrimary:{ ...base, background:'#C9A45E', color:'#0F252E' },
+      btnInk:    { ...base, background:'#0F252E', color:'#fff' },
+      btnTeal:   { ...base, background:'#2C6E77', color:'#fff' },
+      btnOutline:{ ...base, background:'#ECEFEE', border:'1px solid rgba(15,37,46,.28)', color:'#0F252E', font:"600 13px 'IBM Plex Mono',monospace" },
+      btnGilt:   { ...base, background:'#C9A45E', color:'#0F252E' },
+      btnGiltForm:{ ...base, background:'#C9A45E', color:'#0F252E', marginTop:'8px' },
+      btnWhite:  { ...base, background:'#fff', color:'#0F252E' },
+      btnGhost:  { ...base, background:'rgba(255,255,255,.1)', border:'1px solid rgba(255,255,255,.4)', color:'#fff' },
+    };
+  }
+}
+</script>
+</body>
+</html>
