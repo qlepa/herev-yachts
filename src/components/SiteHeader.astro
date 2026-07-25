@@ -13,6 +13,13 @@ interface Props {
 
 const { lang, variant, currentPath, nav } = Astro.props;
 
+function localePath(target: Locale): string {
+  if (currentPath.startsWith(`/${lang}/`)) {
+    return currentPath.replace(`/${lang}/`, `/${target}/`);
+  }
+  return `/${target}/`;
+}
+
 const headerClass =
   variant === 'transparent'
     ? 'absolute top-0 left-0 right-0 z-20 text-white'
@@ -64,7 +71,7 @@ const langLabels: Record<Locale, string> = {
         {LOCALES.map((l, i) => (
           <>
             <a
-              href={`/${l}/`}
+              href={localePath(l)}
               class:list={[
                 'hover:opacity-100 transition-opacity',
                 l === lang ? 'opacity-100 font-bold' : 'opacity-60',
@@ -108,7 +115,7 @@ const langLabels: Record<Locale, string> = {
         <div class="flex gap-3 px-6 py-2 font-mono text-micro tracking-mono opacity-60">
           {LOCALES.map((l) => (
             <a
-              href={`/${l}/`}
+              href={localePath(l)}
               class:list={['hover:opacity-100', l === lang ? 'opacity-100 font-bold' : '']}
             >
               {langLabels[l]}
