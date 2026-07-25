@@ -1,0 +1,84 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import BrandCard from '../../../components/sections/BrandCard.astro';
+import { getLocalePaths, type Locale } from '../../../lib/i18n';
+import { getTranslations } from '../../../lib/i18n-strings';
+import { getBrandHero } from '../../../lib/images';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = getTranslations(lang);
+
+const brandEntries = await getCollection(
+  'brands',
+  (e) => e.id.startsWith(`${lang}/`),
+);
+
+brandEntries.sort((a, b) => a.data.order - b.data.order);
+
+const brandCards = await Promise.all(
+  brandEntries.map(async (brand) => ({
+    key: brand.data.brandKey,
+    name: brand.data.name,
+    tagline: brand.data.tagline,
+    order: brand.data.order,
+    href: `/${lang}/brands/${brand.data.brandKey}/`,
+    image: await getBrandHero(brand.data.brandKey),
+  })),
+);
+
+const pageTitle = t.brandsPage.heading + ' — Herev';
+const pageDescription = t.brandsPage.subheading;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription}>
+
+  <SiteHeader
+    lang={lang}
+    variant="ink"
+    currentPath={`/${lang}/brands/`}
+    nav={t.nav}
+  />
+
+  <main>
+    <section class="py-section bg-paper">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+
+        <SectionLabel text="FIVE ATELIERS" class="mb-4" />
+        <h1
+          class="font-display text-h1 text-ink mb-4 max-w-[640px]"
+          style="font-weight: 400; letter-spacing: var(--tracking-tight);"
+        >
+          {t.brandsPage.heading}
+        </h1>
+        <p class="text-body text-[var(--color-ink-70)] leading-relaxed max-w-[520px] mb-14">
+          {t.brandsPage.subheading}
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {brandCards.map((brand) => (
+            <BrandCard
+              name={brand.name}
+              tagline={brand.tagline}
+              href={brand.href}
+              image={brand.image}
+              order={brand.order}
+              viewLabel={t.brandsPage.viewLabel}
+            />
+          ))}
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

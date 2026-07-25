@@ -25,3 +25,14 @@ const yachtHeroes = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 export const getYachtHero = createImageHelper(yachtHeroes);
+
+const brandHeroes = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/brands/*/hero.*',
+);
+
+export async function getBrandHero(brandKey: string): Promise<ImageMetadata | null> {
+  const prefix = `/src/assets/brands/${brandKey}/hero.`;
+  const key = Object.keys(brandHeroes).find((k) => k.startsWith(prefix));
+  if (!key) return null;
+  return (await brandHeroes[key]()).default;
+}

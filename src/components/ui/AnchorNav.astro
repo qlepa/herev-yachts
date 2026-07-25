@@ -1,0 +1,25 @@
+---
+interface Props {
+  items: Array<{ label: string; href: string }>;
+}
+
+const { items } = Astro.props;
+---
+
+<div class="sticky top-[72px] z-10 bg-white/95 backdrop-blur-sm border-b border-[var(--color-line)]">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <nav
+      class="flex items-center gap-8 overflow-x-auto py-3"
+      aria-label="Page sections"
+    >
+      {items.map(({ label, href }) => (
+        <a
+          href={href}
+          class="font-mono text-label tracking-label uppercase text-[var(--color-ink-55)] hover:text-ink transition-colors shrink-0 py-1"
+        >
+          {label}
+        </a>
+      ))}
+    </nav>
+  </div>
+</div>

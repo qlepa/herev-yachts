@@ -1,0 +1,152 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import HeroSection from '../../../components/sections/HeroSection.astro';
+import FleetStrip from '../../../components/sections/FleetStrip.astro';
+import LeadModule from '../../../components/sections/LeadModule.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import { BRAND_KEYS } from '../../../content.config';
+import type { BrandKey, CategoryKey } from '../../../content.config';
+import { getTranslations } from '../../../lib/i18n-strings';
+import { getBrandHero, getYachtHero } from '../../../lib/images';
+import { metresToFeet } from '../../../lib/format';
+import leadPic from '../../../assets/site/lead-image.avif';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const brand of BRAND_KEYS) {
+      paths.push({ params: { lang, brand } });
+    }
+  }
+  return paths;
+}
+
+const { lang, brand } = Astro.params as { lang: Locale; brand: BrandKey };
+const t = getTranslations(lang);
+
+const brandDisplayMap: Record<BrandKey, string> = {
+  galeon:       'GALEON',
+  parker:       'PARKER',
+  saxdor:       'SAXDOR',
+  'de-antonio': 'DE ANTONIO',
+  'chris-craft': 'CHRIS-CRAFT',
+};
+
+// Fetch brand entry for this locale
+const brandEntries = await getCollection(
+  'brands',
+  (e) => e.id === `${lang}/${brand}.md`,
+);
+const brandEntry = brandEntries[0];
+if (!brandEntry) return Astro.redirect(`/${lang}/brands/`);
+
+const { Content } = await render(brandEntry);
+
+// Fetch brand hero
+const heroImage = await getBrandHero(brand);
+
+// Fetch yachts for this brand in this locale
+const yachtEntries = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && e.data.brand === brand && !e.data.draft,
+);
+yachtEntries.sort((a, b) => a.data.lengthM - b.data.lengthM);
+
+const yachtCards = await Promise.all(
+  yachtEntries.map(async (y) => ({
+    translationKey: y.data.translationKey,
+    name:           y.data.name,
+    brandDisplay:   brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase(),
+    loaM:           y.data.lengthM,
+    loaFt:          metresToFeet(y.data.lengthM),
+    priceEur:       y.data.priceEur,
+    categoryLabel:  y.data.category
+      ? t.categories[y.data.category as CategoryKey]
+      : undefined,
+    image:          await getYachtHero(y.data.translationKey, y.data.draft),
+    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+  })),
+);
+
+const seoTitle = brandEntry.data.seo?.title ?? `${brandEntry.data.name} — Herev`;
+const seoDescription = brandEntry.data.seo?.description ?? brandEntry.data.tagline;
+
+---
+
+<Layout lang={lang} title={seoTitle} description={seoDescription}>
+
+  <SiteHeader
+    lang={lang}
+    variant="transparent"
+    currentPath={`/${lang}/brands/${brand}/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    {heroImage && (
+      <HeroSection
+        eyebrow={brandEntry.data.tagline}
+        heading={brandEntry.data.name}
+        subtext=""
+        cta1Label={t.brandPage.enquireCta}
+        cta1Href="#fleet"
+        cta2Label={t.lead.cta.replace(' →', '')}
+        cta2Href={`/${lang}/#lead`}
+        image={heroImage}
+        imageAlt={`${brandEntry.data.name} yacht`}
+      />
+    )}
+
+    <!-- Brand intro section -->
+    <section class="py-section bg-paper">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="max-w-[680px]">
+          <SectionLabel text={brandDisplayMap[brand]} class="mb-5" />
+          <div class="prose prose-lg text-[var(--color-ink-70)] leading-relaxed">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fleet strip -->
+    {yachtCards.length > 0 && (
+      <div id="fleet">
+        <FleetStrip
+          yachts={yachtCards}
+          eyebrow={brandDisplayMap[brand]}
+          heading={t.brandPage.fleetHeading}
+          subheading={t.brandPage.fleetSubheading}
+          viewAllLabel={t.brandPage.viewAllLabel}
+          viewAllHref={`/${lang}/yachts/`}
+          enquireLabel={t.fleet.enquire}
+          priceOnRequestLabel={t.fleet.priceOnRequest}
+        />
+      </div>
+    )}
+
+    <LeadModule
+      eyebrow={t.lead.eyebrow}
+      heading={t.lead.heading}
+      subtext={t.lead.subtext}
+      ctaLabel={t.lead.cta}
+      image={leadPic}
+      imageAlt="Yacht cockpit interior"
+      orCallLabel={t.lead.orCall}
+      fallbackContact={t.lead.fallbackContact}
+      namePlaceholder={t.lead.namePlaceholder}
+      contactPlaceholder={t.lead.contactPlaceholder}
+      modelPlaceholder={t.lead.modelPlaceholder}
+      messagePlaceholder={t.lead.messagePlaceholder}
+    />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

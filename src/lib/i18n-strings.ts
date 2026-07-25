@@ -2,11 +2,11 @@ import type { Locale } from './i18n';
 import type { CategoryKey } from '../content.config';
 
 export interface NavStrings {
-  fleet: string;
+  yachts: string;
   brands: string;
-  compare: string;
+  services: string;
   network: string;
-  journal: string;
+  blog: string;
   enquire: string;
   call: string;
 }
@@ -63,16 +63,63 @@ export interface Translations {
     company: string;
     language: string;
     links: {
-      fleet: string;
+      yachts: string;
       brands: string;
-      compare: string;
-      journal: string;
+      services: string;
+      blog: string;
       network: string;
       about: string;
       trials: string;
       contact: string;
     };
     legal: string;
+  };
+  brandsPage: {
+    heading: string;
+    subheading: string;
+    viewLabel: string;
+  };
+  brandPage: {
+    fleetHeading: string;
+    fleetSubheading: string;
+    enquireCta: string;
+    viewAllLabel: string;
+  };
+  yachtsPage: {
+    heading: string;
+    subheading: string;
+  };
+  yachtPage: {
+    enquireCta: string;
+    bookViewingCta: string;
+    keyNumbers: { length: string; cabins: string; speed: string; price: string };
+    anchorNav: { overview: string; gallery: string; specs: string; recommended: string };
+    specsHeading: string;
+    galleryHeading: string;
+    deckPlansHeading: string;
+    recommendedHeading: string;
+    specs: {
+      length: string;
+      beam: string;
+      draft: string;
+      cabins: string;
+      berths: string;
+      speed: string;
+      year: string;
+      brand: string;
+      category: string;
+    };
+  };
+  servicesPage: {
+    hero: { eyebrow: string; heading: string; subtext: string };
+    advisory: { eyebrow: string; heading: string };
+    steps: Array<{ number: string; title: string; body: string }>;
+    cta: { heading: string };
+  };
+  notFound: {
+    heading: string;
+    subtext: string;
+    backToHome: string;
   };
 }
 
@@ -83,11 +130,11 @@ const en: Translations = {
       'Authorised representation for Galeon, Parker, Saxdor, De Antonio and Chris-Craft. Find your yacht across our network of showrooms.',
   },
   nav: {
-    fleet: 'Fleet',
+    yachts: 'Yachts',
     brands: 'Brands',
-    compare: 'Compare',
+    services: 'Services',
     network: 'Our Network',
-    journal: 'Journal',
+    blog: 'Blog',
     enquire: 'Enquire',
     call: 'Call',
   },
@@ -167,16 +214,106 @@ const en: Translations = {
     company: 'COMPANY',
     language: 'LANGUAGE',
     links: {
-      fleet: 'Fleet',
+      yachts: 'Yachts',
       brands: 'Brands',
-      compare: 'Compare',
-      journal: 'Journal',
+      services: 'Services',
+      blog: 'Blog',
       network: 'Our Network',
       about: 'About Herev',
       trials: 'Sea Trials',
       contact: 'Contact',
     },
     legal: '© MMXXVI HEREV · LEGAL · PRIVACY · COOKIES',
+  },
+  brandsPage: {
+    heading: 'Five ateliers. One standard.',
+    subheading:
+      'Each brand chosen for a distinct reason — together they cover every serious category of modern yacht ownership.',
+    viewLabel: 'View collection →',
+  },
+  brandPage: {
+    fleetHeading: 'The range.',
+    fleetSubheading: 'Every model in our current selection.',
+    enquireCta: 'Enquire',
+    viewAllLabel: 'VIEW ALL MODELS →',
+  },
+  yachtsPage: {
+    heading: 'The full collection.',
+    subheading:
+      'Every vessel we represent — five builders, one considered standard.',
+  },
+  yachtPage: {
+    enquireCta: 'Enquire',
+    bookViewingCta: 'Book a private viewing',
+    keyNumbers: {
+      length: 'Length',
+      cabins: 'Cabins',
+      speed: 'Max speed',
+      price: 'From',
+    },
+    anchorNav: {
+      overview: 'Overview',
+      gallery: 'Gallery',
+      specs: 'Specifications',
+      recommended: 'Recommended',
+    },
+    specsHeading: 'Specifications',
+    galleryHeading: 'Gallery',
+    deckPlansHeading: 'Deck plans',
+    recommendedHeading: 'You may also consider',
+    specs: {
+      length: 'Length',
+      beam: 'Beam',
+      draft: 'Draft',
+      cabins: 'Cabins',
+      berths: 'Berths',
+      speed: 'Max speed',
+      year: 'Model year',
+      brand: 'Brand',
+      category: 'Category',
+    },
+  },
+  servicesPage: {
+    hero: {
+      eyebrow: 'PRIVATE YACHT REPRESENTATION',
+      heading: 'From first enquiry to sea trial.',
+      subtext:
+        'We act as a single point of contact for five of the most considered yacht builders in the world — translating complex decisions into clear choices.',
+    },
+    advisory: {
+      eyebrow: 'WHAT WE DO',
+      heading: 'A complete introduction to ownership.',
+    },
+    steps: [
+      {
+        number: '01',
+        title: 'Brand introductions',
+        body: 'We introduce you to each atelier on their own terms — the history, the engineering philosophy, and the models that define them. No sales pressure; just context.',
+      },
+      {
+        number: '02',
+        title: 'Private viewings',
+        body: 'We arrange access to vessels at our showrooms in Warsaw, Gdynia, and Palma. Sea trials are coordinated directly with the builder\'s delivery team.',
+      },
+      {
+        number: '03',
+        title: 'Acquisition support',
+        body: 'From specification review to delivery logistics, we stay involved until the vessel is in your hands. After-sales introductions included with every purchase.',
+      },
+      {
+        number: '04',
+        title: 'After-sales care',
+        body: 'We maintain the relationship after the handover — connecting you with the builder\'s service network and flagging relevant model updates or upgrades as they become available.',
+      },
+    ],
+    cta: {
+      heading: 'Begin the conversation.',
+    },
+  },
+  notFound: {
+    heading: 'Page not found.',
+    subtext: 'The page you are looking for does not exist or has been moved.',
+    backToHome: 'Return home',
   },
 };
 
@@ -187,11 +324,11 @@ const pl: Translations = {
       'Autoryzowana reprezentacja Galeon, Parker, Saxdor, De Antonio i Chris-Craft. Znajdź swój jacht w naszej sieci salonów.',
   },
   nav: {
-    fleet: 'Flota',
+    yachts: 'Jachty',
     brands: 'Marki',
-    compare: 'Porównaj',
+    services: 'Usługi',
     network: 'Nasza Sieć',
-    journal: 'Aktualności',
+    blog: 'Blog',
     enquire: 'Zapytaj',
     call: 'Zadzwoń',
   },
@@ -271,16 +408,106 @@ const pl: Translations = {
     company: 'FIRMA',
     language: 'JĘZYK',
     links: {
-      fleet: 'Flota',
+      yachts: 'Jachty',
       brands: 'Marki',
-      compare: 'Porównaj',
-      journal: 'Aktualności',
+      services: 'Usługi',
+      blog: 'Blog',
       network: 'Nasza Sieć',
       about: 'O Herev',
       trials: 'Rejsy Próbne',
       contact: 'Kontakt',
     },
     legal: '© MMXXVI HEREV · INFORMACJE PRAWNE · PRYWATNOŚĆ · COOKIES',
+  },
+  brandsPage: {
+    heading: 'Pięć atelier. Jeden standard.',
+    subheading:
+      'Każda marka wybrana z osobnego powodu — razem obejmują każdą poważną kategorię współczesnej własności jachtu.',
+    viewLabel: 'Zobacz kolekcję →',
+  },
+  brandPage: {
+    fleetHeading: 'Zakres modeli.',
+    fleetSubheading: 'Każdy model z naszej aktualnej selekcji.',
+    enquireCta: 'Zapytaj',
+    viewAllLabel: 'WSZYSTKIE MODELE →',
+  },
+  yachtsPage: {
+    heading: 'Pełna kolekcja.',
+    subheading:
+      'Każda jednostka, którą reprezentujemy — pięciu producentów, jeden przemyślany standard.',
+  },
+  yachtPage: {
+    enquireCta: 'Zapytaj',
+    bookViewingCta: 'Umów prywatne oglądanie',
+    keyNumbers: {
+      length: 'Długość',
+      cabins: 'Kabiny',
+      speed: 'Maks. prędkość',
+      price: 'Od',
+    },
+    anchorNav: {
+      overview: 'Przegląd',
+      gallery: 'Galeria',
+      specs: 'Specyfikacje',
+      recommended: 'Polecane',
+    },
+    specsHeading: 'Specyfikacje',
+    galleryHeading: 'Galeria',
+    deckPlansHeading: 'Plany pokładu',
+    recommendedHeading: 'Możesz również rozważyć',
+    specs: {
+      length: 'Długość',
+      beam: 'Szerokość',
+      draft: 'Zanurzenie',
+      cabins: 'Kabiny',
+      berths: 'Miejsca noclegowe',
+      speed: 'Maks. prędkość',
+      year: 'Rok modelowy',
+      brand: 'Marka',
+      category: 'Kategoria',
+    },
+  },
+  servicesPage: {
+    hero: {
+      eyebrow: 'PRYWATNA REPREZENTACJA JACHTÓW',
+      heading: 'Od pierwszego zapytania do rejsu próbnego.',
+      subtext:
+        'Jesteśmy jednym punktem kontaktu dla pięciu najbardziej przemyślanych producentów jachtów na świecie — przekształcamy złożone decyzje w jasne wybory.',
+    },
+    advisory: {
+      eyebrow: 'CO ROBIMY',
+      heading: 'Pełne wprowadzenie do własności jachtu.',
+    },
+    steps: [
+      {
+        number: '01',
+        title: 'Prezentacja marek',
+        body: 'Przedstawiamy Ci każde atelier na jego własnych warunkach — historię, filozofię inżynieryjną i modele, które je definiują. Bez presji sprzedażowej; tylko kontekst.',
+      },
+      {
+        number: '02',
+        title: 'Prywatne oglądanie',
+        body: 'Organizujemy dostęp do jednostek w naszych salonach w Warszawie, Gdyni i Palmie. Rejsy próbne są koordynowane bezpośrednio z zespołem dostawczym producenta.',
+      },
+      {
+        number: '03',
+        title: 'Wsparcie przy zakupie',
+        body: 'Od przeglądu specyfikacji po logistykę dostawy — pozostajemy zaangażowani, aż jednostka znajdzie się w Twoich rękach. Wprowadzenie do serwisu po sprzedaży przy każdym zakupie.',
+      },
+      {
+        number: '04',
+        title: 'Opieka posprzedażna',
+        body: 'Utrzymujemy relację po przekazaniu jachtu — łącząc Cię z siecią serwisową producenta i informując o odpowiednich aktualizacjach lub ulepszeniach modeli.',
+      },
+    ],
+    cta: {
+      heading: 'Rozpocznij rozmowę.',
+    },
+  },
+  notFound: {
+    heading: 'Strona nie znaleziona.',
+    subtext: 'Strona, której szukasz, nie istnieje lub została przeniesiona.',
+    backToHome: 'Wróć do strony głównej',
   },
 };
 
@@ -291,11 +518,11 @@ const es: Translations = {
       'Representación autorizada de Galeon, Parker, Saxdor, De Antonio y Chris-Craft. Encuentra tu yate en nuestra red de concesionarios.',
   },
   nav: {
-    fleet: 'Flota',
+    yachts: 'Yates',
     brands: 'Marcas',
-    compare: 'Comparar',
+    services: 'Servicios',
     network: 'Nuestra Red',
-    journal: 'Diario',
+    blog: 'Blog',
     enquire: 'Consultar',
     call: 'Llamar',
   },
@@ -375,16 +602,106 @@ const es: Translations = {
     company: 'EMPRESA',
     language: 'IDIOMA',
     links: {
-      fleet: 'Flota',
+      yachts: 'Yates',
       brands: 'Marcas',
-      compare: 'Comparar',
-      journal: 'Diario',
+      services: 'Servicios',
+      blog: 'Blog',
       network: 'Nuestra Red',
       about: 'Sobre Herev',
       trials: 'Pruebas de Mar',
       contact: 'Contacto',
     },
     legal: '© MMXXVI HEREV · AVISO LEGAL · PRIVACIDAD · COOKIES',
+  },
+  brandsPage: {
+    heading: 'Cinco ateliers. Un estándar.',
+    subheading:
+      'Cada marca elegida por una razón distinta — juntas cubren cada categoría seria de la propiedad moderna de yates.',
+    viewLabel: 'Ver colección →',
+  },
+  brandPage: {
+    fleetHeading: 'La gama.',
+    fleetSubheading: 'Todos los modelos de nuestra selección actual.',
+    enquireCta: 'Consultar',
+    viewAllLabel: 'VER TODOS LOS MODELOS →',
+  },
+  yachtsPage: {
+    heading: 'La colección completa.',
+    subheading:
+      'Todas las embarcaciones que representamos — cinco constructores, un estándar reflexivo.',
+  },
+  yachtPage: {
+    enquireCta: 'Consultar',
+    bookViewingCta: 'Reservar una visita privada',
+    keyNumbers: {
+      length: 'Eslora',
+      cabins: 'Cabinas',
+      speed: 'Velocidad máx.',
+      price: 'Desde',
+    },
+    anchorNav: {
+      overview: 'Resumen',
+      gallery: 'Galería',
+      specs: 'Especificaciones',
+      recommended: 'Recomendados',
+    },
+    specsHeading: 'Especificaciones',
+    galleryHeading: 'Galería',
+    deckPlansHeading: 'Planos de cubierta',
+    recommendedHeading: 'También puede considerar',
+    specs: {
+      length: 'Eslora',
+      beam: 'Manga',
+      draft: 'Calado',
+      cabins: 'Cabinas',
+      berths: 'Literas',
+      speed: 'Velocidad máx.',
+      year: 'Año del modelo',
+      brand: 'Marca',
+      category: 'Categoría',
+    },
+  },
+  servicesPage: {
+    hero: {
+      eyebrow: 'REPRESENTACIÓN PRIVADA DE YATES',
+      heading: 'Desde la primera consulta hasta la prueba de mar.',
+      subtext:
+        'Somos el único punto de contacto para cinco de los constructores de yates más reflexivos del mundo — traduciendo decisiones complejas en elecciones claras.',
+    },
+    advisory: {
+      eyebrow: 'LO QUE HACEMOS',
+      heading: 'Una introducción completa a la propiedad.',
+    },
+    steps: [
+      {
+        number: '01',
+        title: 'Presentaciones de marca',
+        body: 'Te presentamos cada atelier en sus propios términos — la historia, la filosofía de ingeniería y los modelos que los definen. Sin presión de ventas; solo contexto.',
+      },
+      {
+        number: '02',
+        title: 'Visitas privadas',
+        body: 'Organizamos el acceso a las embarcaciones en nuestros concesionarios de Varsovia, Gdynia y Palma. Las pruebas de mar se coordinan directamente con el equipo de entrega del constructor.',
+      },
+      {
+        number: '03',
+        title: 'Apoyo en la adquisición',
+        body: 'Desde la revisión de especificaciones hasta la logística de entrega, permanecemos involucrados hasta que la embarcación esté en tus manos. Introducción al servicio postventa incluida en cada compra.',
+      },
+      {
+        number: '04',
+        title: 'Atención postventa',
+        body: 'Mantenemos la relación después de la entrega — conectándote con la red de servicio del constructor y señalando actualizaciones o mejoras de modelos relevantes a medida que estén disponibles.',
+      },
+    ],
+    cta: {
+      heading: 'Comienza la conversación.',
+    },
+  },
+  notFound: {
+    heading: 'Página no encontrada.',
+    subtext: 'La página que busca no existe o ha sido movida.',
+    backToHome: 'Volver al inicio',
   },
 };
 
@@ -395,11 +712,11 @@ const it: Translations = {
       'Rappresentanza autorizzata di Galeon, Parker, Saxdor, De Antonio e Chris-Craft. Trova il tuo yacht nella nostra rete di concessionari.',
   },
   nav: {
-    fleet: 'Flotta',
+    yachts: 'Yacht',
     brands: 'Marchi',
-    compare: 'Confronta',
+    services: 'Servizi',
     network: 'La Nostra Rete',
-    journal: 'Rivista',
+    blog: 'Blog',
     enquire: 'Richiedi',
     call: 'Chiama',
   },
@@ -479,16 +796,106 @@ const it: Translations = {
     company: 'AZIENDA',
     language: 'LINGUA',
     links: {
-      fleet: 'Flotta',
+      yachts: 'Yacht',
       brands: 'Marchi',
-      compare: 'Confronta',
-      journal: 'Rivista',
+      services: 'Servizi',
+      blog: 'Blog',
       network: 'La Nostra Rete',
       about: 'Chi Siamo',
       trials: 'Prove in Mare',
       contact: 'Contatti',
     },
     legal: '© MMXXVI HEREV · NOTE LEGALI · PRIVACY · COOKIE',
+  },
+  brandsPage: {
+    heading: 'Cinque atelier. Uno standard.',
+    subheading:
+      'Ogni marchio scelto per una ragione distinta — insieme coprono ogni categoria seria della moderna proprietà di yacht.',
+    viewLabel: 'Vedi collezione →',
+  },
+  brandPage: {
+    fleetHeading: 'La gamma.',
+    fleetSubheading: 'Tutti i modelli della nostra selezione attuale.',
+    enquireCta: 'Richiedi',
+    viewAllLabel: 'TUTTI I MODELLI →',
+  },
+  yachtsPage: {
+    heading: 'La collezione completa.',
+    subheading:
+      'Ogni imbarcazione che rappresentiamo — cinque costruttori, uno standard ponderato.',
+  },
+  yachtPage: {
+    enquireCta: 'Richiedi',
+    bookViewingCta: 'Prenota una visione privata',
+    keyNumbers: {
+      length: 'Lunghezza',
+      cabins: 'Cabine',
+      speed: 'Velocità max.',
+      price: 'Da',
+    },
+    anchorNav: {
+      overview: 'Panoramica',
+      gallery: 'Galleria',
+      specs: 'Specifiche',
+      recommended: 'Consigliati',
+    },
+    specsHeading: 'Specifiche',
+    galleryHeading: 'Galleria',
+    deckPlansHeading: 'Piani di coperta',
+    recommendedHeading: 'Potresti anche considerare',
+    specs: {
+      length: 'Lunghezza',
+      beam: 'Larghezza',
+      draft: 'Pescaggio',
+      cabins: 'Cabine',
+      berths: 'Cuccette',
+      speed: 'Velocità max.',
+      year: 'Anno modello',
+      brand: 'Marchio',
+      category: 'Categoria',
+    },
+  },
+  servicesPage: {
+    hero: {
+      eyebrow: 'RAPPRESENTANZA PRIVATA DI YACHT',
+      heading: 'Dalla prima richiesta alla prova in mare.',
+      subtext:
+        'Siamo l\'unico punto di contatto per cinque dei costruttori di yacht più attenti al mondo — traducendo decisioni complesse in scelte chiare.',
+    },
+    advisory: {
+      eyebrow: 'COSA FACCIAMO',
+      heading: 'Un\'introduzione completa alla proprietà.',
+    },
+    steps: [
+      {
+        number: '01',
+        title: 'Presentazioni di marchio',
+        body: 'Ti presentiamo ogni atelier nei suoi propri termini — la storia, la filosofia ingegneristica e i modelli che li definiscono. Nessuna pressione di vendita; solo contesto.',
+      },
+      {
+        number: '02',
+        title: 'Visioni private',
+        body: 'Organizziamo l\'accesso alle imbarcazioni nei nostri showroom a Varsavia, Gdynia e Palma. Le prove in mare sono coordinate direttamente con il team di consegna del costruttore.',
+      },
+      {
+        number: '03',
+        title: 'Supporto all\'acquisto',
+        body: 'Dalla revisione delle specifiche alla logistica di consegna, restiamo coinvolti fino a quando l\'imbarcazione è nelle tue mani. Introduzione all\'assistenza post-vendita inclusa con ogni acquisto.',
+      },
+      {
+        number: '04',
+        title: 'Assistenza post-vendita',
+        body: 'Manteniamo il rapporto dopo la consegna — collegandoti alla rete di assistenza del costruttore e segnalando aggiornamenti o miglioramenti di modelli rilevanti man mano che diventano disponibili.',
+      },
+    ],
+    cta: {
+      heading: 'Inizia la conversazione.',
+    },
+  },
+  notFound: {
+    heading: 'Pagina non trovata.',
+    subtext: 'La pagina che stai cercando non esiste o è stata spostata.',
+    backToHome: 'Torna alla home',
   },
 };
 

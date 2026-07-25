@@ -1,0 +1,51 @@
+---
+import type { ImageMetadata } from 'astro';
+import FleetCard from '../FleetCard.astro';
+
+interface YachtCardData {
+  translationKey: string;
+  name: string;
+  brandDisplay: string;
+  loaM: number;
+  loaFt: string;
+  priceEur?: number;
+  categoryLabel?: string;
+  image: ImageMetadata | null;
+  href: string;
+}
+
+interface Props {
+  heading: string;
+  yachts: YachtCardData[];
+  enquireLabel: string;
+  priceOnRequestLabel: string;
+}
+
+const { heading, yachts, enquireLabel, priceOnRequestLabel } = Astro.props;
+---
+
+{yachts.length > 0 && (
+  <section id="recommended" class="py-section bg-paper">
+    <div class="max-w-[1440px] mx-auto px-gutter">
+      <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">
+        {heading}
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {yachts.map((yacht) => (
+          <FleetCard
+            name={yacht.name}
+            brandDisplay={yacht.brandDisplay}
+            loaM={yacht.loaM}
+            loaFt={yacht.loaFt}
+            priceEur={yacht.priceEur}
+            categoryLabel={yacht.categoryLabel}
+            image={yacht.image}
+            href={yacht.href}
+            enquireLabel={enquireLabel}
+            priceOnRequestLabel={priceOnRequestLabel}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+)}

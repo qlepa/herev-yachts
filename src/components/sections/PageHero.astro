@@ -1,0 +1,28 @@
+---
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  subtext?: string;
+}
+
+const { eyebrow, heading, subtext } = Astro.props;
+---
+
+<section class="bg-ink text-white py-section">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <SectionLabel text={eyebrow} on="ink" class="mb-5" />
+    <h1
+      class="font-display text-white mb-5 max-w-[720px] leading-tight"
+      style="font-size: clamp(2rem, 4vw, var(--text-h1)); font-weight: 360; letter-spacing: var(--tracking-tight);"
+    >
+      {heading}
+    </h1>
+    {subtext && (
+      <p class="text-[var(--color-paper-72)] text-lg leading-relaxed max-w-[560px]">
+        {subtext}
+      </p>
+    )}
+  </div>
+</section>

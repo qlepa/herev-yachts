@@ -1,0 +1,314 @@
+---
+import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import HeroSection from '../../../components/sections/HeroSection.astro';
+import AnchorNav from '../../../components/ui/AnchorNav.astro';
+import SpecTable from '../../../components/sections/SpecTable.astro';
+import RecommendedYachts from '../../../components/sections/RecommendedYachts.astro';
+import LeadModule from '../../../components/sections/LeadModule.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import type { BrandKey, CategoryKey } from '../../../content.config';
+import { getTranslations } from '../../../lib/i18n-strings';
+import { getYachtHero } from '../../../lib/images';
+import { metresToFeet, formatPrice } from '../../../lib/format';
+import leadPic from '../../../assets/site/lead-image.avif';
+
+export async function getStaticPaths() {
+  const allYachts = await getCollection('yachts', (e) => !e.data.draft);
+  // Collect unique translationKeys
+  const keys = [...new Set(allYachts.map((e) => e.data.translationKey))];
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const yacht of keys) {
+      paths.push({ params: { lang, yacht } });
+    }
+  }
+  return paths;
+}
+
+const { lang, yacht: yachtSlug } = Astro.params as { lang: Locale; yacht: string };
+const t = getTranslations(lang);
+
+const brandDisplayMap: Record<BrandKey, string> = {
+  galeon:       'GALEON',
+  parker:       'PARKER',
+  saxdor:       'SAXDOR',
+  'de-antonio': 'DE ANTONIO',
+  'chris-craft': 'CHRIS-CRAFT',
+};
+
+// Get the entry for this lang + translationKey
+const allLangYachts = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
+);
+
+const yachtEntry = allLangYachts.find((e) => e.data.translationKey === yachtSlug);
+if (!yachtEntry) return Astro.redirect(`/${lang}/yachts/`);
+
+const { Content } = await render(yachtEntry);
+const data = yachtEntry.data;
+
+// Hero image
+const heroImage = await getYachtHero(data.translationKey, data.draft);
+
+// Gallery images — conditional
+const galleryGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/yachts/*/gallery-*.*',
+);
+const galleryPrefix = `/src/assets/yachts/${data.translationKey}/gallery-`;
+const galleryKeys = Object.keys(galleryGlob).filter((k) => k.startsWith(galleryPrefix));
+const galleryImages: ImageMetadata[] = await Promise.all(
+  galleryKeys.sort().map(async (k) => (await galleryGlob[k]()).default),
+);
+
+// Deck plan images — conditional
+const layoutGlob = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/yachts/*/layout-*.*',
+);
+const layoutPrefix = `/src/assets/yachts/${data.translationKey}/layout-`;
+const layoutKeys = Object.keys(layoutGlob).filter((k) => k.startsWith(layoutPrefix));
+const layoutImages: ImageMetadata[] = await Promise.all(
+  layoutKeys.sort().map(async (k) => (await layoutGlob[k]()).default),
+);
+
+// Build-time recommendations
+const otherYachts = allLangYachts.filter((e) => e.data.translationKey !== data.translationKey);
+otherYachts.sort((a, b) => {
+  // 1. same category first
+  const aCat = a.data.category === data.category ? 0 : 1;
+  const bCat = b.data.category === data.category ? 0 : 1;
+  if (aCat !== bCat) return aCat - bCat;
+  // 2. closest length
+  const aDist = Math.abs(a.data.lengthM - data.lengthM);
+  const bDist = Math.abs(b.data.lengthM - data.lengthM);
+  if (aDist !== bDist) return aDist - bDist;
+  // 3. same brand as tiebreaker
+  const aBrand = a.data.brand === data.brand ? 0 : 1;
+  const bBrand = b.data.brand === data.brand ? 0 : 1;
+  return aBrand - bBrand;
+});
+
+const recommendedEntries = otherYachts.slice(0, 3);
+const recommendedCards = await Promise.all(
+  recommendedEntries.map(async (y) => ({
+    translationKey: y.data.translationKey,
+    name:           y.data.name,
+    brandDisplay:   brandDisplayMap[y.data.brand as BrandKey] ?? y.data.brand.toUpperCase(),
+    loaM:           y.data.lengthM,
+    loaFt:          metresToFeet(y.data.lengthM),
+    priceEur:       y.data.priceEur,
+    categoryLabel:  y.data.category
+      ? t.categories[y.data.category as CategoryKey]
+      : undefined,
+    image:          await getYachtHero(y.data.translationKey, y.data.draft),
+    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+  })),
+);
+
+// Spec table
+const specs: Array<{ label: string; value: string }> = [
+  { label: t.yachtPage.specs.length, value: `${data.lengthM} m / ${metresToFeet(data.lengthM)}` },
+];
+if (data.beamM !== undefined) {
+  specs.push({ label: t.yachtPage.specs.beam, value: `${data.beamM} m` });
+}
+if (data.draftM !== undefined) {
+  specs.push({ label: t.yachtPage.specs.draft, value: `${data.draftM} m` });
+}
+specs.push({ label: t.yachtPage.specs.cabins, value: String(data.cabins) });
+if (data.berths !== undefined) {
+  specs.push({ label: t.yachtPage.specs.berths, value: String(data.berths) });
+}
+if (data.maxSpeedKn !== undefined) {
+  specs.push({ label: t.yachtPage.specs.speed, value: `${data.maxSpeedKn} kn` });
+}
+specs.push({ label: t.yachtPage.specs.year, value: String(data.year) });
+specs.push({ label: t.yachtPage.specs.brand, value: brandDisplayMap[data.brand as BrandKey] ?? data.brand });
+if (data.category) {
+  specs.push({ label: t.yachtPage.specs.category, value: t.categories[data.category as CategoryKey] });
+}
+
+// Anchor nav items (only include gallery/layout if images exist)
+const anchorItems = [
+  { label: t.yachtPage.anchorNav.overview, href: '#overview' },
+  ...(galleryImages.length > 0 ? [{ label: t.yachtPage.anchorNav.gallery, href: '#gallery' }] : []),
+  { label: t.yachtPage.anchorNav.specs, href: '#specs' },
+  ...(recommendedCards.length > 0 ? [{ label: t.yachtPage.anchorNav.recommended, href: '#recommended' }] : []),
+];
+
+const seoTitle = data.seo?.title ?? `${brandDisplayMap[data.brand as BrandKey]} ${data.name} — Herev`;
+const seoDescription = data.seo?.description ?? `${brandDisplayMap[data.brand as BrandKey]} ${data.name}, ${data.lengthM}m.`;
+
+const categoryLabel = data.category ? t.categories[data.category as CategoryKey] : undefined;
+---
+
+<Layout lang={lang} title={seoTitle} description={seoDescription}>
+
+  <SiteHeader
+    lang={lang}
+    variant="transparent"
+    currentPath={`/${lang}/yachts/${yachtSlug}/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    {heroImage && (
+      <HeroSection
+        eyebrow={categoryLabel ?? data.brand.toUpperCase()}
+        heading={`${brandDisplayMap[data.brand as BrandKey]} ${data.name}`}
+        subtext=""
+        cta1Label={t.yachtPage.enquireCta}
+        cta1Href="#lead"
+        cta2Label={t.yachtPage.bookViewingCta}
+        cta2Href="#lead"
+        image={heroImage}
+        imageAlt={`${data.name} yacht`}
+      />
+    )}
+
+    <!-- Key numbers bar -->
+    <div class="bg-ink text-white border-b border-[var(--color-line-on-ink)]">
+      <div class="max-w-[1440px] mx-auto px-gutter py-6">
+        <dl class="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
+          <div>
+            <dt class="font-mono text-label tracking-label uppercase text-[var(--color-paper-72)] mb-1">
+              {t.yachtPage.keyNumbers.length}
+            </dt>
+            <dd class="font-display text-h3 text-white" style="font-weight: 400;">
+              {data.lengthM} m
+            </dd>
+          </div>
+          <div>
+            <dt class="font-mono text-label tracking-label uppercase text-[var(--color-paper-72)] mb-1">
+              {t.yachtPage.keyNumbers.cabins}
+            </dt>
+            <dd class="font-display text-h3 text-white" style="font-weight: 400;">
+              {data.cabins}
+            </dd>
+          </div>
+          {data.maxSpeedKn !== undefined && (
+            <div>
+              <dt class="font-mono text-label tracking-label uppercase text-[var(--color-paper-72)] mb-1">
+                {t.yachtPage.keyNumbers.speed}
+              </dt>
+              <dd class="font-display text-h3 text-white" style="font-weight: 400;">
+                {data.maxSpeedKn} kn
+              </dd>
+            </div>
+          )}
+          <div>
+            <dt class="font-mono text-label tracking-label uppercase text-[var(--color-paper-72)] mb-1">
+              {t.yachtPage.keyNumbers.price}
+            </dt>
+            <dd class="font-display text-h3 text-white" style="font-weight: 400;">
+              {data.priceEur ? formatPrice(data.priceEur) : t.fleet.priceOnRequest}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <AnchorNav items={anchorItems} />
+
+    <!-- Overview -->
+    <section id="overview" class="py-section bg-paper">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="max-w-[720px]">
+          <SectionLabel text={t.yachtPage.anchorNav.overview} class="mb-5" />
+          <div class="prose prose-lg text-[var(--color-ink-70)] leading-relaxed">
+            <Content />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery (conditional) -->
+    {galleryImages.length > 0 && (
+      <section id="gallery" class="py-section bg-white">
+        <div class="max-w-[1440px] mx-auto px-gutter">
+          <SectionLabel text={t.yachtPage.galleryHeading} class="mb-8" />
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {galleryImages.map((img, i) => (
+              <div class="overflow-hidden" style="aspect-ratio: 4/3;">
+                <Image
+                  src={img}
+                  alt={`${data.name} gallery image ${i + 1}`}
+                  widths={[600, 900]}
+                  sizes="(min-width: 1024px) 30vw, 50vw"
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Deck plans (conditional) -->
+    {layoutImages.length > 0 && (
+      <section id="layout" class="py-section bg-paper">
+        <div class="max-w-[1440px] mx-auto px-gutter">
+          <SectionLabel text={t.yachtPage.deckPlansHeading} class="mb-8" />
+          <div class="flex flex-col gap-8">
+            {layoutImages.map((img, i) => (
+              <Image
+                src={img}
+                alt={`${data.name} deck plan ${i + 1}`}
+                widths={[800, 1200]}
+                sizes="(min-width: 1024px) 60vw, 90vw"
+                loading="lazy"
+                class="w-full max-w-[900px] object-contain"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+    )}
+
+    <!-- Specifications -->
+    <section id="specs" class="py-section bg-white">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="max-w-[640px]">
+          <SectionLabel text={t.yachtPage.specsHeading} class="mb-8" />
+          <SpecTable specs={specs} />
+        </div>
+      </div>
+    </section>
+
+    <!-- Lead module -->
+    <LeadModule
+      eyebrow={t.lead.eyebrow}
+      heading={t.lead.heading}
+      subtext={t.lead.subtext}
+      ctaLabel={t.lead.cta}
+      image={leadPic}
+      imageAlt="Yacht interior"
+      orCallLabel={t.lead.orCall}
+      fallbackContact={t.lead.fallbackContact}
+      namePlaceholder={t.lead.namePlaceholder}
+      contactPlaceholder={t.lead.contactPlaceholder}
+      modelPlaceholder={t.lead.modelPlaceholder}
+      messagePlaceholder={t.lead.messagePlaceholder}
+    />
+
+    <!-- Recommended yachts -->
+    <RecommendedYachts
+      heading={t.yachtPage.recommendedHeading}
+      yachts={recommendedCards}
+      enquireLabel={t.fleet.enquire}
+      priceOnRequestLabel={t.fleet.priceOnRequest}
+    />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

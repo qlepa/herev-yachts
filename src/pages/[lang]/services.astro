@@ -1,0 +1,65 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import PageHero from '../../components/sections/PageHero.astro';
+import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
+import LeadModule from '../../components/sections/LeadModule.astro';
+import { getLocalePaths, type Locale } from '../../lib/i18n';
+import { getTranslations } from '../../lib/i18n-strings';
+import leadPic from '../../assets/site/lead-image.avif';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = getTranslations(lang);
+
+const pageTitle = t.servicesPage.hero.heading + ' — Herev';
+const pageDescription = t.servicesPage.hero.subtext;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription}>
+
+  <SiteHeader
+    lang={lang}
+    variant="ink"
+    currentPath={`/${lang}/services/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    <PageHero
+      eyebrow={t.servicesPage.hero.eyebrow}
+      heading={t.servicesPage.hero.heading}
+      subtext={t.servicesPage.hero.subtext}
+    />
+
+    <AdvisoryGrid
+      eyebrow={t.servicesPage.advisory.eyebrow}
+      heading={t.servicesPage.advisory.heading}
+      steps={t.servicesPage.steps}
+    />
+
+    <LeadModule
+      eyebrow={t.lead.eyebrow}
+      heading={t.servicesPage.cta.heading}
+      subtext={t.lead.subtext}
+      ctaLabel={t.lead.cta}
+      image={leadPic}
+      imageAlt="Private yacht viewing"
+      orCallLabel={t.lead.orCall}
+      fallbackContact={t.lead.fallbackContact}
+      namePlaceholder={t.lead.namePlaceholder}
+      contactPlaceholder={t.lead.contactPlaceholder}
+      modelPlaceholder={t.lead.modelPlaceholder}
+      messagePlaceholder={t.lead.messagePlaceholder}
+    />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

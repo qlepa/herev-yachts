@@ -1,0 +1,20 @@
+---
+interface Props {
+  specs: Array<{ label: string; value: string }>;
+}
+
+const { specs } = Astro.props;
+---
+
+<div class="divide-y divide-[var(--color-line)]">
+  {specs.map(({ label, value }) => (
+    <div class="flex items-baseline justify-between py-4 gap-4">
+      <span class="font-mono text-label tracking-label uppercase text-[var(--color-ink-55)]">
+        {label}
+      </span>
+      <span class="font-body text-body font-medium text-ink text-right">
+        {value}
+      </span>
+    </div>
+  ))}
+</div>
