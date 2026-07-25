@@ -9,7 +9,6 @@ beamM: 2.54
 draftM: 0.61
 berths: 2
 maxSpeedKn: 48
-priceEur: 210000
 category: runabout
 featured: true
 draft: false

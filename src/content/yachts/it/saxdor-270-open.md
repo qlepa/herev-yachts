@@ -9,7 +9,6 @@ beamM: 2.75
 draftM: 0.45
 berths: 2
 maxSpeedKn: 42
-priceEur: 90000
 category: open
 featured: false
 draft: false

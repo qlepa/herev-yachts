@@ -1,0 +1,252 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import TextLink from '../../../components/ui/TextLink.astro';
+import Btn from '../../../components/ui/Btn.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import { getTranslations } from '../../../lib/i18n-strings';
+import rawLocations from '../../../data/locations.json';
+
+type LocationEntry = {
+  id: string; name: string; city: string; country: string;
+  address: string; lat: number; lng: number;
+  brandKeys: string[]; dealerId?: string;
+};
+
+const allLocations = rawLocations as LocationEntry[];
+
+const BRAND_LABELS: Record<string, string> = {
+  galeon: 'GALEON',
+  parker: 'PARKER',
+  saxdor: 'SAXDOR',
+  'de-antonio': 'DE ANTONIO',
+  'chris-craft': 'CHRIS-CRAFT',
+};
+
+function getDisplayName(locale: string, code: string): string {
+  try {
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
+export async function getStaticPaths() {
+  const allLocs = rawLocations as LocationEntry[];
+  const countryCodes = [...new Set(allLocs.map((l) => l.country))];
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const code of countryCodes) {
+      paths.push({
+        params: { lang, country: code.toLowerCase() },
+        props: { countryCode: code },
+      });
+    }
+  }
+  return paths;
+}
+
+const { lang, country } = Astro.params as { lang: Locale; country: string };
+const { countryCode } = Astro.props as { countryCode: string };
+const t = getTranslations(lang);
+const np = t.networkPage;
+
+const pageLocations = allLocations.filter((l) => l.country === countryCode);
+const countryName = getDisplayName(lang, countryCode);
+
+const locationCount = pageLocations.length;
+const brandKeys = [...new Set(pageLocations.flatMap((l) => l.brandKeys))];
+const brandsCount = brandKeys.length;
+
+// Mapbox Static Images thumbnail (graceful fallback when token not set)
+const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
+const meanLat = pageLocations.reduce((s, l) => s + l.lat, 0) / locationCount;
+const meanLng = pageLocations.reduce((s, l) => s + l.lng, 0) / locationCount;
+const staticMapUrl = mapboxToken
+  ? `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${meanLng.toFixed(4)},${meanLat.toFixed(4)},5/640x320@2x?access_token=${mapboxToken}`
+  : null;
+
+// hreflang
+const alternates = LOCALES.map((l) => ({
+  lang: l,
+  href: `https://herev.com/${l}/network/${country}/`,
+}));
+
+// JSON-LD per showroom
+const localBusinessSchemas = pageLocations.map((loc) => ({
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: loc.name,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: loc.address,
+    addressLocality: loc.city,
+    addressCountry: countryCode,
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: loc.lat,
+    longitude: loc.lng,
+  },
+  url: `https://herev.com/${lang}/network/${country}/`,
+}));
+
+const pageTitle = `${countryName} — ${np.hero.heading} — Herev`;
+const pageDescription = `Official Herev dealer network in ${countryName}. ${locationCount} authorised location${locationCount !== 1 ? 's' : ''}.`;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription} alternates={alternates}>
+
+  {localBusinessSchemas.map((schema) => (
+    <script is:inline type="application/ld+json" slot="head" set:html={JSON.stringify(schema)} />
+  ))}
+
+  <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/network/${country}/`} nav={t.nav} />
+
+  <main>
+
+    <!-- PAGE HEADER -->
+    <section class="bg-ink text-white py-section">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <!-- Breadcrumb -->
+        <nav class="mb-5" aria-label="Breadcrumb">
+          <p class="font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase">
+            <a href={`/${lang}/network/`} class="hover:text-gilt transition-colors">
+              {np.countryPage.breadcrumb}
+            </a>
+            {' / '}
+            <span class="text-white">{countryName.toUpperCase()}</span>
+          </p>
+        </nav>
+        <!-- H1 + CTA row -->
+        <div class="flex items-end justify-between gap-6 flex-wrap">
+          <div>
+            <SectionLabel
+              text={np.countryPage.locationCount
+                .replace('{n}', String(locationCount))
+                .replace('{b}', String(brandsCount))}
+              on="ink"
+              class="mb-3"
+            />
+            <h1
+              class="font-display text-white leading-none tracking-tight"
+              style="font-size: clamp(2.5rem, 5vw, 3.25rem); font-weight: 360;"
+            >
+              {countryName}
+            </h1>
+          </div>
+          <Btn variant="gilt" href="#enquire">
+            {np.countryPage.enquireInCountry.replace('{country}', countryName)}
+          </Btn>
+        </div>
+      </div>
+    </section>
+
+    <!-- SHOWROOMS + SIDEBAR -->
+    <div class="max-w-[1440px] mx-auto px-gutter py-section">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+
+        <!-- Showroom cards -->
+        <div class="flex flex-col gap-4">
+          {pageLocations.map((loc) => (
+            <div class="border border-[var(--color-line)] p-6 flex flex-col gap-4">
+              <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                  <h2
+                    class="font-display text-ink leading-tight mb-1"
+                    style="font-size: 1.3125rem; font-weight: 450;"
+                  >{loc.name}</h2>
+                  <p class="font-mono text-micro tracking-mono text-teal uppercase m-0">
+                    {loc.city}
+                  </p>
+                </div>
+                <a
+                  href="#enquire"
+                  class="flex-none font-mono font-semibold text-ink border border-[var(--color-line-strong)] px-4 py-2 hover:bg-paper transition-colors rounded-soft text-[12px] tracking-mono"
+                >
+                  {np.countryPage.enquireCta}
+                </a>
+              </div>
+              <address class="font-mono text-sm text-[var(--color-ink-70)] not-italic leading-relaxed m-0">
+                {loc.address}
+              </address>
+              <div class="border-t border-[var(--color-line)] pt-4">
+                <p
+                  class="font-mono font-bold text-brass mb-3 m-0"
+                  style="font-size: 9.5px; letter-spacing: .24em;"
+                >
+                  {np.countryPage.brandsCarried}
+                </p>
+                <div class="flex flex-wrap gap-2">
+                  {loc.brandKeys.map((k) => (
+                    <span
+                      class="font-display text-ink border border-[var(--color-line)] px-3 py-1.5"
+                      style="font-size: 13px; font-weight: 400; letter-spacing: .12em;"
+                    >
+                      {BRAND_LABELS[k] ?? k.toUpperCase()}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Sidebar -->
+        <aside>
+          <div class="sticky top-24 flex flex-col gap-5">
+            <SectionLabel text={np.countryPage.mapLabel} class="mb-0" />
+            {staticMapUrl ? (
+              <div class="overflow-hidden border border-[var(--color-line)]" style="aspect-ratio: 3/4;">
+                <img
+                  src={staticMapUrl}
+                  alt={`${countryName} dealer locations map`}
+                  width="300"
+                  height="400"
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+            ) : (
+              <div
+                class="border border-[var(--color-line)] bg-ink flex items-center justify-center"
+                style="aspect-ratio: 3/4;"
+              >
+                <span class="font-mono text-micro text-[var(--color-paper-72)]">MAP UNAVAILABLE</span>
+              </div>
+            )}
+            <p class="font-mono text-[11px] text-[var(--color-ink-55)] leading-relaxed m-0" style="letter-spacing: .04em;">
+              {np.countryPage.seaTrials}
+            </p>
+            <TextLink href={`/${lang}/network/`}>{np.countryPage.backToNetwork}</TextLink>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+
+    <!-- CLOSING CTA -->
+    <section id="enquire" class="bg-ink text-white py-section text-center">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={np.cta.eyebrow} on="ink" class="mb-5 justify-center" />
+        <h2
+          class="font-display text-white mb-4 max-w-[580px] mx-auto leading-tight tracking-tight"
+          style="font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 340;"
+        >
+          {np.cta.heading}
+        </h2>
+        <p class="text-[var(--color-paper-72)] text-body leading-relaxed max-w-[500px] mx-auto mb-10">
+          {np.cta.subtext}
+        </p>
+        <Btn variant="gilt" href={`/${lang}/#lead`}>{np.cta.ctaLabel}</Btn>
+      </div>
+    </section>
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

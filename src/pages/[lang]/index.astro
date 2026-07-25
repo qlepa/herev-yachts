@@ -56,7 +56,6 @@ const yachtCards = await Promise.all(
     brandDisplay:   brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase(),
     loaM:           y.data.lengthM,
     loaFt:          metresToFeet(y.data.lengthM),
-    priceEur:       y.data.priceEur,
     categoryLabel:  y.data.category
       ? t.categories[y.data.category as CategoryKey]
       : undefined,
@@ -116,7 +115,6 @@ const networkStats = [
       viewAllLabel={t.fleet.viewAll}
       viewAllHref={`/${lang}/yachts/`}
       enquireLabel={t.fleet.enquire}
-      priceOnRequestLabel={t.fleet.priceOnRequest}
     />
 
     <AdvisoryGrid

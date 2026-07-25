@@ -8,7 +8,6 @@ interface YachtCardData {
   brandDisplay: string;
   loaM: number;
   loaFt: string;
-  priceEur?: number;
   categoryLabel?: string;
   image: ImageMetadata | null;
   href: string;
@@ -18,13 +17,12 @@ interface Props {
   heading: string;
   yachts: YachtCardData[];
   enquireLabel: string;
-  priceOnRequestLabel: string;
   eyebrow?: string;
   viewAllLabel?: string;
   viewAllHref?: string;
 }
 
-const { heading, yachts, enquireLabel, priceOnRequestLabel, eyebrow, viewAllLabel, viewAllHref } = Astro.props;
+const { heading, yachts, enquireLabel, eyebrow, viewAllLabel, viewAllHref } = Astro.props;
 ---
 
 {yachts.length > 0 && (
@@ -55,12 +53,10 @@ const { heading, yachts, enquireLabel, priceOnRequestLabel, eyebrow, viewAllLabe
             brandDisplay={yacht.brandDisplay}
             loaM={yacht.loaM}
             loaFt={yacht.loaFt}
-            priceEur={yacht.priceEur}
             categoryLabel={yacht.categoryLabel}
             image={yacht.image}
             href={yacht.href}
             enquireLabel={enquireLabel}
-            priceOnRequestLabel={priceOnRequestLabel}
           />
         ))}
       </div>

@@ -84,19 +84,24 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 - Porównywarka: do 3 jachtów, stan w URL (shareable), widok
   zestawienia + textarea zapytania -> ten sam endpoint z listą
   porównywanych jachtów.
+- Wdrożyć /api/geo (Vercel geo headers: x-vercel-ip-country) i podpiąć
+  do paska personalizacji na /network + geo-IP country focus na mapie.
 
 ## Krok 6 — our network (hybryda)
 
 - Warstwa statyczna (fundament SEO): /network + podstrony
   /network/{kraj} — listy showroomów, schema.org LocalBusiness,
-  liczniki per kraj. Inline SVG mapa świata z podświetlonymi krajami
-  obecności (kraje = linki do podstron), zero JS.
+  liczniki per kraj. Zero JS.
 - Warstwa GL (enhancement): wyspa Mapbox GL na /network,
   client:visible, clustering (setki pinów), publiczny token
   z restrykcją URL. Brak GL nie zabiera treści.
-- Personalizacja: pasek "X lokalizacji w {kraj usera} — najbliższy:
-  {miasto}" z geolokalizacji IP (kraj), fallback na wersję globalną.
-  Bez browser geolocation API.
+- Personalizacja: pasek geo-IP (kraj z nagłówków Vercel) — pełna
+  implementacja w kroku 5 (wire /api/geo into network strip).
+  W tym kroku oba stany (neutral/resolved) renderowane statycznie;
+  `data-geo-strip` atrybut gotowy do przełączania przez JS w kroku 5.
+- Geolokalizacja przeglądarki (user-initiated only) w wyspie GL:
+  przycisk "Use my location" → haversine nearest showroom → flyTo.
+- Enquiry CTAs → #enquire → /${lang}/#lead jako placeholder do kroku 5.
 
 ## Krok 7 — i18n treści + SEO
 
@@ -116,4 +121,4 @@ jeśli dane produkcyjne nie dotarły) — na preview deploy, nie prod.
 
 Konfigurator, newsletter, pełnotekstowa wyszukiwarka
 z podpowiedziami, automatyczny routing regionalny leadów, blog w 3.
-języku, preview mode Sanity, browser geolocation.
+języku, preview mode Sanity.

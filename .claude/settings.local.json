@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs sed -i '/^priceEur:/d')",
+      "Bash(pnpm typecheck *)",
+      "Bash(pnpm build *)"
+    ]
+  }
+}

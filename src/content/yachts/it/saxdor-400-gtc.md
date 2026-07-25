@@ -9,7 +9,6 @@ beamM: 3.72
 draftM: 0.47
 berths: 4
 maxSpeedKn: 45
-priceEur: 520000
 category: grand-tourer
 featured: true
 draft: false

@@ -10,7 +10,6 @@ draftM: 1.05
 berths: 4
 maxSpeedKn: 30
 engines: "2 × Volvo IPS 500"
-priceEur: 450000
 category: flybridge
 featured: false
 draft: false

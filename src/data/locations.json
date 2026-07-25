@@ -31,5 +31,475 @@
     "lng": 2.6502,
     "brandKeys": ["saxdor", "de-antonio"],
     "dealerId": "dealer-01"
+  },
+  {
+    "id": "gdansk-01",
+    "name": "Herev Gdańsk",
+    "city": "Gdańsk",
+    "country": "PL",
+    "address": "ul. Szafarnia 10, 80-755 Gdańsk",
+    "lat": 54.349,
+    "lng": 18.659,
+    "brandKeys": ["galeon", "saxdor"]
+  },
+  {
+    "id": "szczecin-01",
+    "name": "Herev Szczecin",
+    "city": "Szczecin",
+    "country": "PL",
+    "address": "ul. Przestrzenna 6, 70-800 Szczecin",
+    "lat": 53.428,
+    "lng": 14.553,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "barcelona-01",
+    "name": "Herev Barcelona",
+    "city": "Barcelona",
+    "country": "ES",
+    "address": "Moll de la Fusta s/n, 08039 Barcelona",
+    "lat": 41.375,
+    "lng": 2.185,
+    "brandKeys": ["saxdor", "de-antonio", "parker"]
+  },
+  {
+    "id": "valencia-01",
+    "name": "Herev Valencia",
+    "city": "Valencia",
+    "country": "ES",
+    "address": "Muelle de la Aduana s/n, 46024 Valencia",
+    "lat": 39.456,
+    "lng": -0.318,
+    "brandKeys": ["saxdor", "galeon"]
+  },
+  {
+    "id": "marbella-01",
+    "name": "Herev Marbella",
+    "city": "Marbella",
+    "country": "ES",
+    "address": "Puerto Banús, Local 12, 29660 Marbella",
+    "lat": 36.487,
+    "lng": -4.956,
+    "brandKeys": ["de-antonio", "chris-craft", "saxdor"]
+  },
+  {
+    "id": "san-sebastian-01",
+    "name": "Herev San Sebastián",
+    "city": "San Sebastián",
+    "country": "ES",
+    "address": "Puerto Pesquero de Pasaia, Local 4, 20110 Pasaia",
+    "lat": 43.324,
+    "lng": -1.985,
+    "brandKeys": ["parker", "galeon"]
+  },
+  {
+    "id": "vigo-01",
+    "name": "Herev Vigo",
+    "city": "Vigo",
+    "country": "ES",
+    "address": "Estación Marítima de Vigo, 36202 Vigo",
+    "lat": 42.237,
+    "lng": -8.724,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "cannes-01",
+    "name": "Herev Cannes",
+    "city": "Cannes",
+    "country": "FR",
+    "address": "Vieux Port, Quai Saint-Pierre, 06400 Cannes",
+    "lat": 43.546,
+    "lng": 7.012,
+    "brandKeys": ["de-antonio", "saxdor", "chris-craft"]
+  },
+  {
+    "id": "marseille-01",
+    "name": "Herev Marseille",
+    "city": "Marseille",
+    "country": "FR",
+    "address": "Quai du Port, 13002 Marseille",
+    "lat": 43.297,
+    "lng": 5.37,
+    "brandKeys": ["saxdor", "galeon"]
+  },
+  {
+    "id": "la-rochelle-01",
+    "name": "Herev La Rochelle",
+    "city": "La Rochelle",
+    "country": "FR",
+    "address": "Bassin des Chalutiers, 17000 La Rochelle",
+    "lat": 46.159,
+    "lng": -1.15,
+    "brandKeys": ["parker", "saxdor"]
+  },
+  {
+    "id": "bordeaux-01",
+    "name": "Herev Bordeaux",
+    "city": "Bordeaux",
+    "country": "FR",
+    "address": "Quai Louis XVIII, 33000 Bordeaux",
+    "lat": 44.842,
+    "lng": -0.574,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "nice-01",
+    "name": "Herev Nice",
+    "city": "Nice",
+    "country": "FR",
+    "address": "Port Lympia, Quai Entrecasteaux, 06300 Nice",
+    "lat": 43.697,
+    "lng": 7.285,
+    "brandKeys": ["de-antonio", "saxdor"]
+  },
+  {
+    "id": "genoa-01",
+    "name": "Herev Genoa",
+    "city": "Genoa",
+    "country": "IT",
+    "address": "Calata Molo Vecchio 15, 16128 Genova",
+    "lat": 44.397,
+    "lng": 8.927,
+    "brandKeys": ["galeon", "saxdor", "parker"]
+  },
+  {
+    "id": "venice-01",
+    "name": "Herev Venice",
+    "city": "Venice",
+    "country": "IT",
+    "address": "Via delle Industrie 25, 30175 Venezia",
+    "lat": 45.441,
+    "lng": 12.316,
+    "brandKeys": ["de-antonio", "chris-craft"]
+  },
+  {
+    "id": "naples-01",
+    "name": "Herev Naples",
+    "city": "Naples",
+    "country": "IT",
+    "address": "Via Mergellina 14, 80122 Napoli",
+    "lat": 40.836,
+    "lng": 14.249,
+    "brandKeys": ["saxdor", "de-antonio"]
+  },
+  {
+    "id": "bari-01",
+    "name": "Herev Bari",
+    "city": "Bari",
+    "country": "IT",
+    "address": "Molo San Nicola, 70122 Bari",
+    "lat": 41.127,
+    "lng": 16.882,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "palermo-01",
+    "name": "Herev Palermo",
+    "city": "Palermo",
+    "country": "IT",
+    "address": "Porto di Palermo, Molo Beverello, 90139 Palermo",
+    "lat": 38.116,
+    "lng": 13.362,
+    "brandKeys": ["saxdor", "galeon"]
+  },
+  {
+    "id": "ostia-01",
+    "name": "Herev Ostia",
+    "city": "Ostia",
+    "country": "IT",
+    "address": "Via della Scafa 98, 00119 Roma Ostia",
+    "lat": 41.731,
+    "lng": 12.278,
+    "brandKeys": ["de-antonio", "saxdor"]
+  },
+  {
+    "id": "split-01",
+    "name": "Herev Split",
+    "city": "Split",
+    "country": "HR",
+    "address": "ACI Marina Split, Uvala Baluni bb, 21000 Split",
+    "lat": 43.508,
+    "lng": 16.44,
+    "brandKeys": ["saxdor", "parker", "galeon"]
+  },
+  {
+    "id": "dubrovnik-01",
+    "name": "Herev Dubrovnik",
+    "city": "Dubrovnik",
+    "country": "HR",
+    "address": "Gruška obala 1, 20000 Dubrovnik",
+    "lat": 42.651,
+    "lng": 18.094,
+    "brandKeys": ["de-antonio", "chris-craft"]
+  },
+  {
+    "id": "zadar-01",
+    "name": "Herev Zadar",
+    "city": "Zadar",
+    "country": "HR",
+    "address": "Obala kneza Domagoja 1, 23000 Zadar",
+    "lat": 44.119,
+    "lng": 15.242,
+    "brandKeys": ["galeon", "saxdor"]
+  },
+  {
+    "id": "rovinj-01",
+    "name": "Herev Rovinj",
+    "city": "Rovinj",
+    "country": "HR",
+    "address": "Obala Alda Rismondo 2, 52210 Rovinj",
+    "lat": 45.08,
+    "lng": 13.638,
+    "brandKeys": ["parker", "saxdor"]
+  },
+  {
+    "id": "piraeus-01",
+    "name": "Herev Piraeus",
+    "city": "Piraeus",
+    "country": "GR",
+    "address": "Akti Miaouli 93, 185 38 Piraeus",
+    "lat": 37.949,
+    "lng": 23.644,
+    "brandKeys": ["galeon", "saxdor", "de-antonio"]
+  },
+  {
+    "id": "thessaloniki-01",
+    "name": "Herev Thessaloniki",
+    "city": "Thessaloniki",
+    "country": "GR",
+    "address": "Leoforos Nikis 5, 546 25 Thessaloniki",
+    "lat": 40.64,
+    "lng": 22.944,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "rhodes-01",
+    "name": "Herev Rhodes",
+    "city": "Rhodes",
+    "country": "GR",
+    "address": "Mandraki Harbour, 851 00 Rhodes",
+    "lat": 36.435,
+    "lng": 28.218,
+    "brandKeys": ["saxdor", "de-antonio"]
+  },
+  {
+    "id": "corfu-01",
+    "name": "Herev Corfu",
+    "city": "Corfu",
+    "country": "GR",
+    "address": "New Port of Corfu, 491 00 Corfu",
+    "lat": 39.624,
+    "lng": 19.922,
+    "brandKeys": ["parker", "saxdor"]
+  },
+  {
+    "id": "hamburg-01",
+    "name": "Herev Hamburg",
+    "city": "Hamburg",
+    "country": "DE",
+    "address": "Neumühlen 19, 22763 Hamburg",
+    "lat": 53.545,
+    "lng": 9.969,
+    "brandKeys": ["galeon", "parker", "chris-craft"]
+  },
+  {
+    "id": "kiel-01",
+    "name": "Herev Kiel",
+    "city": "Kiel",
+    "country": "DE",
+    "address": "Schiffbrücke 1, 24103 Kiel",
+    "lat": 54.323,
+    "lng": 10.123,
+    "brandKeys": ["galeon", "saxdor"]
+  },
+  {
+    "id": "wannsee-01",
+    "name": "Herev Berlin-Wannsee",
+    "city": "Berlin",
+    "country": "DE",
+    "address": "Wannseebadweg 25, 14129 Berlin",
+    "lat": 52.428,
+    "lng": 13.183,
+    "brandKeys": ["chris-craft", "de-antonio"]
+  },
+  {
+    "id": "amsterdam-01",
+    "name": "Herev Amsterdam",
+    "city": "Amsterdam",
+    "country": "NL",
+    "address": "NDSM-Plein 28, 1033 WB Amsterdam",
+    "lat": 52.37,
+    "lng": 4.914,
+    "brandKeys": ["galeon", "saxdor"]
+  },
+  {
+    "id": "rotterdam-01",
+    "name": "Herev Rotterdam",
+    "city": "Rotterdam",
+    "country": "NL",
+    "address": "Wilhelminakade 909, 3072 AP Rotterdam",
+    "lat": 51.923,
+    "lng": 4.479,
+    "brandKeys": ["parker", "galeon"]
+  },
+  {
+    "id": "scheveningen-01",
+    "name": "Herev Scheveningen",
+    "city": "Scheveningen",
+    "country": "NL",
+    "address": "Dr. Lelykade 10, 2583 CL Den Haag",
+    "lat": 52.1,
+    "lng": 4.265,
+    "brandKeys": ["saxdor", "parker"]
+  },
+  {
+    "id": "southampton-01",
+    "name": "Herev Southampton",
+    "city": "Southampton",
+    "country": "GB",
+    "address": "Ocean Village Marina, SO14 3TL Southampton",
+    "lat": 50.898,
+    "lng": -1.405,
+    "brandKeys": ["galeon", "chris-craft", "saxdor"]
+  },
+  {
+    "id": "brighton-01",
+    "name": "Herev Brighton",
+    "city": "Brighton",
+    "country": "GB",
+    "address": "Brighton Marina, BN2 5UF Brighton",
+    "lat": 50.814,
+    "lng": -0.133,
+    "brandKeys": ["saxdor", "parker"]
+  },
+  {
+    "id": "plymouth-01",
+    "name": "Herev Plymouth",
+    "city": "Plymouth",
+    "country": "GB",
+    "address": "Queen Anne's Battery Marina, PL4 0LP Plymouth",
+    "lat": 50.366,
+    "lng": -4.144,
+    "brandKeys": ["galeon", "parker"]
+  },
+  {
+    "id": "lisbon-01",
+    "name": "Herev Lisbon",
+    "city": "Lisbon",
+    "country": "PT",
+    "address": "Doca de Alcântara Norte, 1350-352 Lisboa",
+    "lat": 38.708,
+    "lng": -9.174,
+    "brandKeys": ["de-antonio", "saxdor", "galeon"]
+  },
+  {
+    "id": "porto-01",
+    "name": "Herev Porto",
+    "city": "Porto",
+    "country": "PT",
+    "address": "Cais de Gaia, Av. Diogo Leite 78, 4400-111 Vila Nova de Gaia",
+    "lat": 41.15,
+    "lng": -8.611,
+    "brandKeys": ["parker", "galeon"]
+  },
+  {
+    "id": "stockholm-01",
+    "name": "Herev Stockholm",
+    "city": "Stockholm",
+    "country": "SE",
+    "address": "Wasahamnen, Frihamnen, 115 56 Stockholm",
+    "lat": 59.329,
+    "lng": 18.069,
+    "brandKeys": ["galeon", "chris-craft"]
+  },
+  {
+    "id": "gothenburg-01",
+    "name": "Herev Gothenburg",
+    "city": "Gothenburg",
+    "country": "SE",
+    "address": "Fiskhamnsgatan 2, 414 58 Göteborg",
+    "lat": 57.709,
+    "lng": 11.975,
+    "brandKeys": ["galeon", "saxdor"]
+  },
+  {
+    "id": "oslo-01",
+    "name": "Herev Oslo",
+    "city": "Oslo",
+    "country": "NO",
+    "address": "Aker Brygge, Stranden 3, 0250 Oslo",
+    "lat": 59.914,
+    "lng": 10.752,
+    "brandKeys": ["parker", "galeon", "chris-craft"]
+  },
+  {
+    "id": "bergen-01",
+    "name": "Herev Bergen",
+    "city": "Bergen",
+    "country": "NO",
+    "address": "Festningskaien 1, 5003 Bergen",
+    "lat": 60.391,
+    "lng": 5.322,
+    "brandKeys": ["parker", "saxdor"]
+  },
+  {
+    "id": "bodrum-01",
+    "name": "Herev Bodrum",
+    "city": "Bodrum",
+    "country": "TR",
+    "address": "Neyzen Tevfik Cad. 228, 48400 Bodrum",
+    "lat": 37.034,
+    "lng": 27.431,
+    "brandKeys": ["de-antonio", "saxdor", "galeon"]
+  },
+  {
+    "id": "antalya-01",
+    "name": "Herev Antalya",
+    "city": "Antalya",
+    "country": "TR",
+    "address": "Setur Antalya Marina, Konyaaltı Cd., 07050 Antalya",
+    "lat": 36.897,
+    "lng": 30.713,
+    "brandKeys": ["saxdor", "de-antonio"]
+  },
+  {
+    "id": "dubai-marina-01",
+    "name": "Herev Dubai Marina",
+    "city": "Dubai",
+    "country": "AE",
+    "address": "Dubai Marina Yacht Club, Marina Walk, Dubai",
+    "lat": 25.076,
+    "lng": 55.139,
+    "brandKeys": ["chris-craft", "de-antonio", "saxdor"]
+  },
+  {
+    "id": "miami-01",
+    "name": "Herev Miami",
+    "city": "Miami",
+    "country": "US",
+    "address": "Miamarina at Bayside, 401 Biscayne Blvd, Miami, FL 33132",
+    "lat": 25.762,
+    "lng": -80.192,
+    "brandKeys": ["chris-craft", "galeon", "saxdor"]
+  },
+  {
+    "id": "fort-lauderdale-01",
+    "name": "Herev Fort Lauderdale",
+    "city": "Fort Lauderdale",
+    "country": "US",
+    "address": "Bahia Mar Marina, 801 Seabreeze Blvd, Fort Lauderdale, FL 33316",
+    "lat": 26.122,
+    "lng": -80.137,
+    "brandKeys": ["chris-craft", "de-antonio"]
+  },
+  {
+    "id": "sydney-01",
+    "name": "Herev Sydney",
+    "city": "Sydney",
+    "country": "AU",
+    "address": "Jones Bay Wharf, 26-32 Pirrama Rd, Pyrmont NSW 2009",
+    "lat": -33.869,
+    "lng": 151.209,
+    "brandKeys": ["galeon", "saxdor"]
   }
 ]

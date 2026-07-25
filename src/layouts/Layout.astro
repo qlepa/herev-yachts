@@ -5,9 +5,10 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string;
+  alternates?: Array<{ lang: string; href: string }>;
 }
 
-const { title = 'Herev Yachts', description, lang = 'en' } = Astro.props;
+const { title = 'Herev Yachts', description, lang = 'en', alternates } = Astro.props;
 ---
 
 <!doctype html>
@@ -20,6 +21,10 @@ const { title = 'Herev Yachts', description, lang = 'en' } = Astro.props;
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
+    {alternates && alternates.map((a) => (
+      <link rel="alternate" hreflang={a.lang} href={a.href} />
+    ))}
+    <slot name="head" />
   </head>
   <body>
     <slot />

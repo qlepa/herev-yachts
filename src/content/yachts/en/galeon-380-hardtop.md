@@ -9,7 +9,6 @@ beamM: 3.85
 draftM: 0.95
 berths: 4
 maxSpeedKn: 28
-priceEur: 320000
 category: hardtop
 featured: false
 draft: false

@@ -1,0 +1,268 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import Btn from '../../../components/ui/Btn.astro';
+import NetworkMap from '../../../islands/NetworkMap';
+import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
+import { getTranslations } from '../../../lib/i18n-strings';
+import type { MapLocation } from '../../../islands/NetworkMap';
+import rawLocations from '../../../data/locations.json';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = getTranslations(lang);
+const np = t.networkPage;
+
+// Cast JSON to typed array (JSON import infers narrow types)
+const allLocations = rawLocations as MapLocation[];
+
+// Build-time stats
+const locationCount = allLocations.length;
+const countryCodes = [...new Set(allLocations.map((l) => l.country))];
+const countriesCount = countryCodes.length;
+
+// Helper: Intl.DisplayNames with fallback
+function getDisplayName(locale: string, code: string): string {
+  try {
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
+
+// Country directory: sorted by count desc
+const byCountry = countryCodes
+  .map((code) => {
+    const locs = allLocations.filter((l) => l.country === code);
+    const cities = [...new Set(locs.map((l) => l.city))].slice(0, 2).join(' · ');
+    return {
+      code,
+      displayName: getDisplayName(lang, code),
+      count: locs.length,
+      cities,
+      href: `/${lang}/network/${code.toLowerCase()}/`,
+    };
+  })
+  .sort((a, b) => b.count - a.count);
+
+// hreflang alternates (placeholder domain — step 7 will centralise)
+const alternates = LOCALES.map((l) => ({
+  lang: l,
+  href: `https://herev.com/${l}/network/`,
+}));
+
+const heroStats = [
+  { value: String(locationCount), label: t.network.locations },
+  { value: '5', label: t.network.brands },
+  { value: String(countriesCount), label: t.network.countries },
+];
+
+const pageTitle = `${np.hero.heading} — Herev`;
+const pageDescription = np.hero.subtext;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription} alternates={alternates}>
+  <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/network/`} nav={t.nav} />
+
+  <main>
+
+    <!-- 1. HERO -->
+    <section class="bg-ink text-white">
+      <div class="max-w-[1440px] mx-auto px-gutter pt-16 pb-0">
+        <SectionLabel text={np.hero.eyebrow} on="ink" class="mb-5" />
+        <h1
+          class="font-display text-white max-w-[720px] leading-tight tracking-tight mb-5"
+          style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 340;"
+        >
+          {np.hero.heading}
+        </h1>
+        <p class="text-[var(--color-paper-72)] text-lg leading-relaxed max-w-[560px]">
+          {np.hero.subtext}
+        </p>
+      </div>
+      <!-- Stats bar -->
+      <div class="max-w-[1440px] mx-auto px-gutter mt-10">
+        <div class="flex border-t border-[var(--color-line-on-ink)]">
+          {heroStats.map((stat) => (
+            <div class="flex-1 py-6 pr-8 flex flex-col gap-2 border-r border-[var(--color-line-on-ink)] last:border-r-0">
+              <span
+                class="font-display text-white leading-none"
+                style="font-size: 2.75rem; font-weight: 400;"
+              >{stat.value}</span>
+              <span class="font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase"
+                >{stat.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. PERSONALIZATION STRIP -->
+    <div class="bg-paper border-b border-[var(--color-line)]">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <!-- Neutral state (always visible until step 5 wires geo-IP) -->
+        <div
+          data-geo-strip="neutral"
+          class="flex items-center justify-between gap-5 py-4"
+        >
+          <div class="flex items-center gap-3">
+            <svg
+              width="17" height="17" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6"
+              class="text-[var(--color-ink-55)] shrink-0"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
+            </svg>
+            <span class="text-sm text-ink">{np.strip.neutral}</span>
+          </div>
+          <a href="#directory" class="font-mono font-semibold text-[13px] tracking-mono text-teal shrink-0">
+            {np.strip.neutralCta}
+          </a>
+        </div>
+        <!-- Geo-resolved state (hidden; step 5 will remove 'hidden' and populate data-geo-* attrs) -->
+        <div
+          data-geo-strip="resolved"
+          class="hidden items-center justify-between gap-5 py-4 bg-[rgba(44,110,119,0.05)]"
+          aria-hidden="true"
+        >
+          <div class="flex items-center gap-3">
+            <svg
+              width="17" height="17" viewBox="0 0 24 24" fill="none"
+              stroke="currentColor" stroke-width="1.6"
+              class="text-brass shrink-0"
+              aria-hidden="true"
+            >
+              <path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11z" />
+              <circle cx="12" cy="10" r="2.4" />
+            </svg>
+            <span class="text-sm text-ink">
+              <strong data-geo-count></strong>
+              {' · '}nearest:{' '}
+              <strong data-geo-nearest></strong>
+            </span>
+          </div>
+          <a data-geo-link href="#directory" class="font-mono font-semibold text-[13px] tracking-mono text-teal shrink-0"></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. MAP ISLAND -->
+    <section style="background: #12222a;">
+      <NetworkMap
+        client:visible
+        locations={allLocations}
+        accessToken={import.meta.env.PUBLIC_MAPBOX_TOKEN ?? ''}
+        lang={lang}
+        mapAria={np.mapAria}
+      />
+      <noscript>
+        <div class="bg-ink text-center py-12 px-gutter">
+          <p class="font-mono text-sm text-[var(--color-paper-72)]">
+            Interactive map requires JavaScript. Browse the directory below.
+          </p>
+        </div>
+      </noscript>
+    </section>
+
+    <!-- 4. HOW IT WORKS -->
+    <section class="bg-paper py-section">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={np.howItWorks.eyebrow} class="mb-4" />
+        <h2
+          class="font-display text-ink max-w-[520px] mb-12 leading-tight tracking-tight"
+          style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400;"
+        >
+          {np.howItWorks.heading}
+        </h2>
+        <div
+          class="grid grid-cols-1 md:grid-cols-3"
+          style="border-top: 1px solid var(--color-line-strong);"
+        >
+          {np.howItWorks.steps.map((step) => (
+            <div class="pt-8 pb-10 md:pr-10 border-b md:border-b-0 md:border-r border-[var(--color-line)] last:border-r-0 flex flex-col gap-4">
+              <span
+                class="font-mono font-bold text-brass"
+                style="font-size: 12px; letter-spacing: .30em;"
+              >{step.no}</span>
+              <h3
+                class="font-display text-ink leading-tight"
+                style="font-size: 1.4375rem; font-weight: 450;"
+              >{step.title}</h3>
+              <p class="text-[var(--color-ink-70)] text-sm leading-relaxed m-0">{step.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. COUNTRY DIRECTORY -->
+    <section id="directory" class="bg-white py-section border-t border-[var(--color-line)]">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="flex items-end justify-between mb-8 gap-4 flex-wrap">
+          <div>
+            <SectionLabel
+              text={`${np.directory.eyebrow} · ${countriesCount} COUNTRIES`}
+              class="mb-3"
+            />
+            <h2
+              class="font-display text-ink leading-tight tracking-tight"
+              style="font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 400;"
+            >
+              {np.directory.heading}
+            </h2>
+          </div>
+        </div>
+        <!-- Grid: 4-col desktop, 2-col mobile; gap-px on bg-line creates borders -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-[var(--color-line)] border border-[var(--color-line)]">
+          {byCountry.map((country) => (
+            <a
+              href={country.href}
+              class="bg-white px-5 py-5 flex items-center justify-between gap-3 hover:bg-paper transition-colors"
+            >
+              <div class="flex flex-col gap-1 min-w-0">
+                <span
+                  class="font-display text-ink leading-tight truncate"
+                  style="font-size: 1.125rem; font-weight: 450;"
+                >{country.displayName}</span>
+                <span class="font-mono text-micro tracking-mono text-[var(--color-ink-55)] uppercase truncate">
+                  {country.cities}
+                </span>
+              </div>
+              <span
+                class="font-mono font-bold text-brass shrink-0"
+                style="font-size: 15px;"
+              >{country.count}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. CLOSING CTA -->
+    <section id="enquire" class="bg-ink text-white py-section text-center">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={np.cta.eyebrow} on="ink" class="mb-5 justify-center" />
+        <h2
+          class="font-display text-white mb-4 max-w-[640px] mx-auto leading-tight tracking-tight"
+          style="font-size: clamp(1.75rem, 3vw, 2.75rem); font-weight: 340;"
+        >
+          {np.cta.heading}
+        </h2>
+        <p class="text-[var(--color-paper-72)] text-body leading-relaxed max-w-[500px] mx-auto mb-10">
+          {np.cta.subtext}
+        </p>
+        <Btn variant="gilt" href={`/${lang}/#lead`}>{np.cta.ctaLabel}</Btn>
+      </div>
+    </section>
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+</Layout>

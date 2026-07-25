@@ -9,7 +9,6 @@ beamM: 3.40
 draftM: 0.60
 berths: 4
 maxSpeedKn: 38
-priceEur: 195000
 category: weekender
 featured: false
 draft: false
