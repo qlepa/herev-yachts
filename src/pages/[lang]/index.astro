@@ -4,6 +4,7 @@ import Layout from '../../layouts/Layout.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
+import IntroSection from '../../components/sections/IntroSection.astro';
 import FleetStrip from '../../components/sections/FleetStrip.astro';
 import TrustBand from '../../components/sections/TrustBand.astro';
 import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
@@ -84,15 +85,27 @@ const networkStats = [
   <main>
 
     <HeroSection
-      eyebrow={t.hero.eyebrow}
+      fullscreen
+      image={homepageHero}
+      imageAlt="A Saxdor yacht under way on open water"
+      videoSrc="https://player.vimeo.com/progressive_redirect/playback/1185484138/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&oauth2_token_id=1799510047&signature=85041f5fdc32ddad1d3e0c1bfe3c7f45a2ad09386863675518639a098fb22027"
       heading={t.hero.heading}
-      subtext={t.hero.subtext}
       cta1Label={t.hero.cta1}
       cta1Href={`/${lang}/brands/`}
       cta2Label={t.hero.cta2}
       cta2Href={`/${lang}/yachts/`}
-      image={homepageHero}
-      imageAlt="A Saxdor yacht under way on open water"
+    />
+
+    <div class="relative z-[1]">
+
+    <IntroSection
+      eyebrow={t.intro.eyebrow}
+      heading={t.intro.heading}
+      body={t.hero.subtext}
+    />
+
+    <TrustBand
+      brandNames={['GALEON', 'PARKER', 'SAXDOR', 'DE ANTONIO', 'CHRIS-CRAFT']}
     />
 
     <FleetStrip
@@ -104,10 +117,6 @@ const networkStats = [
       viewAllHref={`/${lang}/yachts/`}
       enquireLabel={t.fleet.enquire}
       priceOnRequestLabel={t.fleet.priceOnRequest}
-    />
-
-    <TrustBand
-      brandNames={['GALEON', 'PARKER', 'SAXDOR', 'DE ANTONIO', 'CHRIS-CRAFT']}
     />
 
     <AdvisoryGrid
@@ -142,6 +151,8 @@ const networkStats = [
       linkLabel={t.network.linkLabel}
       linkHref={`/${lang}/network/`}
     />
+
+    </div>
 
   </main>
 

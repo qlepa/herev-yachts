@@ -1,0 +1,30 @@
+---
+interface Props {
+  eyebrow: string;
+  copy: string;
+  ctaLabel: string;
+}
+
+const { eyebrow, copy, ctaLabel } = Astro.props;
+---
+
+<section id="financing" class="py-section bg-ink text-white">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+      <div class="max-w-[640px]">
+        <p class="font-mono font-bold text-gilt uppercase tracking-[.3em] text-[11px] mb-5">
+          {eyebrow}
+        </p>
+        <p class="font-display text-white leading-[1.32]" style="font-size: clamp(1.25rem, 2vw, 1.6875rem); font-weight: 300;">
+          {copy}
+        </p>
+      </div>
+      <a
+        href="#lead"
+        class="font-mono font-semibold text-[13px] tracking-[.04em] text-gilt underline underline-offset-4 hover:text-white transition-colors whitespace-nowrap"
+      >
+        {ctaLabel}
+      </a>
+    </div>
+  </div>
+</section>

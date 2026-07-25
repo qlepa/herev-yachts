@@ -1,0 +1,47 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Props {
+  images: ImageMetadata[];
+  eyebrow: string;
+  subtitle: string;
+  yachtName: string;
+}
+
+const { images, eyebrow, subtitle, yachtName } = Astro.props;
+---
+
+{images.length > 0 && (
+  <section id="deck-plans" class="py-section bg-paper">
+    <div class="max-w-[1440px] mx-auto px-gutter">
+
+      <SectionLabel text={eyebrow} class="mb-3" />
+      <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{subtitle}</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {images.map((img, i) => (
+          <div class="bg-white overflow-hidden">
+            <div class="overflow-hidden" style="aspect-ratio: 3/4;">
+              <Image
+                src={img}
+                alt={`${yachtName} deck plan ${i + 1}`}
+                widths={[500, 800]}
+                sizes="(min-width: 1024px) 30vw, 90vw"
+                loading="lazy"
+                class="w-full h-full object-contain grayscale contrast-[1.05] opacity-[.82] mix-blend-multiply"
+              />
+            </div>
+            <div class="flex items-center justify-between px-5 py-4 border-t border-[var(--color-line)]">
+              <span class="font-display text-ink" style="font-size: 1.1875rem; font-weight: 450;">
+                Plan {i + 1}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </section>
+)}

@@ -41,8 +41,10 @@ Pola obowiązkowe: klucz (`translationKey`), nazwa, brand, rok,
 długość w metrach (`lengthM`), liczba kabin (`cabins`).
 
 Pola opcjonalne: szerokość, zanurzenie, koje, prędkość maks., cena
-w EUR. **Brak ceny = strona pokaże „cena na zapytanie"** — to
-świadomy mechanizm, nie błąd.
+w EUR (pole wyłącznie do użytku wewnętrznego — ceny nigdy nie
+pojawiają się na stronie ani w treści opisów; na pytania cenowe
+w copy odpowiada fraza „cena zależy od konfiguracji — zapytaj
+o wycenę").
 
 Pole `seo.description` — maks. 160 znaków, to tekst widoczny
 w wynikach Google.
@@ -57,6 +59,10 @@ w wynikach Google.
   dla galerii.
 - Nazwy plików dokładnie jak wyżej — `Hero.JPG`, `hero (1).jpg`
   itp. nie zadziałają.
+- `layout-01.jpg`, `layout-02.jpg`… — plany pokładów, opcjonalne.
+  Numeracja dwucyfrowa, ten sam folder co hero i galeria, poziome,
+  min. 2000 px szerokości. Brak plików = sekcja nie pojawia się
+  na stronie.
 
 ## Brandy
 

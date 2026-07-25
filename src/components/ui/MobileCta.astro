@@ -1,0 +1,21 @@
+---
+interface Props {
+  enquireLabel: string;
+}
+
+const { enquireLabel } = Astro.props;
+---
+
+<div
+  class="lg:hidden fixed bottom-0 left-0 right-0 z-40"
+  style="background: rgba(236,239,238,0.94); backdrop-filter: blur(8px); padding-bottom: env(safe-area-inset-bottom, 0px);"
+>
+  <div class="px-4 py-3">
+    <a
+      href="#lead"
+      class="block w-full text-center font-mono font-bold text-[13px] tracking-[.08em] uppercase bg-ink text-white rounded-[6px] py-3.5"
+    >
+      {enquireLabel}
+    </a>
+  </div>
+</div>

@@ -24,10 +24,10 @@ maxSpeedKn, priceEur, muxPlaybackId, category (enum: flybridge|hardtop|
 open|weekender|day|grand-tourer|runabout — dodane w kroku 2, surowa
 wartość w content, uppercase+separator+tłumaczenie w UI),
 seo{title<=60, description<=160}; featured default false,
-draft DEFAULT TRUE. Brak priceEur = "cena na zapytanie", filtr cenowy
-pomija. Brand: brandKey, name, tagline<=120, website?, muxPlaybackId?,
-defaultDealer, order, seo. Dealer: dealerId, name, email, phone?,
-brands[], pipedriveOptionLabel; niepubliczny.
+draft DEFAULT TRUE. priceEur: pole wyłącznie wewnętrzne, nigdy nie
+renderowane. Brand: brandKey, name, tagline<=120, website?,
+muxPlaybackId?, defaultDealer, order, seo. Dealer: dealerId, name,
+email, phone?, brands[], pipedriveOptionLabel; niepubliczny.
 
 ## Krok 2 — strona główna jako poligon design systemu
 
@@ -51,6 +51,9 @@ komponentów bez nowego CSS ad hoc.
 
 ## Krok 3 — pozostałe strony statyczne (składane, nie projektowane)
 
+CENY NIE SĄ PUBLIKOWANE nigdzie w serwisie. priceEur zostaje
+w schemacie (dane wewnętrzne), nie jest renderowane.
+
 Template brandu (x5), karta jachtu z sekcją polecanych (liczone przy
 buildzie: ten sam brand / zbliżona lengthM, zero JS), lista jachtów
 (bez filtra). Wyłącznie z komponentów kroku 2 — potrzeba nowego
@@ -71,8 +74,9 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 - Przywrócić @astrojs/vercel adapter (usunięty w kroku 1 dla
   static-only buildu; wymagany dla endpointów SSR) + output: 'server'.
 - Filtr jachtów: client:visible, dane jako props z builda, stan w URL
-  query params. Pole tekstowe wyszukiwania: dopasowanie po
-  name/brand (placeholder funkcjonalny, bez rozbudowy).
+  query params; facety: brand / category / lengthM / cabins / year.
+  Pole tekstowe wyszukiwania: dopasowanie po name/brand (placeholder
+  funkcjonalny, bez rozbudowy).
 - Formularz leadowy: kontekst brand/jacht pre-filled, Turnstile,
   walidacja współdzielona z serwerem.
 - /api/lead: docs/kontrakt-api-lead.md (w tym odbiorcy z Sanity

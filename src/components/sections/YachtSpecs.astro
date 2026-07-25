@@ -1,0 +1,87 @@
+---
+import SectionLabel from '../ui/SectionLabel.astro';
+import { metresToFeet } from '../../lib/format';
+
+interface SpecRow { label: string; value: string }
+
+interface Props {
+  eyebrow: string;
+  subtitle: string;
+  groups: {
+    dimensions: string;
+    accommodation: string;
+    performance: string;
+  };
+  labels: {
+    length: string;
+    beam: string;
+    draft: string;
+    cabins: string;
+    berths: string;
+    engines: string;
+    speed: string;
+    year: string;
+  };
+  lengthM: number;
+  beamM?: number;
+  draftM?: number;
+  cabins: number;
+  berths?: number;
+  engines?: string;
+  maxSpeedKn?: number;
+  year: number;
+}
+
+const {
+  eyebrow, subtitle, groups, labels,
+  lengthM, beamM, draftM, cabins, berths, engines, maxSpeedKn, year,
+} = Astro.props;
+
+const dimensionRows: SpecRow[] = [
+  { label: labels.length, value: `${lengthM} m / ${metresToFeet(lengthM)}` },
+  ...(beamM !== undefined ? [{ label: labels.beam, value: `${beamM} m` }] : []),
+  ...(draftM !== undefined ? [{ label: labels.draft, value: `${draftM} m` }] : []),
+];
+
+const accommodationRows: SpecRow[] = [
+  { label: labels.cabins, value: String(cabins) },
+  ...(berths !== undefined ? [{ label: labels.berths, value: String(berths) }] : []),
+];
+
+const performanceRows: SpecRow[] = [
+  ...(engines ? [{ label: labels.engines, value: engines }] : []),
+  ...(maxSpeedKn !== undefined ? [{ label: labels.speed, value: `${maxSpeedKn} kn` }] : []),
+  { label: labels.year, value: String(year) },
+];
+
+const columnData = [
+  { title: groups.dimensions, rows: dimensionRows },
+  { title: groups.accommodation, rows: accommodationRows },
+  { title: groups.performance, rows: performanceRows },
+].filter((col) => col.rows.length > 0);
+---
+
+<section id="specs" class="py-section bg-white">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+
+    <SectionLabel text={eyebrow} class="mb-3" />
+    <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{subtitle}</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-14">
+      {columnData.map((col) => (
+        <div>
+          <p class="font-mono font-bold text-[10px] tracking-[.26em] uppercase text-teal border-b border-[var(--color-line-strong)] pb-3 mb-0">
+            {col.title}
+          </p>
+          {col.rows.map((row) => (
+            <div class="flex justify-between items-baseline py-3.5 border-b border-[var(--color-line)]">
+              <span class="font-mono text-[12px] tracking-[.08em] text-ink/55">{row.label}</span>
+              <span class="font-mono font-bold text-[14px] text-ink text-right ml-4">{row.value}</span>
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

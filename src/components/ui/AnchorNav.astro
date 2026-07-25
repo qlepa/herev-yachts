@@ -1,25 +1,35 @@
 ---
 interface Props {
   items: Array<{ label: string; href: string }>;
+  enquireLabel?: string;
+  enquireHref?: string;
 }
 
-const { items } = Astro.props;
+const { items, enquireLabel, enquireHref } = Astro.props;
 ---
 
-<div class="sticky top-[72px] z-10 bg-white/95 backdrop-blur-sm border-b border-[var(--color-line)]">
-  <div class="max-w-[1440px] mx-auto px-gutter">
+<div class="sticky top-[72px] z-10 bg-[rgba(236,239,238,.92)] backdrop-blur-sm border-b border-[var(--color-line)]">
+  <div class="max-w-[1440px] mx-auto px-gutter flex items-center justify-between">
     <nav
-      class="flex items-center gap-8 overflow-x-auto py-3"
+      class="flex items-center overflow-x-auto"
       aria-label="Page sections"
     >
       {items.map(({ label, href }) => (
         <a
           href={href}
-          class="font-mono text-label tracking-label uppercase text-[var(--color-ink-55)] hover:text-ink transition-colors shrink-0 py-1"
+          class="font-mono font-semibold text-[12px] tracking-[.04em] uppercase text-[var(--color-ink-40)] hover:text-ink transition-colors shrink-0 px-5 py-[18px] border-b-2 border-transparent hover:border-brass"
         >
           {label}
         </a>
       ))}
     </nav>
+    {enquireLabel && enquireHref && (
+      <a
+        href={enquireHref}
+        class="font-mono font-semibold text-[12px] tracking-[.04em] text-teal hover:text-ink transition-colors shrink-0 hidden md:block"
+      >
+        {enquireLabel}
+      </a>
+    )}
   </div>
 </div>

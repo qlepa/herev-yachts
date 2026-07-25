@@ -50,7 +50,6 @@ const yachtCards = await Promise.all(
     brandDisplay:   brandDisplayMap[y.data.brand as BrandKey] ?? y.data.brand.toUpperCase(),
     loaM:           y.data.lengthM,
     loaFt:          metresToFeet(y.data.lengthM),
-    priceEur:       y.data.priceEur,
     categoryLabel:  y.data.category
       ? t.categories[y.data.category as CategoryKey]
       : undefined,
@@ -100,7 +99,6 @@ const pageDescription = t.yachtsPage.subheading;
               brandDisplay={yacht.brandDisplay}
               loaM={yacht.loaM}
               loaFt={yacht.loaFt}
-              priceEur={yacht.priceEur}
               categoryLabel={yacht.categoryLabel}
               image={yacht.image}
               href={yacht.href}

@@ -1,0 +1,170 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import Btn from '../ui/Btn.astro';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  brandLine: string;
+  ctaLabel: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  fallbackContact: string;
+  orCallLabel: string;
+  namePlaceholder: string;
+  emailPlaceholder: string;
+  phonePlaceholder: string;
+  modelValue: string;
+  messagePlaceholder: string;
+  financingLabel: string;
+  privacyLabel: string;
+}
+
+const {
+  eyebrow,
+  heading,
+  brandLine,
+  ctaLabel,
+  image,
+  imageAlt,
+  fallbackContact,
+  orCallLabel,
+  namePlaceholder,
+  emailPlaceholder,
+  phonePlaceholder,
+  modelValue,
+  messagePlaceholder,
+  financingLabel,
+  privacyLabel,
+} = Astro.props;
+
+const inputBase =
+  'w-full bg-transparent border-b border-[rgba(236,239,238,.32)] text-white placeholder-white/40 py-3 px-0 text-[15px] font-body focus:outline-none focus:border-white/60 transition-colors';
+---
+
+<section id="lead" class="bg-ink text-white">
+  <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-[2fr_3fr]">
+
+    <!-- Image (left, ~40%) -->
+    <div class="relative hidden md:block" style="min-height: 560px;">
+      <Image
+        src={image}
+        alt={imageAlt}
+        widths={[600, 900]}
+        sizes="40vw"
+        loading="lazy"
+        class="absolute inset-0 w-full h-full object-cover"
+      />
+      <div
+        class="absolute inset-0"
+        style="background: linear-gradient(90deg, rgba(15,37,46,0) 55%, rgba(15,37,46,.92) 100%);"
+      />
+      <div class="absolute left-10 bottom-10 right-10 text-white">
+        <div
+          class="font-display text-white"
+          style="font-size: 26px; font-weight: 340; letter-spacing: .2em; text-indent: .2em;"
+        >
+          HEREV
+        </div>
+        <p class="font-mono text-gilt mt-2.5" style="font-size: 10.5px; line-height: 1.8; letter-spacing: .18em;">
+          {brandLine}
+        </p>
+      </div>
+    </div>
+
+    <!-- Form (right) -->
+    <div class="px-gutter py-14 md:py-20 md:px-[60px]">
+      <SectionLabel text={eyebrow} on="ink" class="mb-4" />
+      <h2
+        class="font-display text-white mb-8"
+        style="font-size: clamp(1.5rem, 2.5vw, 2.25rem); font-weight: 400; line-height: 1.1; letter-spacing: -.01em;"
+      >
+        {heading}
+      </h2>
+
+      <!--
+        Step 2: form is visual only — submit is disabled.
+        Endpoint + Turnstile added in Step 5.
+      -->
+      <form aria-label="Enquiry form" novalidate class="max-w-[640px]">
+
+        <!-- Desktop: 2-col grid rows; mobile: single column -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <input
+            type="text"
+            name="name"
+            placeholder={namePlaceholder}
+            autocomplete="name"
+            required
+            class={inputBase}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder={emailPlaceholder}
+            autocomplete="email"
+            required
+            class={inputBase}
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+          <input
+            type="tel"
+            name="phone"
+            placeholder={phonePlaceholder}
+            autocomplete="tel"
+            class={inputBase}
+          />
+          <input
+            type="text"
+            name="model"
+            value={modelValue}
+            readonly
+            class="w-full bg-transparent border-b border-[rgba(236,239,238,.18)] text-[rgba(236,239,238,.6)] py-3 px-0 text-[14px] font-mono focus:outline-none"
+          />
+        </div>
+        <div class="mb-6">
+          <textarea
+            name="message"
+            placeholder={messagePlaceholder}
+            rows="2"
+            class={`${inputBase} resize-none w-full`}
+          />
+        </div>
+
+        <!-- Checkboxes -->
+        <label class="flex items-center gap-3 mb-3.5 cursor-pointer">
+          <input
+            type="checkbox"
+            name="financing"
+            class="w-[17px] h-[17px] accent-gilt shrink-0"
+          />
+          <span class="text-[14px] text-[rgba(236,239,238,.85)]">{financingLabel}</span>
+        </label>
+        <label class="flex items-start gap-3 mb-7 cursor-pointer">
+          <input
+            type="checkbox"
+            name="privacy"
+            required
+            class="w-[17px] h-[17px] accent-gilt shrink-0 mt-0.5"
+          />
+          <span class="text-[13px] leading-[1.5] text-[rgba(236,239,238,.7)]">{privacyLabel}</span>
+        </label>
+
+        <Btn variant="gilt" type="submit" disabled>
+          {ctaLabel}
+        </Btn>
+
+        <p class="text-[var(--color-paper-72)] text-micro font-mono tracking-mono mt-5 uppercase">
+          {/* Form submission active in Step 5 · */}
+          <a href={`mailto:${fallbackContact}`} class="underline hover:text-gilt transition-colors">
+            {fallbackContact}
+          </a>
+        </p>
+      </form>
+    </div>
+
+  </div>
+</section>

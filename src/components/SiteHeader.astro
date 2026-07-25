@@ -22,7 +22,7 @@ function localePath(target: Locale): string {
 
 const headerClass =
   variant === 'transparent'
-    ? 'absolute top-0 left-0 right-0 z-20 text-white'
+    ? 'fixed top-0 left-0 right-0 z-20 text-white'
     : 'sticky top-0 z-20 bg-ink text-white shadow-panel';
 
 const navLinks = [
@@ -38,7 +38,7 @@ const langLabels: Record<Locale, string> = {
 };
 ---
 
-<header class={headerClass}>
+<header class={headerClass} data-scroll-header={variant === 'transparent' ? '' : undefined}>
   <div class="max-w-[1440px] mx-auto px-gutter flex items-center justify-between h-[72px]">
 
     <!-- Wordmark -->
@@ -127,3 +127,22 @@ const langLabels: Record<Locale, string> = {
 
   </div>
 </header>
+
+<style>
+  [data-scroll-header] {
+    transition: background-color 0.25s ease, box-shadow 0.25s ease;
+  }
+  [data-scroll-header].scrolled {
+    background-color: var(--color-ink);
+    box-shadow: var(--shadow-panel);
+  }
+</style>
+
+<script>
+  const h = document.querySelector<HTMLElement>('[data-scroll-header]');
+  if (h) {
+    const toggle = () => h.classList.toggle('scrolled', window.scrollY > 0);
+    window.addEventListener('scroll', toggle, { passive: true });
+    toggle();
+  }
+</script>

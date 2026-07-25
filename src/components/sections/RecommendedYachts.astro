@@ -19,17 +19,35 @@ interface Props {
   yachts: YachtCardData[];
   enquireLabel: string;
   priceOnRequestLabel: string;
+  eyebrow?: string;
+  viewAllLabel?: string;
+  viewAllHref?: string;
 }
 
-const { heading, yachts, enquireLabel, priceOnRequestLabel } = Astro.props;
+const { heading, yachts, enquireLabel, priceOnRequestLabel, eyebrow, viewAllLabel, viewAllHref } = Astro.props;
 ---
 
 {yachts.length > 0 && (
   <section id="recommended" class="py-section bg-paper">
     <div class="max-w-[1440px] mx-auto px-gutter">
-      <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">
-        {heading}
-      </h2>
+      <div class="flex items-end justify-between mb-10 gap-6">
+        <div>
+          {eyebrow && (
+            <p class="font-mono font-bold text-brass text-label tracking-label uppercase mb-3">{eyebrow}</p>
+          )}
+          <h2 class="font-display text-h2 text-ink" style="font-weight: 400;">
+            {heading}
+          </h2>
+        </div>
+        {viewAllLabel && viewAllHref && (
+          <a
+            href={viewAllHref}
+            class="font-mono font-semibold text-[13px] tracking-[.04em] text-ink border-b border-[var(--color-line-strong)] pb-1 hidden md:block whitespace-nowrap hover:text-teal transition-colors"
+          >
+            {viewAllLabel}
+          </a>
+        )}
+      </div>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {yachts.map((yacht) => (
           <FleetCard

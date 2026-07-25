@@ -21,13 +21,16 @@ export interface Translations {
     cta1: string;
     cta2: string;
   };
+  intro: {
+    eyebrow: string;
+    heading: string;
+  };
   fleet: {
     eyebrow: string;
     heading: string;
     subheading: string;
     viewAll: string;
     enquire: string;
-    priceOnRequest: string;
   };
   categories: Record<CategoryKey, string>;
   advisory: {
@@ -92,12 +95,27 @@ export interface Translations {
   yachtPage: {
     enquireCta: string;
     bookViewingCta: string;
-    keyNumbers: { length: string; cabins: string; speed: string; price: string };
-    anchorNav: { overview: string; gallery: string; specs: string; recommended: string };
-    specsHeading: string;
+    keyNumbers: { length: string; cabins: string; speed: string; engines: string };
+    anchorNav: { overview: string; gallery: string; deckPlans: string; specs: string; financing: string };
+    overviewLabel: string;
     galleryHeading: string;
+    galleryTitle: string;
     deckPlansHeading: string;
+    deckPlansSubtitle: string;
+    specsSubtitle: string;
     recommendedHeading: string;
+    financing: { eyebrow: string; copy: string; cta: string };
+    enquireHeadingPrefix: string;
+    mobileCta: { enquire: string };
+    recommendedEyebrow: string;
+    viewAllLabel: string;
+    leadEyebrow: string;
+    financingCheckbox: string;
+    privacyCheckbox: string;
+    emailPlaceholder: string;
+    phonePlaceholder: string;
+    sendEnquiry: string;
+    specsGroups: { dimensions: string; accommodation: string; performance: string };
     specs: {
       length: string;
       beam: string;
@@ -108,6 +126,7 @@ export interface Translations {
       year: string;
       brand: string;
       category: string;
+      engines: string;
     };
   };
   servicesPage: {
@@ -144,7 +163,11 @@ const en: Translations = {
     subtext:
       "We represent five of the world's most considered yacht builders — each chosen for a different reason, all sharing an uncommon standard of finish.",
     cta1: 'Explore by brand',
-    cta2: 'Find by length & price',
+    cta2: 'Find by length',
+  },
+  intro: {
+    eyebrow: 'ABOUT HEREV',
+    heading: 'Five ateliers. One uncommon standard.',
   },
   fleet: {
     eyebrow: 'FEATURED FLEET · MMXXVI',
@@ -153,7 +176,6 @@ const en: Translations = {
       'Five builders. One standard. Every vessel chosen because nothing else performs its role as well.',
     viewAll: 'VIEW ALL MODELS →',
     enquire: 'Enquire →',
-    priceOnRequest: 'Price on request',
   },
   categories: {
     flybridge: 'FLYBRIDGE CRUISER',
@@ -243,24 +265,48 @@ const en: Translations = {
       'Every vessel we represent — five builders, one considered standard.',
   },
   yachtPage: {
-    enquireCta: 'Enquire',
+    enquireCta: 'Enquire about this yacht →',
     bookViewingCta: 'Book a private viewing',
     keyNumbers: {
-      length: 'Length',
-      cabins: 'Cabins',
-      speed: 'Max speed',
-      price: 'From',
+      length: 'LENGTH OVERALL',
+      cabins: 'CABINS',
+      speed: 'MAX SPEED',
+      engines: 'ENGINES',
     },
     anchorNav: {
       overview: 'Overview',
       gallery: 'Gallery',
-      specs: 'Specifications',
-      recommended: 'Recommended',
+      deckPlans: 'Deck Plans',
+      specs: 'Specification',
+      financing: 'Financing',
     },
-    specsHeading: 'Specifications',
-    galleryHeading: 'Gallery',
-    deckPlansHeading: 'Deck plans',
-    recommendedHeading: 'You may also consider',
+    overviewLabel: 'WHO IT\'S FOR',
+    galleryHeading: 'GALLERY',
+    galleryTitle: 'Aboard the',
+    deckPlansHeading: 'DECK PLANS',
+    deckPlansSubtitle: 'Three decks, arranged for real life',
+    specsSubtitle: 'The full measure',
+    recommendedHeading: 'You might also consider',
+    financing: {
+      eyebrow: 'LEASING · CREDIT · CHARTER INVESTMENT',
+      copy: 'There are several sensible ways to own this yacht — from marine leasing to charter-management that puts her to work when you\'re ashore. We\'ll walk you through the options that fit.',
+      cta: 'Ask about financing →',
+    },
+    enquireHeadingPrefix: 'Enquire about the',
+    mobileCta: { enquire: 'Enquire' },
+    recommendedEyebrow: 'YOU MIGHT ALSO CONSIDER',
+    viewAllLabel: 'VIEW ALL YACHTS →',
+    leadEyebrow: 'NO OBLIGATION',
+    financingCheckbox: 'I\'m interested in financing options',
+    privacyCheckbox: 'I agree to be contacted by Herev regarding this enquiry and accept the privacy policy.',
+    emailPlaceholder: 'Email',
+    phonePlaceholder: 'Phone',
+    sendEnquiry: 'Send enquiry →',
+    specsGroups: {
+      dimensions: 'DIMENSIONS',
+      accommodation: 'ACCOMMODATION',
+      performance: 'PERFORMANCE',
+    },
     specs: {
       length: 'Length',
       beam: 'Beam',
@@ -271,6 +317,7 @@ const en: Translations = {
       year: 'Model year',
       brand: 'Brand',
       category: 'Category',
+      engines: 'Engines',
     },
   },
   servicesPage: {
@@ -338,7 +385,11 @@ const pl: Translations = {
     subtext:
       'Reprezentujemy pięciu najbardziej przemyślanych producentów jachtów na świecie — każdego z innego powodu, wszystkich łączy wyjątkowy standard wykończenia.',
     cta1: 'Odkryj według marki',
-    cta2: 'Szukaj według długości i ceny',
+    cta2: 'Szukaj według długości',
+  },
+  intro: {
+    eyebrow: 'O HEREV',
+    heading: 'Pięć atelier. Jeden wyjątkowy standard.',
   },
   fleet: {
     eyebrow: 'WYBRANA FLOTA · MMXXVI',
@@ -347,7 +398,6 @@ const pl: Translations = {
       'Pięciu producentów. Jeden standard. Każda jednostka wybrana dlatego, że nic innego nie spełnia swojej roli równie dobrze.',
     viewAll: 'WSZYSTKIE MODELE →',
     enquire: 'Zapytaj →',
-    priceOnRequest: 'Cena na zapytanie',
   },
   categories: {
     flybridge: 'KRĄŻOWNIK FLYBRIDGE',
@@ -437,24 +487,48 @@ const pl: Translations = {
       'Każda jednostka, którą reprezentujemy — pięciu producentów, jeden przemyślany standard.',
   },
   yachtPage: {
-    enquireCta: 'Zapytaj',
+    enquireCta: 'Zapytaj o ten jacht →',
     bookViewingCta: 'Umów prywatne oglądanie',
     keyNumbers: {
-      length: 'Długość',
-      cabins: 'Kabiny',
-      speed: 'Maks. prędkość',
-      price: 'Od',
+      length: 'DŁUGOŚĆ CAŁKOWITA',
+      cabins: 'KABINY',
+      speed: 'MAKS. PRĘDKOŚĆ',
+      engines: 'SILNIKI',
     },
     anchorNav: {
       overview: 'Przegląd',
       gallery: 'Galeria',
-      specs: 'Specyfikacje',
-      recommended: 'Polecane',
+      deckPlans: 'Plany pokładu',
+      specs: 'Specyfikacja',
+      financing: 'Finansowanie',
     },
-    specsHeading: 'Specyfikacje',
-    galleryHeading: 'Galeria',
-    deckPlansHeading: 'Plany pokładu',
+    overviewLabel: 'DLA KOGO',
+    galleryHeading: 'GALERIA',
+    galleryTitle: 'Na pokładzie',
+    deckPlansHeading: 'PLANY POKŁADU',
+    deckPlansSubtitle: 'Trzy pokłady, zaplanowane na życie',
+    specsSubtitle: 'Pełny wymiar',
     recommendedHeading: 'Możesz również rozważyć',
+    financing: {
+      eyebrow: 'LEASING · KREDYT · INWESTYCJA CZARTEROWA',
+      copy: 'Jest kilka rozsądnych sposobów na posiadanie tego jachtu — od leasingu morskiego po zarządzanie czarterowe, które sprawia, że pracuje, gdy ty jesteś na lądzie. Przeprowadzimy cię przez opcje, które pasują.',
+      cta: 'Zapytaj o finansowanie →',
+    },
+    enquireHeadingPrefix: 'Zapytaj o',
+    mobileCta: { enquire: 'Zapytaj' },
+    recommendedEyebrow: 'MOŻE CIĘ ZAINTERESOWAĆ',
+    viewAllLabel: 'WSZYSTKIE JACHTY →',
+    leadEyebrow: 'BEZ ZOBOWIĄZAŃ',
+    financingCheckbox: 'Interesuje mnie finansowanie',
+    privacyCheckbox: 'Wyrażam zgodę na kontakt ze strony Herev w sprawie tego zapytania i akceptuję politykę prywatności.',
+    emailPlaceholder: 'Email',
+    phonePlaceholder: 'Telefon',
+    sendEnquiry: 'Wyślij zapytanie →',
+    specsGroups: {
+      dimensions: 'WYMIARY',
+      accommodation: 'ZAKWATEROWANIE',
+      performance: 'OSIĄGI',
+    },
     specs: {
       length: 'Długość',
       beam: 'Szerokość',
@@ -465,6 +539,7 @@ const pl: Translations = {
       year: 'Rok modelowy',
       brand: 'Marka',
       category: 'Kategoria',
+      engines: 'Silniki',
     },
   },
   servicesPage: {
@@ -532,7 +607,11 @@ const es: Translations = {
     subtext:
       'Representamos a cinco de los constructores de yates más reflexivos del mundo — cada uno elegido por una razón diferente, todos compartiendo un estándar de acabado poco común.',
     cta1: 'Explorar por marca',
-    cta2: 'Buscar por eslora y precio',
+    cta2: 'Buscar por eslora',
+  },
+  intro: {
+    eyebrow: 'SOBRE HEREV',
+    heading: 'Cinco ateliers. Un estándar poco común.',
   },
   fleet: {
     eyebrow: 'FLOTA DESTACADA · MMXXVI',
@@ -541,7 +620,6 @@ const es: Translations = {
       'Cinco constructores. Un estándar. Cada embarcación elegida porque nada más cumple su función igual de bien.',
     viewAll: 'VER TODOS LOS MODELOS →',
     enquire: 'Consultar →',
-    priceOnRequest: 'Precio a consultar',
   },
   categories: {
     flybridge: 'CRUCERO FLYBRIDGE',
@@ -631,24 +709,48 @@ const es: Translations = {
       'Todas las embarcaciones que representamos — cinco constructores, un estándar reflexivo.',
   },
   yachtPage: {
-    enquireCta: 'Consultar',
+    enquireCta: 'Consultar sobre este yate →',
     bookViewingCta: 'Reservar una visita privada',
     keyNumbers: {
-      length: 'Eslora',
-      cabins: 'Cabinas',
-      speed: 'Velocidad máx.',
-      price: 'Desde',
+      length: 'ESLORA TOTAL',
+      cabins: 'CABINAS',
+      speed: 'VELOCIDAD MÁX.',
+      engines: 'MOTORES',
     },
     anchorNav: {
       overview: 'Resumen',
       gallery: 'Galería',
-      specs: 'Especificaciones',
-      recommended: 'Recomendados',
+      deckPlans: 'Planos de cubierta',
+      specs: 'Especificación',
+      financing: 'Financiación',
     },
-    specsHeading: 'Especificaciones',
-    galleryHeading: 'Galería',
-    deckPlansHeading: 'Planos de cubierta',
+    overviewLabel: 'PARA QUIÉN',
+    galleryHeading: 'GALERÍA',
+    galleryTitle: 'A bordo del',
+    deckPlansHeading: 'PLANOS DE CUBIERTA',
+    deckPlansSubtitle: 'Tres cubiertas, diseñadas para la vida real',
+    specsSubtitle: 'La medida completa',
     recommendedHeading: 'También puede considerar',
+    financing: {
+      eyebrow: 'LEASING · CRÉDITO · INVERSIÓN EN CHARTER',
+      copy: 'Hay varias formas razonables de poseer este yate — desde el leasing marítimo hasta la gestión de chárter que la pone a trabajar cuando usted está en tierra. Le guiaremos por las opciones que se adaptan.',
+      cta: 'Preguntar sobre financiación →',
+    },
+    enquireHeadingPrefix: 'Consultar sobre el',
+    mobileCta: { enquire: 'Consultar' },
+    recommendedEyebrow: 'TAMBIÉN PUEDE CONSIDERAR',
+    viewAllLabel: 'VER TODOS LOS YATES →',
+    leadEyebrow: 'SIN COMPROMISO',
+    financingCheckbox: 'Estoy interesado en opciones de financiación',
+    privacyCheckbox: 'Acepto ser contactado por Herev sobre esta consulta y acepto la política de privacidad.',
+    emailPlaceholder: 'Email',
+    phonePlaceholder: 'Teléfono',
+    sendEnquiry: 'Enviar consulta →',
+    specsGroups: {
+      dimensions: 'DIMENSIONES',
+      accommodation: 'ALOJAMIENTO',
+      performance: 'RENDIMIENTO',
+    },
     specs: {
       length: 'Eslora',
       beam: 'Manga',
@@ -659,6 +761,7 @@ const es: Translations = {
       year: 'Año del modelo',
       brand: 'Marca',
       category: 'Categoría',
+      engines: 'Motores',
     },
   },
   servicesPage: {
@@ -726,7 +829,11 @@ const it: Translations = {
     subtext:
       'Rappresentiamo cinque dei costruttori di yacht più attenti al mondo — ognuno scelto per una ragione diversa, tutti accomunati da uno standard di finitura fuori dal comune.',
     cta1: 'Esplora per marchio',
-    cta2: 'Cerca per lunghezza e prezzo',
+    cta2: 'Cerca per lunghezza',
+  },
+  intro: {
+    eyebrow: 'CHI SIAMO',
+    heading: 'Cinque atelier. Uno standard fuori dal comune.',
   },
   fleet: {
     eyebrow: 'FLOTTA IN EVIDENZA · MMXXVI',
@@ -735,7 +842,6 @@ const it: Translations = {
       'Cinque costruttori. Uno standard. Ogni imbarcazione scelta perché nient\'altro svolge il suo ruolo altrettanto bene.',
     viewAll: 'TUTTI I MODELLI →',
     enquire: 'Richiedi →',
-    priceOnRequest: 'Prezzo su richiesta',
   },
   categories: {
     flybridge: 'CRUISER FLYBRIDGE',
@@ -825,24 +931,48 @@ const it: Translations = {
       'Ogni imbarcazione che rappresentiamo — cinque costruttori, uno standard ponderato.',
   },
   yachtPage: {
-    enquireCta: 'Richiedi',
+    enquireCta: 'Richiedi informazioni su questo yacht →',
     bookViewingCta: 'Prenota una visione privata',
     keyNumbers: {
-      length: 'Lunghezza',
-      cabins: 'Cabine',
-      speed: 'Velocità max.',
-      price: 'Da',
+      length: 'LUNGHEZZA TOTALE',
+      cabins: 'CABINE',
+      speed: 'VELOCITÀ MAX.',
+      engines: 'MOTORI',
     },
     anchorNav: {
       overview: 'Panoramica',
       gallery: 'Galleria',
+      deckPlans: 'Piani di coperta',
       specs: 'Specifiche',
-      recommended: 'Consigliati',
+      financing: 'Finanziamento',
     },
-    specsHeading: 'Specifiche',
-    galleryHeading: 'Galleria',
-    deckPlansHeading: 'Piani di coperta',
+    overviewLabel: 'PER CHI',
+    galleryHeading: 'GALLERIA',
+    galleryTitle: 'A bordo del',
+    deckPlansHeading: 'PIANI DI COPERTA',
+    deckPlansSubtitle: 'Tre ponti, pensati per la vita reale',
+    specsSubtitle: 'La misura completa',
     recommendedHeading: 'Potresti anche considerare',
+    financing: {
+      eyebrow: 'LEASING · CREDITO · INVESTIMENTO IN CHARTER',
+      copy: 'Ci sono diversi modi sensati per possedere questo yacht — dal leasing marittimo alla gestione charter che la mette al lavoro quando sei a terra. Ti guideremo attraverso le opzioni più adatte.',
+      cta: 'Chiedi informazioni sul finanziamento →',
+    },
+    enquireHeadingPrefix: 'Richiedi informazioni su',
+    mobileCta: { enquire: 'Richiedi' },
+    recommendedEyebrow: 'POTRESTI ANCHE CONSIDERARE',
+    viewAllLabel: 'TUTTI GLI YACHT →',
+    leadEyebrow: 'NESSUN OBBLIGO',
+    financingCheckbox: 'Sono interessato alle opzioni di finanziamento',
+    privacyCheckbox: 'Accetto di essere contattato da Herev riguardo a questa richiesta e accetto la politica sulla privacy.',
+    emailPlaceholder: 'Email',
+    phonePlaceholder: 'Telefono',
+    sendEnquiry: 'Invia richiesta →',
+    specsGroups: {
+      dimensions: 'DIMENSIONI',
+      accommodation: 'ALLOGGIO',
+      performance: 'PRESTAZIONI',
+    },
     specs: {
       length: 'Lunghezza',
       beam: 'Larghezza',
@@ -853,6 +983,7 @@ const it: Translations = {
       year: 'Anno modello',
       brand: 'Marchio',
       category: 'Categoria',
+      engines: 'Motori',
     },
   },
   servicesPage: {

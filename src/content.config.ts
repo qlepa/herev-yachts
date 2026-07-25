@@ -33,7 +33,7 @@ const yachts = defineCollection({
     draftM: z.number().optional(),
     berths: z.number().int().optional(),
     maxSpeedKn: z.number().optional(),
-    priceEur: z.number().optional(),
+    engines: z.string().optional(),
     muxPlaybackId: z.string().optional(),
     category: z.enum(CATEGORY_KEYS).optional(),
     featured: z.boolean().default(false),

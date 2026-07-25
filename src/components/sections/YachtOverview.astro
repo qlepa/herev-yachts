@@ -1,0 +1,76 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import Btn from '../ui/Btn.astro';
+
+interface Props {
+  label: string;
+  insideImage?: ImageMetadata | null;
+  yachtName: string;
+  enquireLabel?: string;
+  enquireHref?: string;
+}
+
+const { label, insideImage, yachtName, enquireLabel, enquireHref } = Astro.props;
+---
+
+<section id="overview" class="py-section bg-paper">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-14 lg:items-center">
+
+      <!-- Left: label + prose content + CTA -->
+      <div class="min-w-0">
+        <SectionLabel text={label} class="mb-5" />
+        <div
+          class="overview-prose text-[var(--color-ink-70)] leading-[1.7] max-w-[520px]"
+        >
+          <slot />
+        </div>
+        {enquireLabel && enquireHref && (
+          <div class="mt-8">
+            <Btn variant="ink" href={enquireHref}>{enquireLabel}</Btn>
+          </div>
+        )}
+      </div>
+
+      <!-- Right: inside image (always shown; bg-ink placeholder if none) -->
+      <div class="hidden lg:block overflow-hidden bg-ink" style="aspect-ratio: 4/5;">
+        {insideImage ? (
+          <Image
+            src={insideImage}
+            alt={`${yachtName} interior`}
+            widths={[600, 900]}
+            sizes="40vw"
+            loading="lazy"
+            class="w-full h-full object-cover"
+          />
+        ) : null}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .overview-prose h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 42px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    color: var(--color-ink);
+    margin: 0 0 24px;
+  }
+  .overview-prose p {
+    font-size: 17px;
+    line-height: 1.7;
+    margin: 0 0 18px;
+  }
+  .overview-prose p:last-child {
+    margin-bottom: 0;
+    font-size: 15px;
+    color: rgba(15, 37, 46, .68);
+  }
+</style>

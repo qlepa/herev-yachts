@@ -9,29 +9,21 @@ interface Props {
   brandDisplay: string;
   loaM: number;
   loaFt: string;
-  priceEur?: number;
   categoryLabel?: string;
   image: ImageMetadata | null;
   href: string;
   enquireLabel: string;
-  priceOnRequestLabel: string;
 }
 
 const {
   name,
   brandDisplay,
   loaM,
-  priceEur,
   categoryLabel,
   image,
   href,
   enquireLabel,
-  priceOnRequestLabel,
 } = Astro.props;
-
-const priceDisplay = priceEur
-  ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(priceEur)
-  : priceOnRequestLabel;
 ---
 
 <article
@@ -79,12 +71,9 @@ const priceDisplay = priceEur
 
     <!-- Footer -->
     <div
-      class="flex items-center justify-between pt-3 mt-auto"
+      class="flex items-center justify-end pt-3 mt-auto"
       style="border-top: 1px solid var(--color-line);"
     >
-      <span class="font-mono text-[12px] tracking-mono font-medium">
-        {priceDisplay}
-      </span>
       <TextLink href={`${href}#lead`}>
         {enquireLabel}
       </TextLink>

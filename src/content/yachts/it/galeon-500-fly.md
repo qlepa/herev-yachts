@@ -9,6 +9,7 @@ beamM: 4.69
 draftM: 1.21
 berths: 6
 maxSpeedKn: 32
+engines: "2 × Volvo IPS 600"
 priceEur: 1190000
 category: flybridge
 featured: true
