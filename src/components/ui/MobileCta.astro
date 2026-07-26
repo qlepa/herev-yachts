@@ -9,7 +9,7 @@ const { enquireLabel } = Astro.props;
 <div
   id="mobile-cta"
   class="lg:hidden fixed bottom-0 left-0 right-0 z-40"
-  style="background: rgba(236,239,238,0.94); backdrop-filter: blur(8px); padding-bottom: env(safe-area-inset-bottom, 0px); transition: transform 0.3s ease;"
+  style="background: rgba(236,239,238,0.94); backdrop-filter: blur(8px); padding-bottom: env(safe-area-inset-bottom, 0px); transition: transform 0.3s ease; transform: translateY(100%);"
 >
   <div class="px-4 py-3">
     <a
@@ -24,13 +24,15 @@ const { enquireLabel } = Astro.props;
 <script>
   const bar = document.getElementById('mobile-cta');
   if (bar) {
+    const SHOW_AT = 200;
     let lastY = window.scrollY;
     let ticking = false;
     window.addEventListener('scroll', () => {
       if (!ticking) {
         requestAnimationFrame(() => {
           const y = window.scrollY;
-          bar.style.transform = (y > lastY && y > 80) ? 'translateY(100%)' : 'translateY(0)';
+          const hide = y < SHOW_AT || y > lastY;
+          bar.style.transform = hide ? 'translateY(100%)' : 'translateY(0)';
           lastY = y;
           ticking = false;
         });

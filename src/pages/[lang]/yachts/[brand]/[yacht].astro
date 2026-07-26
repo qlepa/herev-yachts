@@ -1,38 +1,38 @@
 ---
 import { getCollection, render } from 'astro:content';
 import type { ImageMetadata } from 'astro';
-import Layout from '../../../layouts/Layout.astro';
-import SiteHeader from '../../../components/SiteHeader.astro';
-import SiteFooter from '../../../components/SiteFooter.astro';
-import HeroSection from '../../../components/sections/HeroSection.astro';
-import YachtOverview from '../../../components/sections/YachtOverview.astro';
-import YachtGallery from '../../../components/sections/YachtGallery.astro';
-import YachtDeckPlans from '../../../components/sections/YachtDeckPlans.astro';
-import YachtSpecs from '../../../components/sections/YachtSpecs.astro';
-import YachtFinancing from '../../../components/sections/YachtFinancing.astro';
-import RecommendedYachts from '../../../components/sections/RecommendedYachts.astro';
-import YachtLeadModule from '../../../components/sections/YachtLeadModule.astro';
-import MobileCta from '../../../components/ui/MobileCta.astro';
-import { LOCALES, type Locale } from '../../../lib/i18n';
-import type { BrandKey, CategoryKey } from '../../../content.config';
-import { getTranslations } from '../../../lib/i18n-strings';
-import { getYachtHero } from '../../../lib/images';
-import { metresToFeet } from '../../../lib/format';
-import leadPic from '../../../assets/site/lead-image.avif';
+import Layout from '../../../../layouts/Layout.astro';
+import SiteHeader from '../../../../components/SiteHeader.astro';
+import SiteFooter from '../../../../components/SiteFooter.astro';
+import HeroSection from '../../../../components/sections/HeroSection.astro';
+import YachtOverview from '../../../../components/sections/YachtOverview.astro';
+import YachtGallery from '../../../../components/sections/YachtGallery.astro';
+import YachtDeckPlans from '../../../../components/sections/YachtDeckPlans.astro';
+import YachtSpecs from '../../../../components/sections/YachtSpecs.astro';
+import YachtFinancing from '../../../../components/sections/YachtFinancing.astro';
+import RecommendedYachts from '../../../../components/sections/RecommendedYachts.astro';
+import YachtLeadModule from '../../../../components/sections/YachtLeadModule.astro';
+import MobileCta from '../../../../components/ui/MobileCta.astro';
+import { LOCALES, type Locale } from '../../../../lib/i18n';
+import type { BrandKey, CategoryKey } from '../../../../content.config';
+import { getTranslations } from '../../../../lib/i18n-strings';
+import { getYachtHero } from '../../../../lib/images';
+import { metresToFeet } from '../../../../lib/format';
+import leadPic from '../../../../assets/site/lead-image.avif';
 
 export async function getStaticPaths() {
   const allYachts = await getCollection('yachts', (e) => !e.data.draft);
-  const keys = [...new Set(allYachts.map((e) => e.data.translationKey))];
   const paths = [];
   for (const lang of LOCALES) {
-    for (const yacht of keys) {
-      paths.push({ params: { lang, yacht } });
+    const langYachts = allYachts.filter((e) => e.id.startsWith(`${lang}/`));
+    for (const entry of langYachts) {
+      paths.push({ params: { lang, brand: entry.data.brand, yacht: entry.data.translationKey } });
     }
   }
   return paths;
 }
 
-const { lang, yacht: yachtSlug } = Astro.params as { lang: Locale; yacht: string };
+const { lang, brand, yacht: yachtSlug } = Astro.params as { lang: Locale; brand: string; yacht: string };
 const t = getTranslations(lang);
 
 const brandDisplayMap: Record<BrandKey, string> = {
@@ -58,12 +58,10 @@ const categoryLabel = data.category ? t.categories[data.category as CategoryKey]
 
 const heroImage = await getYachtHero(data.translationKey, data.draft);
 
-// Spec line for hero: CATEGORY · LOA M
 const specLine = categoryLabel
   ? `${categoryLabel} · ${data.lengthM} M`
   : `${data.lengthM} M`;
 
-// gallery-01…12 → Gallery section
 const galleryGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/yachts/*/gallery-*.*');
 const galleryPrefix = `/src/assets/yachts/${data.translationKey}/gallery-`;
 const galleryImages: ImageMetadata[] = await Promise.all(
@@ -73,7 +71,6 @@ const galleryImages: ImageMetadata[] = await Promise.all(
     .map(async (k) => (await galleryGlob[k]()).default),
 );
 
-// layout-01… → Deck Plans section
 const layoutGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/yachts/*/layout-*.*');
 const layoutPrefix = `/src/assets/yachts/${data.translationKey}/layout-`;
 const layoutImages: ImageMetadata[] = await Promise.all(
@@ -85,7 +82,6 @@ const layoutImages: ImageMetadata[] = await Promise.all(
 
 const leadImage = galleryImages[0] ?? leadPic;
 
-// Build-time recommendations
 const otherYachts = allLangYachts.filter((e) => e.data.translationKey !== data.translationKey);
 otherYachts.sort((a, b) => {
   const aCat = a.data.category === data.category ? 0 : 1;
@@ -108,20 +104,25 @@ const recommendedCards = await Promise.all(
     loaFt:          metresToFeet(y.data.lengthM),
     categoryLabel:  y.data.category ? t.categories[y.data.category as CategoryKey] : undefined,
     image:          await getYachtHero(y.data.translationKey, y.data.draft),
-    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+    href:           `/${lang}/yachts/${y.data.brand}/${y.data.translationKey}/`,
   })),
 );
+
+const alternates = LOCALES.map((l) => ({
+  lang: l,
+  href: `/${l}/yachts/${brand}/${yachtSlug}/`,
+}));
 
 const seoTitle       = data.seo?.title       ?? `${brandDisplay} ${data.name} — Herev`;
 const seoDescription = data.seo?.description ?? `${brandDisplay} ${data.name}, ${data.lengthM}m.`;
 ---
 
-<Layout lang={lang} title={seoTitle} description={seoDescription}>
+<Layout lang={lang} title={seoTitle} description={seoDescription} alternates={alternates}>
 
   <SiteHeader
     lang={lang}
     variant="ink"
-    currentPath={`/${lang}/yachts/${yachtSlug}/`}
+    currentPath={`/${lang}/yachts/${brand}/${yachtSlug}/`}
     nav={t.nav}
   />
 

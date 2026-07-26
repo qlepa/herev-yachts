@@ -1,32 +1,89 @@
 ---
 import SectionLabel from '../ui/SectionLabel.astro';
 
+interface Stat {
+  value: string;
+  label: string;
+}
+
 interface Props {
   eyebrow: string;
   heading: string;
-  body: string;
+  body?: string;
+  stats?: Stat[];
 }
 
-const { eyebrow, heading, body } = Astro.props;
+const { eyebrow, heading, body, stats } = Astro.props;
 ---
 
-<section class="bg-paper py-section px-gutter overflow-hidden">
-  <div class="max-w-[1440px] mx-auto">
+{stats ? (
+  <section class="bg-paper py-section px-gutter overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-[1.15fr_0.85fr] gap-16 items-start">
 
-    <SectionLabel text={eyebrow} class="mb-10" />
+        <div>
+          <SectionLabel text={eyebrow} class="mb-8" />
+          <h2
+            class="font-display text-ink leading-[1.08]"
+            style="font-size: clamp(2rem, 3.5vw, 3rem); letter-spacing: var(--tracking-tight); font-weight: 400;"
+          >
+            {heading}
+          </h2>
+        </div>
 
-    <h2
-      class="font-display text-ink leading-[1.02] mb-12"
-      style="font-size: clamp(2.8rem, 6.5vw, 6.5rem); letter-spacing: var(--tracking-tight); font-weight: 340;"
-    >
-      {heading}
-    </h2>
+        <div class="md:pt-2">
+          {body && (
+            <p class="text-[var(--color-ink-78)] text-base leading-[1.7] mb-6" style="text-wrap: pretty;">
+              {body}
+            </p>
+          )}
+          <div
+            class="flex gap-8"
+            style="border-top: 1px solid var(--color-line); padding-top: 20px;"
+          >
+            {stats.map((s) => (
+              <div>
+                <div
+                  class="font-display text-ink leading-none"
+                  style="font-size: 30px;"
+                >
+                  {s.value}
+                </div>
+                <div
+                  class="font-mono text-[var(--color-ink-55)] mt-1.5 uppercase"
+                  style="font-size: 10px; letter-spacing: .18em;"
+                >
+                  {s.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
 
-    <div class="flex justify-end">
-      <p class="text-[var(--color-ink-70)] text-lg leading-relaxed max-w-[480px]">
-        {body}
-      </p>
+      </div>
     </div>
+  </section>
+) : (
+  <section class="bg-paper py-section px-gutter overflow-hidden">
+    <div class="max-w-[1440px] mx-auto">
 
-  </div>
-</section>
+      <SectionLabel text={eyebrow} class="mb-10" />
+
+      <h2
+        class="font-display text-ink leading-[1.02] mb-12"
+        style="font-size: clamp(2.8rem, 6.5vw, 6.5rem); letter-spacing: var(--tracking-tight); font-weight: 340;"
+      >
+        {heading}
+      </h2>
+
+      {body && (
+        <div class="flex justify-end">
+          <p class="text-[var(--color-ink-70)] text-lg leading-relaxed max-w-[480px]">
+            {body}
+          </p>
+        </div>
+      )}
+
+    </div>
+  </section>
+)}

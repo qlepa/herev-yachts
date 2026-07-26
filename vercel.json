@@ -1,5 +1,38 @@
 {
   "redirects": [
-    { "source": "/", "destination": "/en/", "permanent": true }
+    { "source": "/", "destination": "/en/", "permanent": true },
+
+    { "source": "/:lang/yachts/aurora-42",          "destination": "/:lang/yachts/chris-craft/aurora-42",          "permanent": true },
+    { "source": "/:lang/yachts/aurora-42/",         "destination": "/:lang/yachts/chris-craft/aurora-42/",         "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-corsair-25",   "destination": "/:lang/yachts/chris-craft/chris-craft-corsair-25",   "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-corsair-25/",  "destination": "/:lang/yachts/chris-craft/chris-craft-corsair-25/",  "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-launch-25",    "destination": "/:lang/yachts/chris-craft/chris-craft-launch-25",    "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-launch-25/",   "destination": "/:lang/yachts/chris-craft/chris-craft-launch-25/",   "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-launch-28",    "destination": "/:lang/yachts/chris-craft/chris-craft-launch-28",    "permanent": true },
+    { "source": "/:lang/yachts/chris-craft-launch-28/",   "destination": "/:lang/yachts/chris-craft/chris-craft-launch-28/",   "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d28-open",      "destination": "/:lang/yachts/de-antonio/de-antonio-d28-open",      "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d28-open/",     "destination": "/:lang/yachts/de-antonio/de-antonio-d28-open/",     "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d38-cruiser",   "destination": "/:lang/yachts/de-antonio/de-antonio-d38-cruiser",   "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d38-cruiser/",  "destination": "/:lang/yachts/de-antonio/de-antonio-d38-cruiser/",  "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d50",           "destination": "/:lang/yachts/de-antonio/de-antonio-d50",           "permanent": true },
+    { "source": "/:lang/yachts/de-antonio-d50/",          "destination": "/:lang/yachts/de-antonio/de-antonio-d50/",          "permanent": true },
+    { "source": "/:lang/yachts/galeon-380-hardtop",       "destination": "/:lang/yachts/galeon/galeon-380-hardtop",           "permanent": true },
+    { "source": "/:lang/yachts/galeon-380-hardtop/",      "destination": "/:lang/yachts/galeon/galeon-380-hardtop/",          "permanent": true },
+    { "source": "/:lang/yachts/galeon-420-fly",           "destination": "/:lang/yachts/galeon/galeon-420-fly",               "permanent": true },
+    { "source": "/:lang/yachts/galeon-420-fly/",          "destination": "/:lang/yachts/galeon/galeon-420-fly/",              "permanent": true },
+    { "source": "/:lang/yachts/galeon-500-fly",           "destination": "/:lang/yachts/galeon/galeon-500-fly",               "permanent": true },
+    { "source": "/:lang/yachts/galeon-500-fly/",          "destination": "/:lang/yachts/galeon/galeon-500-fly/",              "permanent": true },
+    { "source": "/:lang/yachts/parker-1050-sport",        "destination": "/:lang/yachts/parker/parker-1050-sport",            "permanent": true },
+    { "source": "/:lang/yachts/parker-1050-sport/",       "destination": "/:lang/yachts/parker/parker-1050-sport/",           "permanent": true },
+    { "source": "/:lang/yachts/parker-750-pilothouse",    "destination": "/:lang/yachts/parker/parker-750-pilothouse",        "permanent": true },
+    { "source": "/:lang/yachts/parker-750-pilothouse/",   "destination": "/:lang/yachts/parker/parker-750-pilothouse/",       "permanent": true },
+    { "source": "/:lang/yachts/parker-920-max",           "destination": "/:lang/yachts/parker/parker-920-max",               "permanent": true },
+    { "source": "/:lang/yachts/parker-920-max/",          "destination": "/:lang/yachts/parker/parker-920-max/",              "permanent": true },
+    { "source": "/:lang/yachts/saxdor-270-open",          "destination": "/:lang/yachts/saxdor/saxdor-270-open",              "permanent": true },
+    { "source": "/:lang/yachts/saxdor-270-open/",         "destination": "/:lang/yachts/saxdor/saxdor-270-open/",             "permanent": true },
+    { "source": "/:lang/yachts/saxdor-320-gtc",           "destination": "/:lang/yachts/saxdor/saxdor-320-gtc",               "permanent": true },
+    { "source": "/:lang/yachts/saxdor-320-gtc/",          "destination": "/:lang/yachts/saxdor/saxdor-320-gtc/",              "permanent": true },
+    { "source": "/:lang/yachts/saxdor-400-gtc",           "destination": "/:lang/yachts/saxdor/saxdor-400-gtc",               "permanent": true },
+    { "source": "/:lang/yachts/saxdor-400-gtc/",          "destination": "/:lang/yachts/saxdor/saxdor-400-gtc/",              "permanent": true }
   ]
 }

@@ -51,7 +51,7 @@ const yachtCards = await Promise.all(
       loaM:     y.data.lengthM,
       cabins:   y.data.cabins,
       imageSrc: processed?.src ?? null,
-      href:     `/${lang}/yachts/${y.data.translationKey}/`,
+      href:     `/${lang}/yachts/${y.data.brand}/${y.data.translationKey}/`,
     };
   }),
 );

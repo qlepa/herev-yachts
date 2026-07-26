@@ -10,7 +10,7 @@ import TrustBand from '../../components/sections/TrustBand.astro';
 import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
 import LeadModule from '../../components/sections/LeadModule.astro';
 import NetworkTeaser from '../../components/sections/NetworkTeaser.astro';
-import StickyMobileCta from '../../components/StickyMobileCta.astro';
+import MobileCta from '../../components/ui/MobileCta.astro';
 import { getLocalePaths, type Locale } from '../../lib/i18n';
 import { getTranslations } from '../../lib/i18n-strings';
 import { getYachtHero } from '../../lib/images';
@@ -45,6 +45,21 @@ const featuredYachts = await getCollection(
   (e) => e.id.startsWith(`${lang}/`) && e.data.featured && !e.data.draft,
 );
 
+const allYachts = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
+);
+const sortedBrandNames = Object.entries(brandOrder)
+  .sort(([, a], [, b]) => a - b)
+  .map(([key]) => brandDisplayMap[key]);
+
+const allModelNames = [
+  ...sortedBrandNames,
+  ...allYachts
+    .sort((a, b) => (brandOrder[a.data.brand] ?? 9) - (brandOrder[b.data.brand] ?? 9))
+    .map((y) => `${brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase()} ${y.data.name}`),
+];
+
 featuredYachts.sort(
   (a, b) => (brandOrder[a.data.brand] ?? 9) - (brandOrder[b.data.brand] ?? 9),
 );
@@ -60,7 +75,7 @@ const yachtCards = await Promise.all(
       ? t.categories[y.data.category as CategoryKey]
       : undefined,
     image:          await getYachtHero(y.data.translationKey, y.data.draft),
-    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+    href:           `/${lang}/yachts/${y.data.brand}/${y.data.translationKey}/`,
   })),
 );
 
@@ -78,9 +93,9 @@ try {
 }
 
 const networkStats = [
-  { value: String(locations.length), label: t.network.locations },
-  { value: '5',                      label: t.network.brands },
-  { value: String(countryCount),     label: t.network.countries },
+  { value: String(countryCount), label: t.network.countries },
+  { value: '30+',                label: t.network.berths },
+  { value: '17',                 label: t.network.years },
 ];
 ---
 
@@ -114,11 +129,17 @@ const networkStats = [
     <IntroSection
       eyebrow={t.intro.eyebrow}
       heading={t.intro.heading}
-      body={t.hero.subtext}
+      body={t.intro.body}
+      stats={[
+        { value: '5',  label: t.intro.statLabels.ateliers },
+        { value: '17', label: t.intro.statLabels.years },
+        { value: '1',  label: t.intro.statLabels.relationship },
+      ]}
     />
 
     <TrustBand
       brandNames={['GALEON', 'PARKER', 'SAXDOR', 'DE ANTONIO', 'CHRIS-CRAFT']}
+      awardsLine="WORLD YACHTS TROPHIES · EUROPEAN POWERBOAT OF THE YEAR · BOAT BUILDER AWARDS · 2019—2026"
     />
 
     <FleetStrip
@@ -150,6 +171,7 @@ const networkStats = [
       contactPlaceholder={t.lead.contactPlaceholder}
       modelPlaceholder={t.lead.modelPlaceholder}
       messagePlaceholder={t.lead.messagePlaceholder}
+      models={allModelNames}
     />
 
     <NetworkTeaser
@@ -170,11 +192,6 @@ const networkStats = [
 
   <SiteFooter lang={lang} t={t.footer} />
 
-  <StickyMobileCta
-    enquireLabel={t.nav.enquire}
-    callLabel={t.nav.call}
-    callNumber="+48 800 100 200"
-    enquireHref={`/${lang}/#lead`}
-  />
+  <MobileCta enquireLabel={t.yachtPage.mobileCta.enquire} />
 
 </Layout>

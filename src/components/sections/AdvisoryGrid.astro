@@ -16,7 +16,7 @@ interface Props {
 const { eyebrow, heading, steps } = Astro.props;
 ---
 
-<section class="py-section bg-paper">
+<section class="py-section bg-white" style="border-top: 1px solid var(--color-line);">
   <div class="max-w-[1440px] mx-auto px-gutter">
 
     <SectionLabel text={eyebrow} class="mb-4" />
@@ -32,7 +32,7 @@ const { eyebrow, heading, steps } = Astro.props;
       style="border-top: 1px solid var(--color-line-strong);"
     >
       {steps.map((step) => (
-        <div class="pt-8 pb-10 md:pr-10 border-b md:border-b-0 border-[var(--color-line)]">
+        <div class="pt-8 pb-10 md:pr-10 border-r-0 md:border-r border-[var(--color-line)] last:border-r-0">
           <span
             class="font-mono font-bold text-brass block mb-4"
             style="font-size: 11px; letter-spacing: .30em;"

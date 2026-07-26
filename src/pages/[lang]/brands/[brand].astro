@@ -67,7 +67,7 @@ const yachtCards = await Promise.all(
       ? t.categories[y.data.category as CategoryKey]
       : undefined,
     image:          await getYachtHero(y.data.translationKey, y.data.draft),
-    href:           `/${lang}/yachts/${y.data.translationKey}/`,
+    href:           `/${lang}/yachts/${brand}/${y.data.translationKey}/`,
   })),
 );
 
@@ -122,7 +122,7 @@ const seoDescription = brandEntry.data.seo?.description ?? brandEntry.data.tagli
           heading={t.brandPage.fleetHeading}
           subheading={t.brandPage.fleetSubheading}
           viewAllLabel={t.brandPage.viewAllLabel}
-          viewAllHref={`/${lang}/yachts/`}
+          viewAllHref={`/${lang}/yachts/${brand}/`}
           enquireLabel={t.fleet.enquire}
         />
       </div>

@@ -29,7 +29,7 @@ const brandCards = await Promise.all(
     name: brand.data.name,
     tagline: brand.data.tagline,
     order: brand.data.order,
-    href: `/${lang}/brands/${brand.data.brandKey}/`,
+    href: `/${lang}/yachts/${brand.data.brandKey}/`,
     image: await getBrandHero(brand.data.brandKey),
   })),
 );

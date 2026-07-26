@@ -5,51 +5,27 @@ interface Props {
 }
 
 const { brandNames, awardsLine } = Astro.props;
-
-const logoMap: Record<string, string> = {
-  'GALEON':      '/partners/GaleonYachts_Logo_Black-scaled.webp',
-  'SAXDOR':      '/partners/saxdor-yachts.webp',
-  'DE ANTONIO':  '/partners/DE-ANTONIO-YACHTS_LOGO-scaled.webp',
-  'CHRIS-CRAFT': '/partners/chris-craft-boats.svg',
-};
 ---
 
 <section class="bg-ink py-10">
   <div class="max-w-[1440px] mx-auto px-gutter">
 
-    <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
-      {brandNames.map((name, i) => {
-        const logo = logoMap[name];
-        return (
-          <>
-            {logo ? (
-              <img
-                src={logo}
-                alt={name}
-                height="32"
-                class="h-8 w-auto select-none opacity-70"
-                style="filter: brightness(0) invert(1);"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <span
-                class="font-display text-white uppercase tracking-[.16em] select-none opacity-70"
-                style="font-size: 17px; font-weight: 380;"
-              >
-                {name}
-              </span>
-            )}
-            {i < brandNames.length - 1 && (
-              <span class="text-[var(--color-line-on-ink)] font-mono text-[18px] opacity-30">·</span>
-            )}
-          </>
-        );
-      })}
+    <div class="flex flex-wrap items-center justify-center">
+      {brandNames.map((name, i) => (
+        <span
+          class="font-display"
+          style={`font-weight: 380; font-size: 22px; letter-spacing: .18em; padding: 0 34px; color: rgba(236,239,238,.9);${i < brandNames.length - 1 ? ' border-right: 1px solid rgba(236,239,238,.16);' : ''}`}
+        >
+          {name}
+        </span>
+      ))}
     </div>
 
     {awardsLine && (
-      <p class="font-mono text-micro tracking-mono text-center text-[var(--color-paper-72)] opacity-50 mt-6 uppercase">
+      <p
+        class="font-mono text-gilt text-center uppercase mt-[26px]"
+        style="font-size: 10.5px; letter-spacing: .26em; line-height: 1.8;"
+      >
         {awardsLine}
       </p>
     )}

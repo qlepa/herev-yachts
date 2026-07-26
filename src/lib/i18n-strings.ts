@@ -24,6 +24,8 @@ export interface Translations {
   intro: {
     eyebrow: string;
     heading: string;
+    body: string;
+    statLabels: { ateliers: string; years: string; relationship: string };
   };
   fleet: {
     eyebrow: string;
@@ -57,6 +59,8 @@ export interface Translations {
     locations: string;
     brands: string;
     countries: string;
+    berths: string;
+    years: string;
     linkLabel: string;
     imageCaption: string;
   };
@@ -222,7 +226,9 @@ const en: Translations = {
   },
   intro: {
     eyebrow: 'ABOUT HEREV',
-    heading: 'Five ateliers. One uncommon standard.',
+    heading: 'Five ateliers. One exacting standard.',
+    body: "We represent five of the world's most considered motor-yacht ateliers — each chosen for a different reason, all held to one standard of build. No marketplace noise; a single, trusted introduction to the boat that is yours.",
+    statLabels: { ateliers: 'ATELIERS', years: 'YEARS', relationship: 'RELATIONSHIP' },
   },
   fleet: {
     eyebrow: 'FEATURED FLEET · MMXXVI',
@@ -282,6 +288,8 @@ const en: Translations = {
     locations: 'LOCATIONS',
     brands: 'BRANDS',
     countries: 'COUNTRIES',
+    berths: 'BERTHS',
+    years: 'YEARS',
     linkLabel: 'VIEW FULL NETWORK →',
     imageCaption: 'WARSAW · GDYNIA · PALMA',
   },
@@ -519,7 +527,9 @@ const pl: Translations = {
   },
   intro: {
     eyebrow: 'O HEREV',
-    heading: 'Pięć atelier. Jeden wyjątkowy standard.',
+    heading: 'Pięć atelier. Jeden wymagający standard.',
+    body: 'Reprezentujemy pięć najbardziej przemyślanych atelier jachtów motorowych na świecie — każde wybrane z innego powodu, wszystkie spełniające jeden standard wykonania. Żadnego rynkowego szumu; jedno, zaufane wprowadzenie do jachtu, który jest Twój.',
+    statLabels: { ateliers: 'ATELIER', years: 'LAT', relationship: 'RELACJA' },
   },
   fleet: {
     eyebrow: 'WYBRANA FLOTA · MMXXVI',
@@ -579,6 +589,8 @@ const pl: Translations = {
     locations: 'SALONY',
     brands: 'MARKI',
     countries: 'KRAJE',
+    berths: 'MIEJSCA CUMOWANIA',
+    years: 'LAT',
     linkLabel: 'PEŁNA SIEĆ →',
     imageCaption: 'WARSZAWA · GDYNIA · PALMA',
   },
@@ -816,7 +828,9 @@ const es: Translations = {
   },
   intro: {
     eyebrow: 'SOBRE HEREV',
-    heading: 'Cinco ateliers. Un estándar poco común.',
+    heading: 'Cinco ateliers. Un estándar exigente.',
+    body: 'Representamos cinco de los ateliers de yates a motor más reflexivos del mundo — cada uno elegido por una razón diferente, todos mantenidos según un mismo estándar de construcción. Sin ruido de mercado; una única introducción de confianza al barco que es tuyo.',
+    statLabels: { ateliers: 'ATELIERS', years: 'AÑOS', relationship: 'RELACIÓN' },
   },
   fleet: {
     eyebrow: 'FLOTA DESTACADA · MMXXVI',
@@ -876,6 +890,8 @@ const es: Translations = {
     locations: 'UBICACIONES',
     brands: 'MARCAS',
     countries: 'PAÍSES',
+    berths: 'AMARRES',
+    years: 'AÑOS',
     linkLabel: 'VER RED COMPLETA →',
     imageCaption: 'VARSOVIA · GDYNIA · PALMA',
   },
@@ -1113,7 +1129,9 @@ const it: Translations = {
   },
   intro: {
     eyebrow: 'CHI SIAMO',
-    heading: 'Cinque atelier. Uno standard fuori dal comune.',
+    heading: 'Cinque atelier. Uno standard esigente.',
+    body: "Rappresentiamo cinque dei più attenti atelier di yacht a motore al mondo — ciascuno scelto per una ragione diversa, tutti tenuti a uno standard costruttivo. Nessun rumore di mercato; un'unica, affidabile introduzione all'imbarcazione che è tua.",
+    statLabels: { ateliers: 'ATELIER', years: 'ANNI', relationship: 'RELAZIONE' },
   },
   fleet: {
     eyebrow: 'FLOTTA IN EVIDENZA · MMXXVI',
@@ -1173,6 +1191,8 @@ const it: Translations = {
     locations: 'SEDI',
     brands: 'MARCHI',
     countries: 'PAESI',
+    berths: 'ORMEGGI',
+    years: 'ANNI',
     linkLabel: 'VEDI RETE COMPLETA →',
     imageCaption: 'VARSAVIA · DANZICA · PALMA',
   },
@@ -1385,10 +1405,7 @@ const it: Translations = {
   },
 };
 
-// TODO: translate to Russian — using English stubs until content team delivers copy
-const ru: Translations = { ...en };
-
-const translations: Record<Locale, Translations> = { en, pl, es, it, ru };
+const translations: Record<Locale, Translations> = { en, pl, es, it };
 
 export function getTranslations(locale: Locale): Translations {
   return translations[locale];

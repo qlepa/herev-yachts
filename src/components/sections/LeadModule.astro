@@ -18,6 +18,7 @@ interface Props {
   contactPlaceholder: string;
   modelPlaceholder: string;
   messagePlaceholder: string;
+  models?: string[];
 }
 
 const {
@@ -34,6 +35,7 @@ const {
   contactPlaceholder,
   modelPlaceholder,
   messagePlaceholder,
+  models,
 } = Astro.props;
 
 const inputBase =
@@ -77,7 +79,7 @@ const inputBase =
         Endpoint + Turnstile added in Step 5.
       -->
       <form aria-label="Enquiry form" novalidate>
-        <div class="space-y-6 mb-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <input
             type="text"
             name="name"
@@ -92,17 +94,26 @@ const inputBase =
             autocomplete="email"
             class={inputBase}
           />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
           <input
             type="text"
             name="model"
             placeholder={modelPlaceholder}
+            autocomplete="off"
+            list={models?.length ? 'model-list' : undefined}
             class={inputBase}
           />
-          <textarea
+          {models?.length && (
+            <datalist id="model-list">
+              {models.map((m) => <option value={m} />)}
+            </datalist>
+          )}
+          <input
+            type="text"
             name="message"
             placeholder={messagePlaceholder}
-            rows="3"
-            class={`${inputBase} resize-none`}
+            class={inputBase}
           />
         </div>
 

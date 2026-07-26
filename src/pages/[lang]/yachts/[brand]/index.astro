@@ -1,0 +1,181 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Layout from '../../../../layouts/Layout.astro';
+import SiteHeader from '../../../../components/SiteHeader.astro';
+import SiteFooter from '../../../../components/SiteFooter.astro';
+import SectionLabel from '../../../../components/ui/SectionLabel.astro';
+import LeadModule from '../../../../components/sections/LeadModule.astro';
+import WaterlineBar from '../../../../components/ui/WaterlineBar.astro';
+import { LOCALES, type Locale } from '../../../../lib/i18n';
+import { BRAND_KEYS } from '../../../../content.config';
+import type { BrandKey, CategoryKey } from '../../../../content.config';
+import { getTranslations } from '../../../../lib/i18n-strings';
+import { getYachtHero } from '../../../../lib/images';
+import leadPic from '../../../../assets/site/lead-image.avif';
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const brand of BRAND_KEYS) {
+      paths.push({ params: { lang, brand } });
+    }
+  }
+  return paths;
+}
+
+const { lang, brand } = Astro.params as { lang: Locale; brand: BrandKey };
+const t = getTranslations(lang);
+
+const brandDisplayMap: Record<BrandKey, string> = {
+  galeon:        'GALEON',
+  parker:        'PARKER',
+  saxdor:        'SAXDOR',
+  'de-antonio':  'DE ANTONIO',
+  'chris-craft': 'CHRIS-CRAFT',
+};
+const brandDisplay = brandDisplayMap[brand];
+
+const yachtEntries = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && e.data.brand === brand && !e.data.draft,
+);
+yachtEntries.sort((a, b) => a.data.lengthM - b.data.lengthM);
+
+const yachtCards = await Promise.all(
+  yachtEntries.map(async (y) => ({
+    translationKey: y.data.translationKey,
+    name:           y.data.name,
+    loaM:           y.data.lengthM,
+    cabins:         y.data.cabins,
+    categoryLabel:  y.data.category ? t.categories[y.data.category as CategoryKey] : undefined,
+    image:          await getYachtHero(y.data.translationKey, y.data.draft),
+    href:           `/${lang}/yachts/${brand}/${y.data.translationKey}/`,
+  })),
+);
+
+const alternates = LOCALES.map((l) => ({
+  lang: l,
+  href: `/${l}/yachts/${brand}/`,
+}));
+
+const pageTitle       = `${brandDisplay} — ${t.brandPage.fleetHeading} | Herev`;
+const pageDescription = t.brandPage.fleetSubheading;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription} alternates={alternates}>
+
+  <SiteHeader
+    lang={lang}
+    variant="ink"
+    currentPath={`/${lang}/yachts/${brand}/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    <section class="bg-paper pt-14 pb-10">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={brandDisplay} class="mb-4" />
+        <h1
+          class="font-display text-h1 text-ink mb-4 max-w-[640px]"
+          style="font-weight: 400; letter-spacing: var(--tracking-tight);"
+        >
+          {t.brandPage.fleetHeading}
+        </h1>
+        <p class="text-body text-[var(--color-ink-70)] leading-relaxed max-w-[480px]">
+          {t.brandPage.fleetSubheading}
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-paper py-section">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {yachtCards.map((y) => (
+            <article class="flex flex-col shadow-card bg-white w-full">
+              <a href={y.href} class="block relative overflow-hidden" style="aspect-ratio: 4/3.2;">
+                {y.image ? (
+                  <Image
+                    src={y.image}
+                    alt={y.name}
+                    widths={[400, 800]}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                    loading="lazy"
+                    class="w-full h-full object-cover transition-transform duration-[800ms] hover:scale-105"
+                    style="transition-timing-function: var(--ease-herev);"
+                  />
+                ) : (
+                  <div class="w-full h-full bg-ink" />
+                )}
+                <span
+                  class="absolute top-3 left-3 font-mono font-bold text-white uppercase"
+                  style="font-size: 9.5px; letter-spacing: .2em; text-shadow: 0 1px 4px rgba(15,37,46,.6);"
+                >
+                  {brandDisplay}
+                </span>
+              </a>
+
+              <div class="flex flex-col flex-1 p-[18px]">
+                <a href={y.href} class="block">
+                  <h2
+                    class="font-display text-title mb-1 hover:text-teal transition-colors"
+                    style="font-weight: 450;"
+                  >
+                    {y.name}
+                  </h2>
+                </a>
+
+                {y.categoryLabel && (
+                  <p class="font-mono text-[10.5px] tracking-mono text-teal mb-3 uppercase">
+                    {y.categoryLabel}
+                  </p>
+                )}
+
+                <WaterlineBar loaM={y.loaM} class="mb-4" />
+
+                <div
+                  class="flex items-center justify-between pt-3 mt-auto"
+                  style="border-top: 1px solid var(--color-line);"
+                >
+                  {y.cabins > 0 ? (
+                    <span class="font-mono text-[10px] tracking-mono text-[var(--color-ink-55)] uppercase">
+                      {y.cabins} {t.yachtsPage.filter.cabins}
+                    </span>
+                  ) : (
+                    <span />
+                  )}
+                  <a
+                    href={y.href}
+                    class="font-mono text-[11px] tracking-label text-teal hover:text-ink transition-colors uppercase"
+                  >
+                    {t.yachtsPage.filter.viewLabel}
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <LeadModule
+      eyebrow={t.lead.eyebrow}
+      heading={t.lead.heading}
+      subtext={t.lead.subtext}
+      ctaLabel={t.lead.cta}
+      image={leadPic}
+      imageAlt="Yacht cockpit interior"
+      orCallLabel={t.lead.orCall}
+      fallbackContact={t.lead.fallbackContact}
+      namePlaceholder={t.lead.namePlaceholder}
+      contactPlaceholder={t.lead.contactPlaceholder}
+      modelPlaceholder={t.lead.modelPlaceholder}
+      messagePlaceholder={t.lead.messagePlaceholder}
+    />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

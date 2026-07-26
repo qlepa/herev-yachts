@@ -46,8 +46,8 @@ const { yachts, eyebrow, heading, subheading, viewAllLabel, viewAllHref, enquire
       </TextLink>
     </div>
 
-    <!-- Cards — horizontally scrollable on mobile, row on desktop -->
-    <div class="flex flex-col gap-6 md:flex-row md:gap-5 md:overflow-x-auto md:pb-4 -mx-gutter px-gutter">
+    <!-- Cards — single column on mobile, 5-col grid on desktop -->
+    <div class="flex flex-col gap-5 md:grid md:grid-cols-5 md:gap-5 [&>*]:min-w-0 [&>*]:max-w-none">
       {yachts.map((yacht) => (
         <FleetCard
           name={yacht.name}
