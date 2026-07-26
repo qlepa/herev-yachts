@@ -65,20 +65,6 @@ export interface Translations {
     imageCaption: string;
   };
   footer: {
-    tagline: string;
-    explore: string;
-    company: string;
-    language: string;
-    links: {
-      yachts: string;
-      brands: string;
-      services: string;
-      blog: string;
-      network: string;
-      about: string;
-      trials: string;
-      contact: string;
-    };
     legal: string;
   };
   brandsPage: {
@@ -294,20 +280,6 @@ const en: Translations = {
     imageCaption: 'WARSAW · GDYNIA · PALMA',
   },
   footer: {
-    tagline: 'Premium yacht representation across European waters.',
-    explore: 'EXPLORE',
-    company: 'COMPANY',
-    language: 'LANGUAGE',
-    links: {
-      yachts: 'Yachts',
-      brands: 'Brands',
-      services: 'Services',
-      blog: 'Blog',
-      network: 'Our Network',
-      about: 'About Herev',
-      trials: 'Sea Trials',
-      contact: 'Contact',
-    },
     legal: '© MMXXVI HEREV · LEGAL · PRIVACY · COOKIES',
   },
   brandsPage: {
@@ -595,20 +567,6 @@ const pl: Translations = {
     imageCaption: 'WARSZAWA · GDYNIA · PALMA',
   },
   footer: {
-    tagline: 'Reprezentacja premium jachtów na europejskich wodach.',
-    explore: 'ODKRYJ',
-    company: 'FIRMA',
-    language: 'JĘZYK',
-    links: {
-      yachts: 'Jachty',
-      brands: 'Marki',
-      services: 'Usługi',
-      blog: 'Blog',
-      network: 'Nasza Sieć',
-      about: 'O Herev',
-      trials: 'Rejsy Próbne',
-      contact: 'Kontakt',
-    },
     legal: '© MMXXVI HEREV · INFORMACJE PRAWNE · PRYWATNOŚĆ · COOKIES',
   },
   brandsPage: {
@@ -896,20 +854,6 @@ const es: Translations = {
     imageCaption: 'VARSOVIA · GDYNIA · PALMA',
   },
   footer: {
-    tagline: 'Representación premium de yates en aguas europeas.',
-    explore: 'EXPLORAR',
-    company: 'EMPRESA',
-    language: 'IDIOMA',
-    links: {
-      yachts: 'Yates',
-      brands: 'Marcas',
-      services: 'Servicios',
-      blog: 'Blog',
-      network: 'Nuestra Red',
-      about: 'Sobre Herev',
-      trials: 'Pruebas de Mar',
-      contact: 'Contacto',
-    },
     legal: '© MMXXVI HEREV · AVISO LEGAL · PRIVACIDAD · COOKIES',
   },
   brandsPage: {
@@ -1197,20 +1141,6 @@ const it: Translations = {
     imageCaption: 'VARSAVIA · DANZICA · PALMA',
   },
   footer: {
-    tagline: 'Rappresentanza premium di yacht nelle acque europee.',
-    explore: 'ESPLORA',
-    company: 'AZIENDA',
-    language: 'LINGUA',
-    links: {
-      yachts: 'Yacht',
-      brands: 'Marchi',
-      services: 'Servizi',
-      blog: 'Blog',
-      network: 'La Nostra Rete',
-      about: 'Chi Siamo',
-      trials: 'Prove in Mare',
-      contact: 'Contatti',
-    },
     legal: '© MMXXVI HEREV · NOTE LEGALI · PRIVACY · COOKIE',
   },
   brandsPage: {

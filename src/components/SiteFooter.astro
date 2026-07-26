@@ -11,69 +11,8 @@ const { lang, t } = Astro.props;
 ---
 
 <footer class="bg-ink text-white">
-  <div class="max-w-[1440px] mx-auto px-gutter pt-16 pb-10">
-
-    <!-- Top: logo + tagline + link columns -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-10 pb-12 border-b border-[var(--color-line-on-ink)]">
-
-      <!-- Brand col -->
-      <div class="md:col-span-1">
-        <a
-          href={`/${lang}/`}
-          class="font-display text-[22px] tracking-wordmark uppercase font-light block mb-4"
-          style="font-weight: 340;"
-        >
-          HEREV
-        </a>
-        <p class="font-body text-sm text-[var(--color-paper-72)] leading-relaxed max-w-[220px]">
-          {t.tagline}
-        </p>
-      </div>
-
-      <!-- Explore -->
-      <div>
-        <p class="font-mono font-bold text-label tracking-label uppercase text-[var(--color-paper-72)] mb-5">
-          {t.explore}
-        </p>
-        <ul class="space-y-3">
-          <li><a href={`/${lang}/yachts/`} class="text-sm hover:text-gilt transition-colors">{t.links.yachts}</a></li>
-          <li><a href={`/${lang}/brands/`} class="text-sm hover:text-gilt transition-colors">{t.links.brands}</a></li>
-          <li><a href={`/${lang}/services/`} class="text-sm hover:text-gilt transition-colors">{t.links.services}</a></li>
-          <li><a href={`/${lang}/blog/`} class="text-sm hover:text-gilt transition-colors">{t.links.blog}</a></li>
-          <li><a href={`/${lang}/network/`} class="text-sm hover:text-gilt transition-colors">{t.links.network}</a></li>
-        </ul>
-      </div>
-
-      <!-- Company -->
-      <div>
-        <p class="font-mono font-bold text-label tracking-label uppercase text-[var(--color-paper-72)] mb-5">
-          {t.company}
-        </p>
-        <ul class="space-y-3">
-          <li><a href={`/${lang}/about/`} class="text-sm hover:text-gilt transition-colors">{t.links.about}</a></li>
-          <li><a href={`/${lang}/trials/`} class="text-sm hover:text-gilt transition-colors">{t.links.trials}</a></li>
-          <li><a href={`/${lang}/network/`} class="text-sm hover:text-gilt transition-colors">{t.links.network}</a></li>
-          <li><a href={`/${lang}/#lead`} class="text-sm hover:text-gilt transition-colors">{t.links.contact}</a></li>
-        </ul>
-      </div>
-
-      <!-- Language -->
-      <div>
-        <p class="font-mono font-bold text-label tracking-label uppercase text-[var(--color-paper-72)] mb-5">
-          {t.language}
-        </p>
-        <ul class="space-y-3">
-          <li><a href="/en/" class:list={['text-sm hover:text-gilt transition-colors', lang === 'en' ? 'text-gilt' : '']}>English</a></li>
-          <li><a href="/pl/" class:list={['text-sm hover:text-gilt transition-colors', lang === 'pl' ? 'text-gilt' : '']}>Polski</a></li>
-          <li><a href="/es/" class:list={['text-sm hover:text-gilt transition-colors', lang === 'es' ? 'text-gilt' : '']}>Español</a></li>
-          <li><a href="/it/" class:list={['text-sm hover:text-gilt transition-colors', lang === 'it' ? 'text-gilt' : '']}>Italiano</a></li>
-        </ul>
-      </div>
-
-    </div>
-
-    <!-- Bottom bar -->
-    <div class="pt-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+  <div class="max-w-[1440px] mx-auto px-gutter py-8 border-t border-[var(--color-line-on-ink)]">
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
       <div class="flex flex-wrap items-center gap-4 font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase">
         <span>GALEON</span>
         <span class="opacity-30">·</span>
@@ -89,6 +28,5 @@ const { lang, t } = Astro.props;
         {t.legal}
       </p>
     </div>
-
   </div>
 </footer>
