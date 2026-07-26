@@ -5,6 +5,7 @@ import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import TextLink from '../../../components/ui/TextLink.astro';
 import Btn from '../../../components/ui/Btn.astro';
+import CountryPageMap from '../../../islands/CountryPageMap';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
 import rawLocations from '../../../data/locations.json';
@@ -60,13 +61,7 @@ const locationCount = pageLocations.length;
 const brandKeys = [...new Set(pageLocations.flatMap((l) => l.brandKeys))];
 const brandsCount = brandKeys.length;
 
-// Mapbox Static Images thumbnail (graceful fallback when token not set)
-const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN;
-const meanLat = pageLocations.reduce((s, l) => s + l.lat, 0) / locationCount;
-const meanLng = pageLocations.reduce((s, l) => s + l.lng, 0) / locationCount;
-const staticMapUrl = mapboxToken
-  ? `https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/${meanLng.toFixed(4)},${meanLat.toFixed(4)},5/640x320@2x?access_token=${mapboxToken}`
-  : null;
+const mapboxToken = import.meta.env.PUBLIC_MAPBOX_TOKEN ?? '';
 
 // hreflang
 const alternates = LOCALES.map((l) => ({
@@ -151,7 +146,7 @@ const pageDescription = `Official Herev dealer network in ${countryName}. ${loca
         <!-- Showroom cards -->
         <div class="flex flex-col gap-4">
           {pageLocations.map((loc) => (
-            <div class="border border-[var(--color-line)] p-6 flex flex-col gap-4">
+            <div id={`loc-${loc.id}`} class="border border-[var(--color-line)] p-6 flex flex-col gap-4 transition-[border-color,box-shadow] duration-300">
               <div class="flex items-start justify-between gap-4">
                 <div class="min-w-0">
                   <h2
@@ -198,16 +193,12 @@ const pageDescription = `Official Herev dealer network in ${countryName}. ${loca
         <aside>
           <div class="sticky top-24 flex flex-col gap-5">
             <SectionLabel text={np.countryPage.mapLabel} class="mb-0" />
-            {staticMapUrl ? (
-              <div class="overflow-hidden border border-[var(--color-line)]" style="aspect-ratio: 3/4;">
-                <img
-                  src={staticMapUrl}
-                  alt={`${countryName} dealer locations map`}
-                  width="300"
-                  height="400"
-                  loading="lazy"
-                  decoding="async"
-                  class="w-full h-full object-cover"
+            {mapboxToken ? (
+              <div class="border border-[var(--color-line)] overflow-hidden" style="aspect-ratio: 3/4;">
+                <CountryPageMap
+                  client:visible
+                  locations={pageLocations.map((l) => ({ id: l.id, lat: l.lat, lng: l.lng }))}
+                  accessToken={mapboxToken}
                 />
               </div>
             ) : (
@@ -250,3 +241,21 @@ const pageDescription = `Official Herev dealer network in ${countryName}. ${loca
   <SiteFooter lang={lang} t={t.footer} />
 
 </Layout>
+
+<style is:global>
+  .loc-highlight {
+    border-color: #C9A45E !important;
+    box-shadow: 0 0 0 1px #C9A45E;
+  }
+</style>
+
+<script>
+  window.addEventListener('herev:location-select', (e) => {
+    const id = (e as CustomEvent<{ id: string }>).detail.id;
+    const card = document.getElementById('loc-' + id);
+    if (!card) return;
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('loc-highlight');
+    setTimeout(() => card.classList.remove('loc-highlight'), 2000);
+  });
+</script>

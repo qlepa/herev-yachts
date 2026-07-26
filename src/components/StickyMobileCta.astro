@@ -10,8 +10,9 @@ const { enquireLabel, callLabel, callNumber, enquireHref } = Astro.props;
 ---
 
 <div
+  id="sticky-mobile-cta"
   class="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-white border-t border-[var(--color-line)]"
-  style="height: 72px;"
+  style="height: 72px; transition: transform 0.3s ease;"
   aria-label="Quick actions"
 >
   <div class="flex h-full">
@@ -32,3 +33,22 @@ const { enquireLabel, callLabel, callNumber, enquireHref } = Astro.props;
 
 <!-- Spacer so footer is not hidden behind sticky bar on mobile -->
 <div class="h-[72px] md:hidden" aria-hidden="true" />
+
+<script>
+  const bar = document.getElementById('sticky-mobile-cta');
+  if (bar) {
+    let lastY = window.scrollY;
+    let ticking = false;
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          bar.style.transform = (y > lastY && y > 80) ? 'translateY(100%)' : 'translateY(0)';
+          lastY = y;
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  }
+</script>

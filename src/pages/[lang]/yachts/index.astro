@@ -1,15 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
 import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
-import FleetCard from '../../../components/FleetCard.astro';
+import YachtFilter from '../../../islands/YachtFilter';
 import { getLocalePaths, type Locale } from '../../../lib/i18n';
 import type { BrandKey, CategoryKey } from '../../../content.config';
 import { getTranslations } from '../../../lib/i18n-strings';
 import { getYachtHero } from '../../../lib/images';
-import { metresToFeet } from '../../../lib/format';
 
 export function getStaticPaths() {
   return getLocalePaths();
@@ -18,15 +18,11 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Locale };
 const t = getTranslations(lang);
 
-const brandOrder: Record<BrandKey, number> = {
-  galeon: 1, parker: 2, saxdor: 3, 'de-antonio': 4, 'chris-craft': 5,
-};
-
 const brandDisplayMap: Record<BrandKey, string> = {
-  galeon:       'GALEON',
-  parker:       'PARKER',
-  saxdor:       'SAXDOR',
-  'de-antonio': 'DE ANTONIO',
+  galeon:        'GALEON',
+  parker:        'PARKER',
+  saxdor:        'SAXDOR',
+  'de-antonio':  'DE ANTONIO',
   'chris-craft': 'CHRIS-CRAFT',
 };
 
@@ -35,27 +31,29 @@ const yachtEntries = await getCollection(
   (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
 );
 
-yachtEntries.sort((a, b) => {
-  const brandDiff =
-    (brandOrder[a.data.brand as BrandKey] ?? 9) -
-    (brandOrder[b.data.brand as BrandKey] ?? 9);
-  if (brandDiff !== 0) return brandDiff;
-  return a.data.lengthM - b.data.lengthM;
-});
+yachtEntries.sort((a, b) => b.data.lengthM - a.data.lengthM);
 
 const yachtCards = await Promise.all(
-  yachtEntries.map(async (y) => ({
-    translationKey: y.data.translationKey,
-    name:           y.data.name,
-    brandDisplay:   brandDisplayMap[y.data.brand as BrandKey] ?? y.data.brand.toUpperCase(),
-    loaM:           y.data.lengthM,
-    loaFt:          metresToFeet(y.data.lengthM),
-    categoryLabel:  y.data.category
-      ? t.categories[y.data.category as CategoryKey]
-      : undefined,
-    image:          await getYachtHero(y.data.translationKey, y.data.draft),
-    href:           `/${lang}/yachts/${y.data.translationKey}/`,
-  })),
+  yachtEntries.map(async (y) => {
+    const image = await getYachtHero(y.data.translationKey, y.data.draft);
+    const processed = image
+      ? await getImage({ src: image, width: 640, format: 'webp' })
+      : null;
+    return {
+      translationKey: y.data.translationKey,
+      name:           y.data.name,
+      brand:          y.data.brand as string,
+      brandDisplay:   brandDisplayMap[y.data.brand as BrandKey] ?? y.data.brand.toUpperCase(),
+      category:       y.data.category as string | undefined,
+      categoryLabel:  y.data.category
+        ? t.categories[y.data.category as CategoryKey]
+        : undefined,
+      loaM:     y.data.lengthM,
+      cabins:   y.data.cabins,
+      imageSrc: processed?.src ?? null,
+      href:     `/${lang}/yachts/${y.data.translationKey}/`,
+    };
+  }),
 );
 
 const pageTitle = t.yachtsPage.heading + ' — Herev';
@@ -89,24 +87,13 @@ const pageDescription = t.yachtsPage.subheading;
       </div>
     </section>
 
-    <!-- Fleet grid -->
-    <section class="py-section bg-paper">
-      <div class="max-w-[1440px] mx-auto px-gutter">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {yachtCards.map((yacht) => (
-            <FleetCard
-              name={yacht.name}
-              brandDisplay={yacht.brandDisplay}
-              loaM={yacht.loaM}
-              loaFt={yacht.loaFt}
-              categoryLabel={yacht.categoryLabel}
-              image={yacht.image}
-              href={yacht.href}
-              enquireLabel={t.fleet.enquire}
-            />
-          ))}
-        </div>
-      </div>
+    <!-- Filter island + fleet grid -->
+    <section class="bg-paper">
+      <YachtFilter
+        yachts={yachtCards}
+        filterT={t.yachtsPage.filter}
+        client:visible
+      />
     </section>
 
   </main>

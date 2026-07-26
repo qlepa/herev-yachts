@@ -16,11 +16,12 @@ interface Props {
   image: ImageMetadata;
   imageAlt: string;
   videoSrc?: string;
+  posterSrc?: string;
   fullscreen?: boolean;
   muxPlaybackId?: string; // reserved for Step 5 — ignored here
 }
 
-const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta2Href, image, imageAlt, videoSrc, fullscreen } =
+const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta2Href, image, imageAlt, videoSrc, posterSrc, fullscreen } =
   Astro.props;
 ---
 
@@ -29,26 +30,51 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
     class="relative overflow-hidden"
     style="position: sticky; top: 0; z-index: 0; height: 100svh; min-height: 100vh;"
   >
-    <Image
-      src={image}
-      alt={imageAlt}
-      widths={[800, 1200, 1920]}
-      sizes="100vw"
-      loading="eager"
-      fetchpriority="high"
-      class="absolute inset-0 w-full h-full object-cover"
-    />
-
-    {videoSrc && (
+    {videoSrc && posterSrc ? (
       <video
         autoplay
         muted
         loop
         playsinline
+        poster={posterSrc}
         class="absolute inset-0 w-full h-full object-cover"
       >
         <source src={videoSrc} type="video/mp4" />
       </video>
+    ) : (
+      <Fragment>
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[800, 1200, 1920]}
+          sizes="100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+        {videoSrc && (
+          <Fragment>
+            <video
+              autoplay
+              muted
+              loop
+              playsinline
+              class="absolute inset-0 w-full h-full object-cover"
+              style="opacity:0;transition:opacity .8s ease;"
+            >
+              <source src={videoSrc} type="video/mp4" />
+            </video>
+            <script is:inline>
+              (function(){
+                var v = document.currentScript.previousElementSibling;
+                if (v && v.tagName === 'VIDEO') {
+                  v.addEventListener('canplay', function(){ v.style.opacity = '1'; }, { once: true });
+                }
+              })();
+            </script>
+          </Fragment>
+        )}
+      </Fragment>
     )}
 
     <div
@@ -58,11 +84,17 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
 
     <div class="hero-reveal relative z-10 h-full flex flex-col justify-end px-gutter pb-14 md:pb-20 max-w-[1440px] mx-auto">
       <h1
-        class="font-display text-white mb-8 max-w-[700px] leading-[1.02]"
+        class="font-display text-white mb-5 max-w-[700px] leading-[1.02]"
         style="font-size: clamp(2.75rem, 5.5vw, var(--text-hero)); letter-spacing: var(--tracking-tight); font-weight: 340;"
       >
         {heading}
       </h1>
+
+      {subtext && (
+        <p class="text-[var(--color-paper-72)] text-lg leading-relaxed max-w-[520px] mb-8">
+          {subtext}
+        </p>
+      )}
 
       <div class="flex flex-wrap gap-3">
         <Btn variant="gilt" href={cta1Href!}>{cta1Label}</Btn>
@@ -85,15 +117,26 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
     />
 
     {videoSrc && (
-      <video
-        autoplay
-        muted
-        loop
-        playsinline
-        class="absolute inset-0 w-full h-full object-cover"
-      >
-        <source src={videoSrc} type="video/mp4" />
-      </video>
+      <Fragment>
+        <video
+          autoplay
+          muted
+          loop
+          playsinline
+          class="absolute inset-0 w-full h-full object-cover"
+          style="opacity:0;transition:opacity .8s ease;"
+        >
+          <source src={videoSrc} type="video/mp4" />
+        </video>
+        <script is:inline>
+          (function(){
+            var v = document.currentScript.previousElementSibling;
+            if (v && v.tagName === 'VIDEO') {
+              v.addEventListener('canplay', function(){ v.style.opacity = '1'; }, { once: true });
+            }
+          })();
+        </script>
+      </Fragment>
     )}
 
     <!-- Gradient overlays -->

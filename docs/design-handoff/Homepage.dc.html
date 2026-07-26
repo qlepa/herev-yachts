@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#C6CDCC;font-family:'Inter',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#2C6E77;text-decoration:none}
+a:hover{color:#94702F}
+::selection{background:#C9A45E;color:#0F252E}
+img{display:block}
+input,button,textarea,select{font-family:inherit}
+button{cursor:pointer}
+.hz{animation:hz 9s ease-out both}
+@keyframes hz{from{transform:scale(1.08)}to{transform:scale(1)}}
+.card:hover .cimg{transform:scale(1.05)}
+.cimg{transition:transform .8s cubic-bezier(.2,.6,.2,1)}
+.cscroll::-webkit-scrollbar{width:10px;height:10px}
+.cscroll::-webkit-scrollbar-thumb{background:rgba(15,37,46,.2);border-radius:6px}
+</style>
+</helmet>
+
+<div style="--ink:#0F252E;--paper:#ECEFEE;--brass:#94702F;--brass2:#C9A45E;--teal:#2C6E77;--white:#ffffff;--line:rgba(15,37,46,.14);--line2:rgba(15,37,46,.28);color:var(--ink);padding:52px 48px 90px;display:flex;flex-direction:column;gap:52px;align-items:center">
+
+<!-- ===================== DESKTOP ===================== -->
+<div style="display:flex;flex-direction:column;gap:16px;width:1440px;max-width:100%">
+  <div style="display:flex;align-items:center;gap:12px;font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:rgba(15,37,46,.55)"><span style="background:var(--ink);color:var(--paper);padding:5px 9px">A</span> HOMEPAGE · DESKTOP · REBUILT</div>
+
+  <div style="background:var(--paper);border:1px solid var(--line);box-shadow:0 30px 70px -34px rgba(15,37,46,.55);overflow:hidden">
+
+    <!-- HEADER -->
+    <header style="position:relative;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:20px 44px">
+      <div style="display:flex;align-items:center;gap:44px">
+        <div style="font-family:'Fraunces',serif;font-weight:340;font-size:25px;letter-spacing:.24em;text-indent:.24em;color:#fff;text-shadow:0 1px 20px rgba(0,0,0,.4)">HEREV</div>
+        <nav style="display:flex;gap:28px">
+          <a href="#" style="color:rgba(255,255,255,.92);font-size:13.5px;font-weight:500">{{ t.nav0 }}</a>
+          <a href="#" style="color:rgba(255,255,255,.92);font-size:13.5px;font-weight:500">{{ t.nav1 }}</a>
+          <a href="#" style="color:rgba(255,255,255,.92);font-size:13.5px;font-weight:500">{{ t.nav2 }}</a>
+          <a href="#" style="color:rgba(255,255,255,.92);font-size:13.5px;font-weight:500">{{ t.nav3 }}</a>
+          <a href="#" style="color:rgba(255,255,255,.92);font-size:13.5px;font-weight:500">{{ t.nav4 }}</a>
+        </nav>
+      </div>
+      <div style="display:flex;align-items:center;gap:22px">
+        <div style="display:flex;gap:2px;align-items:center">
+          <sc-for list="{{ langs }}" as="lg" hint-placeholder-count="5">
+            <button onClick="{{ lg.onClick }}" style="{{ lg.style }}">{{ lg.label }}</button>
+          </sc-for>
+        </div>
+        <a href="#lead" style="background:var(--brass2);color:var(--ink);font-weight:600;font-size:13px;letter-spacing:.04em;padding:11px 22px;border-radius:6px">{{ t.enquire }}</a>
+      </div>
+    </header>
+
+    <!-- HERO (unchanged) -->
+    <section style="position:relative;height:660px;margin-top:-80px;overflow:hidden">
+      <img class="hz" src="assets/saxdor-460-aerial-sunset.jpeg" alt="Sax Dor at golden hour" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+      <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,37,46,.72) 0%,rgba(15,37,46,.32) 42%,rgba(15,37,46,0) 70%),linear-gradient(0deg,rgba(15,37,46,.6),rgba(15,37,46,0) 40%)"></div>
+      <div style="position:absolute;left:44px;top:190px;max-width:620px;color:#fff">
+        <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.34em;color:var(--brass2);margin-bottom:22px">{{ t.eyebrow }}</div>
+        <h1 style="font-family:'Fraunces',serif;font-weight:360;font-size:64px;line-height:1.02;margin:0 0 22px;letter-spacing:-.01em;text-wrap:balance">{{ t.heroHead }}</h1>
+        <p style="font-size:17px;line-height:1.6;color:rgba(255,255,255,.85);max-width:500px;margin:0 0 34px;text-wrap:pretty">{{ t.heroSub }}</p>
+        <div style="display:flex;gap:14px">
+          <a href="#fleet" style="display:flex;align-items:center;gap:12px;background:#fff;color:var(--ink);font-weight:600;font-size:14px;padding:15px 26px;border-radius:6px">{{ t.cta1 }} <span style="font-family:'IBM Plex Mono',monospace">→</span></a>
+          <a href="#finder" style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:600;font-size:14px;padding:15px 26px;border-radius:6px;backdrop-filter:blur(4px)">{{ t.cta2 }} <span style="font-family:'IBM Plex Mono',monospace">↧</span></a>
+        </div>
+      </div>
+      <div style="position:absolute;left:44px;right:44px;bottom:26px;color:rgba(255,255,255,.75)">
+        <div style="display:flex;justify-content:space-between;font:400 10px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;margin-bottom:8px"><span>FLEET SIZE RANGE · LENGTH OVERALL (LOA)</span><span>8 M —————————————————— 16 M</span></div>
+        <svg viewBox="0 0 1352 16" width="100%" height="14" preserveAspectRatio="none"><line x1="0" y1="8" x2="1352" y2="8" stroke="rgba(255,255,255,.5)" stroke-width="1"></line><g stroke="rgba(255,255,255,.5)" stroke-width="1"><line x1="1" y1="2" x2="1" y2="14"></line><line x1="169" y1="4" x2="169" y2="12"></line><line x1="338" y1="2" x2="338" y2="14"></line><line x1="507" y1="4" x2="507" y2="12"></line><line x1="676" y1="2" x2="676" y2="14"></line><line x1="845" y1="4" x2="845" y2="12"></line><line x1="1014" y1="2" x2="1014" y2="14"></line><line x1="1183" y1="4" x2="1183" y2="12"></line><line x1="1351" y1="2" x2="1351" y2="14"></line></g></svg>
+      </div>
+    </section>
+
+    <!-- 1 · INTRO (rebuilt — balanced editorial band) -->
+    <section style="background:var(--paper);padding:74px 44px 66px">
+      <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--brass);margin-bottom:30px">ABOUT HEREV</div>
+      <div style="display:grid;grid-template-columns:1.15fr .85fr;gap:64px;align-items:start">
+        <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:48px;line-height:1.08;margin:0;letter-spacing:-.01em;text-wrap:balance">Five ateliers.<br>One exacting standard.</h2>
+        <div style="padding-top:8px">
+          <p style="margin:0 0 22px;font-size:16px;line-height:1.7;color:rgba(15,37,46,.78);text-wrap:pretty">We represent five of the world's most considered motor-yacht ateliers — each chosen for a different reason, all held to one standard of build. No marketplace noise; a single, trusted introduction to the boat that is yours.</p>
+          <div style="display:flex;gap:32px;border-top:1px solid var(--line);padding-top:20px">
+            <div><div style="font-family:'Fraunces',serif;font-size:30px;line-height:1">5</div><div style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:rgba(15,37,46,.55);margin-top:6px">ATELIERS</div></div>
+            <div><div style="font-family:'Fraunces',serif;font-size:30px;line-height:1">17</div><div style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:rgba(15,37,46,.55);margin-top:6px">YEARS</div></div>
+            <div><div style="font-family:'Fraunces',serif;font-size:30px;line-height:1">1</div><div style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.18em;color:rgba(15,37,46,.55);margin-top:6px">RELATIONSHIP</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST BAND -->
+    <section style="background:var(--ink);color:var(--paper);padding:40px 44px">
+      <div style="display:flex;align-items:center;justify-content:center;flex-wrap:wrap">
+        <sc-for list="{{ brands }}" as="b" hint-placeholder-count="5">
+          <span style="font-family:'Fraunces',serif;font-weight:380;font-size:22px;letter-spacing:.18em;padding:0 34px;border-right:1px solid rgba(236,239,238,.16);color:rgba(236,239,238,.9)">{{ b }}</span>
+        </sc-for>
+      </div>
+      <div style="text-align:center;margin-top:26px;font:400 10.5px/1.8 'IBM Plex Mono',monospace;letter-spacing:.26em;color:var(--brass2)">WORLD YACHTS TROPHIES · EUROPEAN POWERBOAT OF THE YEAR · BOAT BUILDER AWARDS · 2019—2026</div>
+    </section>
+
+    <!-- 2 · FEATURED FLEET (clean 5-col grid, no scroll) -->
+    <section id="fleet" style="background:var(--paper);padding:74px 44px">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:34px">
+        <div>
+          <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--brass);margin-bottom:14px">FEATURED FLEET · MMXXVI</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:36px;margin:0;letter-spacing:-.01em">A short, deliberate selection</h2>
+        </div>
+        <a href="#" style="font:600 13px 'IBM Plex Mono',monospace;letter-spacing:.04em;border-bottom:1px solid var(--line2);padding-bottom:4px;color:var(--ink)">VIEW ALL 5 MARQUES →</a>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:20px">
+        <sc-for list="{{ fleet }}" as="m" hint-placeholder-count="5">
+          <div class="card" style="min-width:0;background:var(--white);border:1px solid var(--line);display:flex;flex-direction:column">
+            <div style="position:relative;aspect-ratio:4/3.2;overflow:hidden;background:var(--ink)">
+              <sc-if value="{{ m.img }}" hint-placeholder-val="{{ '' }}"><img class="cimg" src="{{ m.img }}" alt="{{ m.name }}" style="width:100%;height:100%;object-fit:cover"></sc-if>
+              <span style="position:absolute;left:14px;top:13px;font:700 9.5px/1 'IBM Plex Mono',monospace;letter-spacing:.2em;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.6)">{{ m.brand }}</span>
+              <button onClick="{{ m.onSave }}" title="Save" style="position:absolute;right:11px;top:10px;width:34px;height:34px;border:none;background:rgba(15,37,46,.42);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center">
+                <sc-if value="{{ m.saved }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="#C9A45E"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg></sc-if>
+                <sc-if value="{{ m.notSaved }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg></sc-if>
+              </button>
+            </div>
+            <div style="padding:18px 18px 20px;display:flex;flex-direction:column;gap:12px;flex:1">
+              <div>
+                <div style="font-family:'Fraunces',serif;font-weight:450;font-size:20px;line-height:1.1">{{ m.name }}</div>
+                <div style="font:400 10.5px/1 'IBM Plex Mono',monospace;letter-spacing:.12em;color:var(--teal);margin-top:6px">{{ m.use }}</div>
+              </div>
+              <div style="margin-top:auto">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+                  <span style="font:700 10px 'IBM Plex Mono',monospace;color:rgba(15,37,46,.55);width:44px">{{ m.loaFt }}</span>
+                  <div style="flex:1;height:3px;background:rgba(15,37,46,.12);position:relative"><div style="{{ m.barStyle }}"></div></div>
+                </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px">
+                  <span style="font:400 11px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:rgba(15,37,46,.55)">{{ m.loaM }}</span>
+                  <a href="#" style="font:600 12px 'IBM Plex Mono',monospace;color:var(--teal)">Enquire →</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- 3 · ADVISORY (Not a marketplace) -->
+    <section style="background:var(--white);padding:76px 44px;border-top:1px solid var(--line)">
+      <div style="max-width:560px;margin-bottom:44px">
+        <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--brass);margin-bottom:16px">HOW HEREV HELPS YOU BUY</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:36px;line-height:1.12;margin:0;letter-spacing:-.01em">Not a marketplace. A single, trusted introduction to the boat that is yours.</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line2)">
+        <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+          <div style="padding:30px 34px 30px 0;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:14px">
+            <div style="font:700 12px 'IBM Plex Mono',monospace;color:var(--brass)">{{ s.no }}</div>
+            <div style="font-family:'Fraunces',serif;font-weight:450;font-size:23px;line-height:1.2">{{ s.title }}</div>
+            <p style="margin:0;font-size:14px;line-height:1.6;color:rgba(15,37,46,.7);text-wrap:pretty">{{ s.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- 4 · LEAD MODULE (fixed spacing) -->
+    <section id="lead" style="display:flex;background:var(--ink);color:var(--paper)">
+      <div style="flex:0 0 42%;position:relative;overflow:hidden;min-height:460px">
+        <img src="assets/galeon-430-cockpit.avif" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+        <div style="position:absolute;inset:0;background:linear-gradient(90deg,rgba(15,37,46,0) 60%,rgba(15,37,46,.9))"></div>
+      </div>
+      <div style="flex:1;padding:64px 56px">
+        <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--brass2);margin-bottom:20px">A WARM INTRODUCTION · NO OBLIGATION</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;line-height:1.1;margin:0 0 12px;letter-spacing:-.01em">{{ t.advisor }}</h2>
+        <p style="margin:0 0 32px;font-size:14.5px;line-height:1.6;color:rgba(236,239,238,.72);max-width:460px">Tell us a little about what you have in mind. One of our five specialists replies personally, usually within the day.</p>
+        <sc-if value="{{ sentLead }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid rgba(201,164,94,.5);padding:34px;max-width:560px">
+            <div style="font-family:'Fraunces',serif;font-size:26px;margin-bottom:8px;color:#fff">Thank you — message received.</div>
+            <p style="margin:0;font-size:14px;line-height:1.6;color:rgba(236,239,238,.75)">Your advisor will be in touch shortly. In the meantime, feel free to keep exploring the fleet.</p>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSentLead }}" hint-placeholder-val="{{ true }}">
+          <form onSubmit="{{ onLead }}" style="max-width:600px">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+              <input required placeholder="Full name" style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none">
+              <input required placeholder="Email or phone" style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+              <select style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:rgba(236,239,238,.85);padding:12px 2px;font-size:15px;outline:none">
+                <option style="color:#000">Model of interest — optional</option>
+                <option style="color:#000">Galeon 500 FLY</option>
+                <option style="color:#000">De Antonio D50</option>
+                <option style="color:#000">Sax Dor 400 GTC</option>
+                <option style="color:#000">Parker 920 MAX</option>
+                <option style="color:#000">Chris-Craft Launch 28 GT</option>
+              </select>
+              <input placeholder="Message — optional" style="background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none">
+            </div>
+            <div style="display:flex;align-items:center;gap:20px;margin-top:26px">
+              <button type="submit" style="background:var(--brass2);color:var(--ink);border:none;font-weight:600;font-size:14px;letter-spacing:.03em;padding:15px 32px;border-radius:6px">Speak with an advisor →</button>
+              <span style="font:600 13px 'IBM Plex Mono',monospace;color:rgba(236,239,238,.7)">or write info@herev.com</span>
+            </div>
+          </form>
+        </sc-if>
+      </div>
+    </section>
+
+    <!-- 5 · NETWORK TEASER -->
+    <section style="background:var(--paper);padding:74px 44px;display:flex;gap:56px;align-items:center">
+      <div style="flex:1">
+        <div style="font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.3em;color:var(--brass);margin-bottom:16px">OUR NETWORK</div>
+        <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:34px;line-height:1.12;margin:0 0 18px">An authorised presence across the Mediterranean & Baltic.</h2>
+        <p style="margin:0 0 28px;font-size:15px;line-height:1.65;color:rgba(15,37,46,.72);max-width:440px">From Monaco to Gdynia, Herev is the single authorised representative for all five marques — one relationship, wherever you berth.</p>
+        <div style="display:flex;gap:40px;margin-bottom:30px">
+          <div><div style="font-family:'Fraunces',serif;font-size:40px;line-height:1">14</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:rgba(15,37,46,.6);margin-top:7px">COUNTRIES</div></div>
+          <div><div style="font-family:'Fraunces',serif;font-size:40px;line-height:1">30+</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:rgba(15,37,46,.6);margin-top:7px">BERTHS</div></div>
+          <div><div style="font-family:'Fraunces',serif;font-size:40px;line-height:1">17</div><div style="font:400 10.5px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:rgba(15,37,46,.6);margin-top:7px">YEARS</div></div>
+        </div>
+        <a href="#" style="font:600 13px 'IBM Plex Mono',monospace;letter-spacing:.04em;border-bottom:1px solid var(--line2);padding-bottom:4px;color:var(--ink)">EXPLORE OUR NETWORK →</a>
+      </div>
+      <div style="flex:0 0 46%;aspect-ratio:16/10;background:var(--ink);position:relative;overflow:hidden">
+        <img src="assets/cannes-marina.avif" alt="Cannes marina" style="width:100%;height:100%;object-fit:cover;opacity:.85">
+        <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,37,46,.55),rgba(15,37,46,.05))"></div>
+        <div style="position:absolute;left:22px;bottom:20px;color:#fff;font:400 10.5px/1.7 'IBM Plex Mono',monospace;letter-spacing:.16em">MONACO · CANNES · PALMA · SPLIT · GDYNIA</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer style="background:var(--ink);color:rgba(236,239,238,.72);padding:56px 44px 30px">
+      <div style="display:flex;justify-content:space-between;gap:40px;padding-bottom:40px;border-bottom:1px solid rgba(236,239,238,.14)">
+        <div style="max-width:300px">
+          <div style="font-family:'Fraunces',serif;font-weight:340;font-size:24px;letter-spacing:.24em;text-indent:.24em;color:#fff;margin-bottom:16px">HEREV</div>
+          <p style="margin:0;font-size:13px;line-height:1.7">Authorised representative of five premium motor-yacht ateliers. Curated. Independent. At your service.</p>
+        </div>
+        <div style="display:flex;gap:64px">
+          <div><div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--brass2);margin-bottom:16px">EXPLORE</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px"><a href="#" style="color:rgba(236,239,238,.8)">Fleet</a><a href="#" style="color:rgba(236,239,238,.8)">Brands</a><a href="#" style="color:rgba(236,239,238,.8)">Compare</a><a href="#" style="color:rgba(236,239,238,.8)">Journal</a></div></div>
+          <div><div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--brass2);margin-bottom:16px">COMPANY</div><div style="display:flex;flex-direction:column;gap:10px;font-size:13px"><a href="#" style="color:rgba(236,239,238,.8)">Our Network</a><a href="#" style="color:rgba(236,239,238,.8)">About Herev</a><a href="#" style="color:rgba(236,239,238,.8)">Sea trials</a><a href="#" style="color:rgba(236,239,238,.8)">Contact</a></div></div>
+          <div><div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.2em;color:var(--brass2);margin-bottom:16px">LANGUAGE</div><div style="font:400 12px/2 'IBM Plex Mono',monospace">EN · IT · ES<br>PL · DE</div></div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding-top:24px;gap:20px;flex-wrap:wrap">
+        <div style="display:flex;gap:26px;font-family:'Fraunces',serif;font-size:14px;letter-spacing:.16em;color:rgba(236,239,238,.55)"><span>DE ANTONIO</span><span>GALEON</span><span>PARKER</span><span>SAXDOR</span><span>CHRIS-CRAFT</span></div>
+        <div style="font:400 10.5px 'IBM Plex Mono',monospace;color:rgba(236,239,238,.4)">© MMXXVI HEREV · LEGAL · PRIVACY · COOKIES</div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+<!-- ===================== MOBILE ===================== -->
+<div style="display:flex;flex-direction:column;gap:16px">
+  <div style="display:flex;align-items:center;gap:12px;font:700 11px/1 'IBM Plex Mono',monospace;letter-spacing:.24em;color:rgba(15,37,46,.55)"><span style="background:var(--ink);color:var(--paper);padding:5px 9px">B</span> HOMEPAGE · MOBILE · REBUILT</div>
+  <div style="width:400px;height:820px;background:#0b1519;border-radius:44px;padding:11px;box-shadow:0 40px 80px -30px rgba(15,37,46,.7)">
+    <div style="position:relative;width:100%;height:100%;background:var(--paper);border-radius:34px;overflow:hidden">
+      <div style="position:absolute;top:0;left:50%;transform:translateX(-50%);width:130px;height:28px;background:#0b1519;border-bottom-left-radius:16px;border-bottom-right-radius:16px;z-index:40"></div>
+      <div class="cscroll" onScroll="{{ onMobileScroll }}" style="position:absolute;inset:0;overflow-y:auto">
+        <div style="position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;background:rgba(15,37,46,.9);backdrop-filter:blur(6px)">
+          <div style="font-family:'Fraunces',serif;font-weight:340;font-size:19px;letter-spacing:.22em;text-indent:.22em;color:#fff">HEREV</div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:var(--brass2)">EN</span><div style="display:flex;flex-direction:column;gap:4px"><span style="width:20px;height:1.5px;background:#fff"></span><span style="width:20px;height:1.5px;background:#fff"></span></div></div>
+        </div>
+        <!-- hero -->
+        <div style="position:relative;height:440px;margin-top:-56px">
+          <img src="assets/parker-sorrento-dusk.webp" alt="" style="width:100%;height:100%;object-fit:cover">
+          <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(15,37,46,.92) 4%,rgba(15,37,46,.15) 60%)"></div>
+          <div style="position:absolute;left:20px;right:20px;bottom:26px;color:#fff">
+            <div style="font:700 9.5px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass2);margin-bottom:12px">{{ t.eyebrow }}</div>
+            <h1 style="font-family:'Fraunces',serif;font-weight:360;font-size:34px;line-height:1.04;margin:0 0 22px">{{ t.heroHead }}</h1>
+            <a href="#" style="display:block;text-align:center;background:#fff;color:var(--ink);font-weight:600;font-size:14px;padding:14px;border-radius:6px;margin-bottom:10px">{{ t.cta1 }}</a>
+            <a href="#" style="display:block;text-align:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.4);color:#fff;font-weight:600;font-size:14px;padding:14px;border-radius:6px">{{ t.cta2 }}</a>
+          </div>
+        </div>
+        <!-- intro -->
+        <div style="padding:28px 18px 24px">
+          <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass);margin-bottom:14px">ABOUT HEREV</div>
+          <h2 style="font-family:'Fraunces',serif;font-weight:400;font-size:27px;line-height:1.1;margin:0 0 14px;letter-spacing:-.01em">Five ateliers. One exacting standard.</h2>
+          <p style="margin:0;font-size:15px;line-height:1.7;color:rgba(15,37,46,.76)">A single, trusted introduction to the boat that is yours — no marketplace noise.</p>
+        </div>
+        <!-- trust -->
+        <div style="background:var(--ink);color:var(--paper);padding:22px 18px;display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px">
+          <sc-for list="{{ brands }}" as="b" hint-placeholder-count="5"><span style="font-family:'Fraunces',serif;font-weight:380;font-size:14px;letter-spacing:.14em;color:rgba(236,239,238,.85)">{{ b }}</span></sc-for>
+        </div>
+        <!-- fleet -->
+        <div style="padding:26px 18px 14px">
+          <div style="font:700 10px 'IBM Plex Mono',monospace;letter-spacing:.28em;color:var(--brass);margin-bottom:14px">FEATURED FLEET</div>
+          <sc-for list="{{ fleet }}" as="m" hint-placeholder-count="3">
+            <div style="display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--line)">
+              <div style="position:relative;flex:0 0 108px;height:78px;overflow:hidden;background:var(--ink)"><sc-if value="{{ m.img }}" hint-placeholder-val="{{ '' }}"><img src="{{ m.img }}" alt="" style="width:100%;height:100%;object-fit:cover"></sc-if></div>
+              <div style="flex:1;min-width:0">
+                <div style="font:700 9px 'IBM Plex Mono',monospace;letter-spacing:.16em;color:var(--teal)">{{ m.brand }}</div>
+                <div style="font-family:'Fraunces',serif;font-weight:450;font-size:16px;margin:3px 0 6px">{{ m.name }}</div>
+                <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:400 10px 'IBM Plex Mono',monospace;letter-spacing:.1em;color:rgba(15,37,46,.55)">{{ m.loaM }}</span><button onClick="{{ m.onSave }}" style="border:none;background:none;padding:0">
+                  <sc-if value="{{ m.saved }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="#94702F"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg></sc-if>
+                  <sc-if value="{{ m.notSaved }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F252E" stroke-width="1.6"><path d="M6 3h12a1 1 0 0 1 1 1v17l-7-4.2L5 21V4a1 1 0 0 1 1-1z"></path></svg></sc-if>
+                </button></div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <!-- lead -->
+        <div style="background:var(--ink);color:var(--paper);padding:28px 18px 30px;margin-top:10px">
+          <div style="font:700 9.5px 'IBM Plex Mono',monospace;letter-spacing:.26em;color:var(--brass2);margin-bottom:14px">NO OBLIGATION</div>
+          <div style="font-family:'Fraunces',serif;font-weight:420;font-size:24px;margin-bottom:18px">{{ t.advisor }}</div>
+          <sc-if value="{{ sentMobile }}" hint-placeholder-val="{{ false }}">
+            <div style="border:1px solid rgba(201,164,94,.5);padding:22px"><div style="font-family:'Fraunces',serif;font-size:19px;margin-bottom:6px">Thank you.</div><p style="margin:0;font-size:13px;color:rgba(236,239,238,.72)">Your advisor will be in touch shortly.</p></div>
+          </sc-if>
+          <sc-if value="{{ notSentMobile }}" hint-placeholder-val="{{ true }}">
+            <form onSubmit="{{ onMobileLead }}">
+              <input required placeholder="Full name" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none;margin-bottom:12px">
+              <input required placeholder="Email or phone" style="width:100%;background:transparent;border:none;border-bottom:1px solid rgba(236,239,238,.3);color:#fff;padding:12px 2px;font-size:15px;outline:none;margin-bottom:22px">
+              <button type="submit" style="width:100%;background:var(--brass2);color:var(--ink);border:none;font-weight:600;font-size:14px;padding:15px;border-radius:6px">Speak with an advisor →</button>
+            </form>
+          </sc-if>
+        </div>
+        <div style="height:92px"></div>
+      </div>
+      <div style="{{ mobileCtaStyle }}">
+        <a href="#" style="flex:1;text-align:center;background:var(--ink);color:#fff;font-weight:600;font-size:14px;padding:15px;border-radius:6px">{{ t.enquire }}</a>
+        <a href="tel:+37700000000" style="flex:0 0 132px;display:flex;align-items:center;justify-content:center;gap:8px;background:#fff;border:1px solid var(--line2);color:var(--ink);font-weight:600;font-size:14px;padding:15px;border-radius:6px"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L16 18l5 2v-0a1 1 0 0 1-1 1A17 17 0 0 1 3 5a1 1 0 0 1 1-1z"></path></svg>{{ t.call }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1536,&quot;height&quot;:1000}}">
+class Component extends DCLogic {
+  state = { lang:'en', saved:{}, sent:{}, mobileScrolled:false };
+
+  fleet = [
+    { id:'galeon500', brand:'GALEON', name:'500 FLY', use:'CRUISER · FLYBRIDGE', loa:15.65, loaFt:"51′4″", loaM:'15.65 m', img:'assets/galeon-450-running.avif' },
+    { id:'da50', brand:'DE ANTONIO', name:'D50', use:'WEEKENDER · OUTBOARD', loa:15.60, loaFt:"51′2″", loaM:'15.60 m', img:'assets/deantonio-d55-anchor.jpg' },
+    { id:'saxdor400', brand:'SAXDOR', name:'400 GTC', use:'DAY · GRAND TOURER', loa:12.20, loaFt:"40′0″", loaM:'12.20 m', img:'assets/saxdor-460-aerial-sunset.jpeg' },
+    { id:'parker920', brand:'PARKER', name:'920 MAX', use:'DAY / WEEKEND', loa:9.99, loaFt:"32′9″", loaM:'9.99 m', img:'assets/parker-sorrento-dusk.webp' },
+    { id:'cc28', brand:'CHRIS-CRAFT', name:'Launch 28 GT', use:'DAY · RUNABOUT', loa:8.60, loaFt:"28′2″", loaM:'8.60 m', img:'assets/deantonio-aerial-turquoise.jpg' },
+  ];
+
+  L = {
+    en:{ nav0:'Fleet',nav1:'Brands',nav2:'Compare',nav3:'Our Network',nav4:'Journal', enquire:'Enquire', call:'Call', eyebrow:'AUTHORISED REPRESENTATION · FIVE ATELIERS', heroHead:'The sea, on your terms.', heroSub:'Herev represents five of the world’s most exacting motor-yacht ateliers — and guides you, quietly, to the one that is yours.', cta1:'Explore by brand', cta2:'Find by length & price', advisor:'Speak with an advisor' },
+    it:{ nav0:'Flotta',nav1:'Marchi',nav2:'Confronta',nav3:'La Rete',nav4:'Journal', enquire:'Richiedi', call:'Chiama', eyebrow:'RAPPRESENTANZA AUTORIZZATA · CINQUE ATELIER', heroHead:'Il mare, alle tue condizioni.', heroSub:'Herev rappresenta cinque tra i più esigenti atelier di yacht a motore — e ti guida verso quello che è tuo.', cta1:'Esplora per marca', cta2:'Cerca per lunghezza e prezzo', advisor:'Parla con un consulente' },
+    es:{ nav0:'Flota',nav1:'Marcas',nav2:'Comparar',nav3:'Nuestra Red',nav4:'Journal', enquire:'Consultar', call:'Llamar', eyebrow:'REPRESENTACIÓN AUTORIZADA · CINCO ATELIERS', heroHead:'El mar, en tus términos.', heroSub:'Herev representa a cinco de los ateliers de yates a motor más exigentes del mundo — y te guía hacia el que es tuyo.', cta1:'Explorar por marca', cta2:'Buscar por eslora y precio', advisor:'Habla con un asesor' },
+    pl:{ nav0:'Jachty',nav1:'Marki',nav2:'Porównaj',nav3:'Nasza Sieć',nav4:'Blog', enquire:'Zapytaj', call:'Zadzwoń', eyebrow:'AUTORYZOWANE PRZEDSTAWICIELSTWO · PIĘĆ ATELIER', heroHead:'Morze, na Twoich warunkach.', heroSub:'Herev reprezentuje pięć najbardziej wymagających atelier jachtów motorowych na świecie — i dyskretnie prowadzi Cię do tego jednego, który jest Twój.', cta1:'Odkryj według marki', cta2:'Szukaj według długości i ceny', advisor:'Porozmawiaj z doradcą' },
+    de:{ nav0:'Flotte',nav1:'Marken',nav2:'Vergleichen',nav3:'Unser Netzwerk',nav4:'Journal', enquire:'Anfragen', call:'Anrufen', eyebrow:'AUTORISIERTE VERTRETUNG · FÜNF ATELIERS', heroHead:'Das Meer, zu Ihren Bedingungen.', heroSub:'Herev vertritt fünf der anspruchsvollsten Motoryacht-Ateliers der Welt — und führt Sie zu jener, die Ihnen gehört.', cta1:'Nach Marke', cta2:'Nach Länge & Preis', advisor:'Sprechen Sie mit einem Berater' },
+  };
+
+  toggleSave(id){ this.setState(s=>({ saved:{...s.saved,[id]:!s.saved[id]} })); }
+  send(which){ return (e)=>{ if(e&&e.preventDefault) e.preventDefault(); this.setState(s=>({ sent:{...s.sent,[which]:true} })); }; }
+  onMobileScroll = (e)=>{ const past = e.target.scrollTop > 400; if(past!==this.state.mobileScrolled) this.setState({ mobileScrolled:past }); };
+  parse(str){ const o={}; str.split(';').forEach(d=>{ const i=d.indexOf(':'); if(i<0) return; let k=d.slice(0,i).trim(); const v=d.slice(i+1).trim(); k=k.replace(/-([a-z])/g,(_,c)=>c.toUpperCase()); o[k]=v; }); return o; }
+
+  renderVals(){
+    const lang = this.state.lang;
+    const t = this.L[lang] || this.L.en;
+    const MIN=8, MAX=16.4;
+    const fleet = this.fleet.map(m=>{
+      const sv = !!this.state.saved[m.id];
+      const pct = Math.max(6, Math.round((m.loa-MIN)/(MAX-MIN)*100));
+      return { ...m, saved:sv, notSaved:!sv, onSave:()=>this.toggleSave(m.id),
+        barStyle:{ position:'absolute', left:0, top:0, height:'3px', width:pct+'%', background:'#94702F' } };
+    });
+    const codes=['en','it','es','pl','de'];
+    const langs = codes.map(c=>({ label:c.toUpperCase(),
+      onClick:()=>this.setState({lang:c}),
+      style:{ border:'none', cursor:'pointer', font:"700 11px 'IBM Plex Mono',monospace", letterSpacing:'.08em', padding:'6px 7px',
+        background: c===lang ? 'rgba(255,255,255,.16)' : 'transparent',
+        color: c===lang ? '#fff' : 'rgba(255,255,255,.55)' } }));
+
+    const sent=this.state.sent;
+    const ctaBase='position:absolute;left:0;right:0;bottom:0;z-index:40;display:flex;gap:10px;padding:14px 16px 22px;background:rgba(236,239,238,.94);backdrop-filter:blur(10px);border-top:1px solid rgba(15,37,46,.14);transition:transform .35s cubic-bezier(.2,.6,.2,1)';
+    const mobileCtaStyle = { ...this.parse(ctaBase), transform: this.state.mobileScrolled ? 'translateY(0)' : 'translateY(120%)' };
+
+    return {
+      t, langs, fleet,
+      brands:['DE ANTONIO','GALEON','PARKER','SAXDOR','CHRIS-CRAFT'],
+      steps:[
+        { no:'01', title:'A short conversation', body:'We learn how you’ll use the boat — day, weekend or long passages — then shortlist only what genuinely fits.' },
+        { no:'02', title:'A tailored proposal', body:'Two or three models that truly suit, with honest trade-offs and side-by-side length. No brochures, no noise.' },
+        { no:'03', title:'A personal introduction', body:'We arrange trials with the right marque, handle cross-border paperwork, and stay with you long after handover.' },
+      ],
+      onLead:this.send('lead'), sentLead:!!sent.lead, notSentLead:!sent.lead,
+      onMobileLead:this.send('mobile'), sentMobile:!!sent.mobile, notSentMobile:!sent.mobile,
+      onMobileScroll:this.onMobileScroll, mobileCtaStyle,
+    };
+  }
+}
+</script>
+</body>
+</html>

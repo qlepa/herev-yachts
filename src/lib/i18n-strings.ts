@@ -91,6 +91,19 @@ export interface Translations {
   yachtsPage: {
     heading: string;
     subheading: string;
+    filter: {
+      refine: string;
+      typeLabel: string;
+      marqueLabel: string;
+      lengthLabel: string;
+      searchPlaceholder: string;
+      yachts: string;
+      cabins: string;
+      sortLengthLong: string;
+      sortLengthShort: string;
+      viewLabel: string;
+      noResults: string;
+    };
   };
   yachtPage: {
     enquireCta: string;
@@ -139,6 +152,15 @@ export interface Translations {
     heading: string;
     subtext: string;
     backToHome: string;
+  };
+  blogPage: {
+    eyebrow: string;
+    heading: string;
+    subheading: string;
+    readMore: string;
+    publishedLabel: string;
+    backToBlog: string;
+    comingSoon: string;
   };
   networkPage: {
     hero: { eyebrow: string; heading: string; subtext: string };
@@ -296,6 +318,19 @@ const en: Translations = {
     heading: 'The full collection.',
     subheading:
       'Every vessel we represent — five builders, one considered standard.',
+    filter: {
+      refine: 'REFINE',
+      typeLabel: 'TYPE',
+      marqueLabel: 'MARQUE',
+      lengthLabel: 'LENGTH OVERALL',
+      searchPlaceholder: 'Search a model — e.g. 500 FLY',
+      yachts: 'yachts',
+      cabins: 'cabins',
+      sortLengthLong: 'Length · longest first',
+      sortLengthShort: 'Length · shortest first',
+      viewLabel: 'View →',
+      noResults: 'No yachts match your filters.',
+    },
   },
   yachtPage: {
     enquireCta: 'Enquire about this yacht →',
@@ -394,6 +429,15 @@ const en: Translations = {
     heading: 'Page not found.',
     subtext: 'The page you are looking for does not exist or has been moved.',
     backToHome: 'Return home',
+  },
+  blogPage: {
+    eyebrow: 'HEREV JOURNAL',
+    heading: 'The Journal.',
+    subheading: 'Considered writing on yacht ownership, sea life, and the builders we represent.',
+    readMore: 'Read →',
+    publishedLabel: 'PUBLISHED',
+    backToBlog: '← Back to journal',
+    comingSoon: 'New articles coming soon.',
   },
   networkPage: {
     hero: {
@@ -571,6 +615,19 @@ const pl: Translations = {
     heading: 'Pełna kolekcja.',
     subheading:
       'Każda jednostka, którą reprezentujemy — pięciu producentów, jeden przemyślany standard.',
+    filter: {
+      refine: 'FILTRUJ',
+      typeLabel: 'TYP',
+      marqueLabel: 'MARKA',
+      lengthLabel: 'DŁUGOŚĆ',
+      searchPlaceholder: 'Szukaj modelu — np. 500 FLY',
+      yachts: 'jachtów',
+      cabins: 'kabin',
+      sortLengthLong: 'Długość · najdłuższe pierwsze',
+      sortLengthShort: 'Długość · najkrótsze pierwsze',
+      viewLabel: 'Zobacz →',
+      noResults: 'Brak jachtów spełniających kryteria.',
+    },
   },
   yachtPage: {
     enquireCta: 'Zapytaj o ten jacht →',
@@ -669,6 +726,15 @@ const pl: Translations = {
     heading: 'Strona nie znaleziona.',
     subtext: 'Strona, której szukasz, nie istnieje lub została przeniesiona.',
     backToHome: 'Wróć do strony głównej',
+  },
+  blogPage: {
+    eyebrow: 'DZIENNIK HEREV',
+    heading: 'Dziennik.',
+    subheading: 'Przemyślane teksty o własności jachtu, życiu na morzu i producentach, których reprezentujemy.',
+    readMore: 'Czytaj →',
+    publishedLabel: 'OPUBLIKOWANO',
+    backToBlog: '← Wróć do dziennika',
+    comingSoon: 'Nowe artykuły wkrótce.',
   },
   networkPage: {
     hero: {
@@ -846,6 +912,19 @@ const es: Translations = {
     heading: 'La colección completa.',
     subheading:
       'Todas las embarcaciones que representamos — cinco constructores, un estándar reflexivo.',
+    filter: {
+      refine: 'FILTRAR',
+      typeLabel: 'TIPO',
+      marqueLabel: 'MARCA',
+      lengthLabel: 'ESLORA TOTAL',
+      searchPlaceholder: 'Buscar modelo — p.ej. 500 FLY',
+      yachts: 'yates',
+      cabins: 'cabinas',
+      sortLengthLong: 'Eslora · más larga primero',
+      sortLengthShort: 'Eslora · más corta primero',
+      viewLabel: 'Ver →',
+      noResults: 'Ningún yate coincide con los filtros.',
+    },
   },
   yachtPage: {
     enquireCta: 'Consultar sobre este yate →',
@@ -944,6 +1023,15 @@ const es: Translations = {
     heading: 'Página no encontrada.',
     subtext: 'La página que busca no existe o ha sido movida.',
     backToHome: 'Volver al inicio',
+  },
+  blogPage: {
+    eyebrow: 'EL DIARIO HEREV',
+    heading: 'El Diario.',
+    subheading: 'Escritura reflexiva sobre la propiedad de yates, la vida en el mar y los constructores que representamos.',
+    readMore: 'Leer →',
+    publishedLabel: 'PUBLICADO',
+    backToBlog: '← Volver al diario',
+    comingSoon: 'Nuevos artículos próximamente.',
   },
   networkPage: {
     hero: {
@@ -1121,6 +1209,19 @@ const it: Translations = {
     heading: 'La collezione completa.',
     subheading:
       'Ogni imbarcazione che rappresentiamo — cinque costruttori, uno standard ponderato.',
+    filter: {
+      refine: 'FILTRA',
+      typeLabel: 'TIPO',
+      marqueLabel: 'MARCA',
+      lengthLabel: 'LUNGHEZZA TOTALE',
+      searchPlaceholder: 'Cerca modello — es. 500 FLY',
+      yachts: 'yacht',
+      cabins: 'cabine',
+      sortLengthLong: 'Lunghezza · più lungo prima',
+      sortLengthShort: 'Lunghezza · più corto prima',
+      viewLabel: 'Vedi →',
+      noResults: 'Nessuno yacht corrisponde ai filtri.',
+    },
   },
   yachtPage: {
     enquireCta: 'Richiedi informazioni su questo yacht →',
@@ -1219,6 +1320,15 @@ const it: Translations = {
     heading: 'Pagina non trovata.',
     subtext: 'La pagina che stai cercando non esiste o è stata spostata.',
     backToHome: 'Torna alla home',
+  },
+  blogPage: {
+    eyebrow: 'IL GIORNALE HEREV',
+    heading: 'Il Giornale.',
+    subheading: 'Scrittura ponderata sulla proprietà di yacht, la vita in mare e i costruttori che rappresentiamo.',
+    readMore: 'Leggi →',
+    publishedLabel: 'PUBBLICATO',
+    backToBlog: '← Torna al giornale',
+    comingSoon: 'Nuovi articoli in arrivo.',
   },
   networkPage: {
     hero: {

@@ -1,0 +1,99 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import { type Locale } from '../../../lib/i18n';
+import { getTranslations } from '../../../lib/i18n-strings';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('blog', (e) => !e.data.draft);
+  return entries.map((entry) => {
+    const [lang, ...rest] = entry.id.split('/');
+    const slug = rest.join('/');
+    return { params: { lang, slug }, props: { entry } };
+  });
+}
+
+const { lang, slug } = Astro.params as { lang: Locale; slug: string };
+const { entry } = Astro.props;
+const t = getTranslations(lang);
+const { Content } = await render(entry);
+
+const allPosts = await getCollection('blog', (e) => !e.data.draft);
+const related = allPosts.filter(
+  (e) => e.data.translationKey === entry.data.translationKey,
+);
+const alternates = related.map((e) => {
+  const [entryLang, ...rest] = e.id.split('/');
+  const entrySlug = rest.join('/');
+  return { lang: entryLang, href: `/${entryLang}/blog/${entrySlug}/` };
+});
+
+const pageTitle = (entry.data.seo?.title ?? `${entry.data.title} — Herev`);
+const pageDescription = entry.data.seo?.description ?? entry.data.excerpt;
+---
+
+<Layout
+  lang={lang}
+  title={pageTitle}
+  description={pageDescription}
+  alternates={alternates}
+>
+  <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/blog/${slug}/`} nav={t.nav} />
+
+  <main>
+    <article>
+
+      <!-- Article header -->
+      <section class="pt-section pb-14 bg-paper border-b border-[var(--color-line)]">
+        <div class="max-w-[1440px] mx-auto px-gutter">
+
+          <a
+            href={`/${lang}/blog/`}
+            class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] hover:text-teal transition-colors duration-200 mb-10 inline-block uppercase"
+          >
+            {t.blogPage.backToBlog}
+          </a>
+
+          {entry.data.category && (
+            <SectionLabel text={entry.data.category} class="mb-4" />
+          )}
+
+          <h1
+            class="font-display text-h1 text-ink max-w-[800px] mb-6"
+            style="font-weight: 400; letter-spacing: var(--tracking-tight); line-height: 1.08;"
+          >
+            {entry.data.title}
+          </h1>
+
+          <p class="text-lg text-[var(--color-ink-70)] max-w-[640px] leading-relaxed mb-8">
+            {entry.data.excerpt}
+          </p>
+
+          <p class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] uppercase">
+            {t.blogPage.publishedLabel} · {entry.data.publishedAt.toLocaleDateString(lang, {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric',
+            })}
+          </p>
+
+        </div>
+      </section>
+
+      <!-- Article body -->
+      <section class="py-section bg-white">
+        <div class="max-w-[1440px] mx-auto px-gutter">
+          <div class="max-w-[720px] prose-blog">
+            <Content />
+          </div>
+        </div>
+      </section>
+
+    </article>
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+</Layout>
