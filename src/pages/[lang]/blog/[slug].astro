@@ -40,6 +40,11 @@ const pageDescription = entry.data.seo?.description ?? entry.data.excerpt;
   title={pageTitle}
   description={pageDescription}
   alternates={alternates}
+  ogType="article"
+  breadcrumbs={[
+    { position: 1, name: 'Blog', item: `/${lang}/blog/` },
+    { position: 2, name: entry.data.title, item: `/${lang}/blog/${slug}/` },
+  ]}
 >
   <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/blog/${slug}/`} nav={t.nav} />
 

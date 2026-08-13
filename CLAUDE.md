@@ -34,7 +34,7 @@ content team), `docs/design-handoff/` (visual reference, read-only).
 - **Infra:** Vercel (static + serverless endpoints) via GitHub integration.
   No database, no workers, no separate backend service.
   @astrojs/vercel adapter added locally in step 5 (API routes).
-- **i18n:** en (default) / pl / es / it / ru, prefixDefaultLocale, localized slugs
+- **i18n:** en (default) / pl / es / it, prefixDefaultLocale, localized slugs
 
 ## Structure
 
@@ -86,7 +86,7 @@ docs/             backlog, contracts, design-handoff/
 
 ## Definition of Done
 
-**New page:** 5 locale versions (en/pl/es/it/ru — or missing content explicitly noted)
+**New page:** 4 locale versions (en/pl/es/it — or missing content explicitly noted)
 + meta title/description + hreflang + images via astro:assets
 + Lighthouse mobile >= 95 not regressed (landing/brand/yacht)
 **New island:** justification in PR + `client:visible` (other

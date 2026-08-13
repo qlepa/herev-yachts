@@ -1,0 +1,21 @@
+# Herev
+
+> Herev is an authorised representative for five premium European and American yacht brands — Galeon, Parker, Saxdor, De Antonio, and Chris-Craft — operating across a dealer network spanning multiple countries. Herev provides expert advisory services for yacht acquisition, from first enquiry to sea trial and handover.
+
+## About
+
+- [About Herev](https://herev.com/en/)
+- [Our Services](https://herev.com/en/services/)
+- [Our Network](https://herev.com/en/network/)
+
+## Yacht Brands
+
+- [Galeon Yachts](https://herev.com/en/yachts/galeon/)
+- [Parker Boats](https://herev.com/en/yachts/parker/)
+- [Saxdor Yachts](https://herev.com/en/yachts/saxdor/)
+- [De Antonio Yachts](https://herev.com/en/yachts/de-antonio/)
+- [Chris-Craft Boats](https://herev.com/en/yachts/chris-craft/)
+
+## Insights
+
+- [Blog](https://herev.com/en/blog/)

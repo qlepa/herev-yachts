@@ -14,7 +14,7 @@ const { lang } = Astro.params as { lang: Locale };
 const t = getTranslations(lang);
 ---
 
-<Layout lang={lang} title="404 — Herev">
+<Layout lang={lang} title="404 — Herev" noindex={true} alternates={[]}>
 
   <SiteHeader
     lang={lang}

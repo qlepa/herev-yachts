@@ -2,15 +2,117 @@
 import '../styles/global.css';
 import frauncesUrl from '@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2?url';
 import interUrl    from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import { buildAlternates } from '../lib/i18n';
 
 interface Props {
   title?: string;
   description?: string;
   lang?: string;
+  /** Absolute URL for OG image. Falls back to /og.jpg. */
+  image?: string;
+  /** true for 404, /admin and any other non-indexable pages. */
+  noindex?: boolean;
+  /** 'article' for blog posts, 'website' everywhere else. */
+  ogType?: 'website' | 'article';
+  /**
+   * Structured breadcrumbs for BreadcrumbList JSON-LD.
+   * Position numbering starts at 1. Item hrefs may be relative.
+   */
+  breadcrumbs?: Array<{ name: string; item: string; position: number }>;
+  /**
+   * Explicit hreflang alternates. When omitted, Layout auto-generates them
+   * from Astro.url.pathname by swapping the locale prefix — correct for all
+   * pages whose slug is locale-invariant.
+   *
+   * Pass [] to suppress hreflang entirely (e.g. 404 pages).
+   * Supply explicit alternates only for blog posts whose slug differs per locale.
+   */
   alternates?: Array<{ lang: string; href: string }>;
 }
 
-const { title = 'Herev Yachts', description, lang = 'en', alternates } = Astro.props;
+const {
+  title = 'Herev Yachts',
+  description,
+  lang = 'en',
+  image,
+  noindex = false,
+  ogType = 'website',
+  breadcrumbs,
+  alternates: explicitAlternates,
+} = Astro.props;
+
+const siteOrigin = Astro.site?.origin ?? 'https://herev.com';
+
+// Indexing gate: set PUBLIC_INDEXING_ENABLED=true in Vercel env vars at launch.
+const indexingEnabled = import.meta.env.PUBLIC_INDEXING_ENABLED === 'true';
+const shouldNoindex = noindex || !indexingEnabled;
+
+const canonicalUrl = Astro.url.href;
+const ogImage = image ?? `${siteOrigin}/og.jpg`;
+
+// Auto-generate alternates when no explicit prop passed.
+// Normalise relative hrefs from existing pages to absolute.
+const computedAlternates: Array<{ lang: string; href: string }> =
+  explicitAlternates !== undefined
+    ? explicitAlternates.map((a) => ({
+        lang: a.lang,
+        href: a.href.startsWith('http') ? a.href : `${siteOrigin}${a.href}`,
+      }))
+    : buildAlternates(Astro.url.pathname, siteOrigin);
+
+const xDefaultHref =
+  computedAlternates.find((a) => a.lang === 'en')?.href ?? `${siteOrigin}/en/`;
+
+const ogLocaleAlternates = computedAlternates
+  .filter((a) => a.lang !== lang)
+  .map((a) => a.lang);
+
+// JSON-LD graph
+const organizationNode = {
+  '@type': 'Organization',
+  '@id': `${siteOrigin}/#identity`,
+  name: 'Herev',
+  url: siteOrigin,
+  logo: `${siteOrigin}/favicon-512.png`,
+  knowsAbout: ['Galeon', 'Parker', 'Saxdor', 'De Antonio', 'Chris-Craft', 'luxury yachts', 'motorboat dealership'],
+  sameAs: [] as string[], // TODO: add LinkedIn, social profiles, Wikidata
+};
+
+const websiteNode = {
+  '@type': 'WebSite',
+  '@id': `${siteOrigin}/#website`,
+  url: siteOrigin,
+  name: 'Herev',
+  inLanguage: lang,
+  publisher: { '@id': `${siteOrigin}/#identity` },
+};
+
+const webpageNode = {
+  '@type': 'WebPage',
+  '@id': `${canonicalUrl}#webpage`,
+  url: canonicalUrl,
+  name: title,
+  ...(description ? { description } : {}),
+  inLanguage: lang,
+  isPartOf: { '@id': `${siteOrigin}/#website` },
+  about: { '@id': `${siteOrigin}/#identity` },
+};
+
+const breadcrumbNode = breadcrumbs
+  ? {
+      '@type': 'BreadcrumbList',
+      itemListElement: breadcrumbs.map((crumb) => ({
+        '@type': 'ListItem',
+        position: crumb.position,
+        name: crumb.name,
+        item: crumb.item.startsWith('http') ? crumb.item : `${siteOrigin}${crumb.item}`,
+      })),
+    }
+  : null;
+
+const ldGraph: object[] = [organizationNode, websiteNode, webpageNode];
+if (breadcrumbNode) ldGraph.push(breadcrumbNode);
+const ldJson = JSON.stringify({ '@context': 'https://schema.org', '@graph': ldGraph });
 ---
 
 <!doctype html>
@@ -23,11 +125,42 @@ const { title = 'Herev Yachts', description, lang = 'en', alternates } = Astro.p
     <link rel="apple-touch-icon" sizes="180x180" href="/favicon-180.png" />
     <link rel="icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
+
+    <!-- Core meta -->
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
-    {alternates && alternates.map((a) => (
+    <link rel="canonical" href={canonicalUrl} />
+    <meta name="robots" content={shouldNoindex ? 'noindex,nofollow' : 'index,follow'} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content={ogType} />
+    <meta property="og:site_name" content="Herev" />
+    <meta property="og:title" content={title} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content={lang} />
+    {ogLocaleAlternates.map((l) => (
+      <meta property="og:locale:alternate" content={l} />
+    ))}
+
+    <!-- Twitter / X -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- hreflang -->
+    {computedAlternates.map((a) => (
       <link rel="alternate" hreflang={a.lang} href={a.href} />
     ))}
+    {computedAlternates.length > 0 && (
+      <link rel="alternate" hreflang="x-default" href={xDefaultHref} />
+    )}
+
+    <!-- JSON-LD -->
+    <script is:inline type="application/ld+json" set:html={ldJson} />
+
     <link rel="preload" as="font" type="font/woff2" href={frauncesUrl} crossorigin />
     <link rel="preload" as="font" type="font/woff2" href={interUrl} crossorigin />
     <slot name="head" />

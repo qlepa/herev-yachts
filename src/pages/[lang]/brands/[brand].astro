@@ -73,10 +73,11 @@ const yachtCards = await Promise.all(
 
 const seoTitle = brandEntry.data.seo?.title ?? `${brandEntry.data.name} — Herev`;
 const seoDescription = brandEntry.data.seo?.description ?? brandEntry.data.tagline;
+const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/brands/${brand}/` }));
 
 ---
 
-<Layout lang={lang} title={seoTitle} description={seoDescription}>
+<Layout lang={lang} title={seoTitle} description={seoDescription} alternates={alternates}>
 
   <SiteHeader
     lang={lang}
