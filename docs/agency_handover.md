@@ -31,7 +31,7 @@ Herev to portal lead-gen dla rynku jachtowego premium. Reprezentuje 5 europejski
 | Hosting | Vercel | CDN globalny, CI/CD z GitHub |
 | Język | TypeScript strict | |
 | Stylowanie | Tailwind v4 | Design system oparty na tokenach (`@theme`) |
-| CMS | Sanity | Planowany (blog + ustawienia) — nie wdrożony |
+| CMS | Sanity | Wdrożone: blog (en/pl/es/it) + `notificationRecipients` singleton. Studio pod `/admin` |
 | Mapa | Mapbox GL v3 | Strona "Our Network" — sieć showroomów |
 | Video | Mux | Planowany dla hero sections |
 | Analityka | GA4 + Consent Mode v2 | Planowany |
@@ -95,7 +95,7 @@ Herev to portal lead-gen dla rynku jachtowego premium. Reprezentuje 5 europejski
 - ⏳ GA4 + Consent Mode v2
 - ⏳ Cookie consent banner (5 języków)
 - ⏳ OG image per strona (jachty, marki) — aktualnie jeden domyślny `/og.jpg`
-- ⏳ `dateModified` w WebPage JSON-LD (po wdrożeniu CMS)
+- ✅ `dateModified`/`datePublished` w WebPage JSON-LD (na stronach bloga, z dat Sanity)
 - ⏳ Sitemap rejestracja w Google Search Console + Bing
 
 ### Do uzupełnienia manualnie
@@ -110,15 +110,24 @@ Herev to portal lead-gen dla rynku jachtowego premium. Reprezentuje 5 europejski
 
 ### Struktura treści
 
-Treści są aktualnie w plikach Markdown w repozytorium (`src/content/`). Planowana migracja do Sanity CMS przed launchem — umożliwi edycję przez osoby nietech.
+Blog jest zarządzany przez Sanity CMS (Studio pod `/admin`) — patrz `docs/sanity-setup.md`.
+Pozostałe treści (jachty, marki, dealerzy) są w plikach Markdown w repozytorium
+(`src/content/`) — to zamierzony, świadomy podział na teraz (patrz niżej), nie
+przeoczenie.
 
-### Co można edytować przez CMS (po wdrożeniu Sanity)
+### Co można edytować przez CMS (dziś)
+
+- Wpisy blogowe (tytuł, treść, obraz okładki, meta tagi SEO, pl/en)
+- Adresy e-mail odbiorców powiadomień o leadach (`notificationRecipients`)
+
+### Poza CMS (nadal pliki w repo — wymaga PR-a do zmiany)
 
 - Teksty opisowe jachtów i marek
-- Zdjęcia (z CDN i cropperem)
-- Meta tagi (title, description per strona)
-- Wpisy blogowe
-- Dane kontaktowe / email odbiorcy leadów
+- Zdjęcia jachtów/marek
+- Meta tagi jachtów/marek
+
+Migracja tych treści do Sanity to osobny, jeszcze nie zaplanowany krok —
+celowo odłożony, dopóki zakres jachtów/marek nie jest ustabilizowany z klientem.
 
 ### Modele jachtów (obecne fixture data)
 
@@ -136,7 +145,9 @@ Treści są aktualnie w plikach Markdown w repozytorium (`src/content/`). Planow
 
 ### Blog
 
-Aktualnie 1 artykuł × 4 locale (placeholder). Blog będzie zarządzany przez Sanity CMS.
+Zarządzany przez Sanity CMS (`/admin`), 4 języki (en/pl/es/it). Schemat: tytuł, slug, treść (Portable Text),
+obraz okładki, kategoria, data publikacji, SEO. Konfiguracja i instrukcja
+edytorska: `docs/sanity-setup.md`.
 
 ### Sieć showroomów
 

@@ -9,11 +9,22 @@ interface Props {
   variant: 'transparent' | 'ink';
   currentPath: string;
   nav: NavStrings;
+  /**
+   * Explicit per-locale URLs for the current page, when its slug differs by
+   * locale (e.g. blog posts). When omitted, the language switcher swaps the
+   * locale prefix on the current path — correct for every locale-invariant
+   * route.
+   */
+  alternates?: Array<{ lang: string; href: string }>;
 }
 
-const { lang, variant, currentPath, nav } = Astro.props;
+const { lang, variant, currentPath, nav, alternates } = Astro.props;
 
 function localePath(target: Locale): string {
+  if (alternates) {
+    // Slug varies per locale on this page — only ever link to a URL we know exists.
+    return alternates.find((a) => a.lang === target)?.href ?? `/${target}/`;
+  }
   if (currentPath.startsWith(`/${lang}/`)) {
     return currentPath.replace(`/${lang}/`, `/${target}/`);
   }

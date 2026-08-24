@@ -1,11 +1,12 @@
 ---
-import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
+import { listBlogPosts } from '../../../lib/server/sanity';
+import { urlForImage, srcsetForImage } from '../../../lib/sanityImage';
 
 export function getStaticPaths() {
   return getLocalePaths();
@@ -14,27 +15,12 @@ export function getStaticPaths() {
 const { lang } = Astro.params as { lang: Locale };
 const t = getTranslations(lang);
 
-const allPosts = await getCollection(
-  'blog',
-  (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
-);
+const allPosts = await listBlogPosts(lang);
 
-allPosts.sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-);
-
-const posts = allPosts.map((entry) => {
-  const [, ...rest] = entry.id.split('/');
-  const slug = rest.join('/');
-  return {
-    slug,
-    title: entry.data.title,
-    excerpt: entry.data.excerpt,
-    publishedAt: entry.data.publishedAt,
-    category: entry.data.category,
-    href: `/${lang}/blog/${slug}/`,
-  };
-});
+const posts = allPosts.map((post) => ({
+  ...post,
+  href: `/${lang}/blog/${post.slug}/`,
+}));
 
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/blog/` }));
 const pageTitle = `${t.blogPage.heading} — Herev`;
@@ -70,31 +56,43 @@ const pageTitle = `${t.blogPage.heading} — Herev`;
             {posts.map((post) => (
               <a
                 href={post.href}
-                class="group block border border-[var(--color-line)] hover:border-[var(--color-ink)] transition-colors duration-200 p-8 bg-white"
+                class="group block border border-[var(--color-line)] hover:border-[var(--color-ink)] transition-colors duration-200 bg-white overflow-hidden"
               >
-                {post.category && (
-                  <p class="text-label font-body tracking-[var(--tracking-label)] text-teal mb-4 uppercase">
-                    {post.category}
-                  </p>
+                {post.image && (
+                  <img
+                    src={urlForImage(post.image).width(768).auto('format').url()}
+                    srcset={srcsetForImage(post.image)}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    alt={post.image.alt ?? ''}
+                    loading="lazy"
+                    class="w-full aspect-[3/2] object-cover"
+                  />
                 )}
-                <h2
-                  class="font-display text-h3 text-ink mb-3 group-hover:text-teal transition-colors duration-200"
-                  style="font-weight: 400; letter-spacing: var(--tracking-tight); line-height: 1.15;"
-                >
-                  {post.title}
-                </h2>
-                <p class="text-sm text-[var(--color-ink-70)] leading-relaxed mb-6">
-                  {post.excerpt}
-                </p>
-                <div class="flex items-end justify-between gap-4">
-                  <span class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] uppercase">
-                    {post.publishedAt.toLocaleDateString(lang, {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric',
-                    })}
-                  </span>
-                  <span class="text-sm text-teal shrink-0">{t.blogPage.readMore}</span>
+                <div class="p-8">
+                  {post.category && (
+                    <p class="text-label font-body tracking-[var(--tracking-label)] text-teal mb-4 uppercase">
+                      {post.category}
+                    </p>
+                  )}
+                  <h2
+                    class="font-display text-h3 text-ink mb-3 group-hover:text-teal transition-colors duration-200"
+                    style="font-weight: 400; letter-spacing: var(--tracking-tight); line-height: 1.15;"
+                  >
+                    {post.title}
+                  </h2>
+                  <p class="text-sm text-[var(--color-ink-70)] leading-relaxed mb-6">
+                    {post.excerpt}
+                  </p>
+                  <div class="flex items-end justify-between gap-4">
+                    <span class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] uppercase">
+                      {new Date(post.publishedAt).toLocaleDateString(lang, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                    <span class="text-sm text-teal shrink-0">{t.blogPage.readMore}</span>
+                  </div>
                 </div>
               </a>
             ))}

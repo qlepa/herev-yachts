@@ -18,7 +18,7 @@ Status: **✅ Zainstalowane** | **⏳ Do potwierdzenia z klientem**
 
 | Narzędzie | Status | Plusy | Minusy |
 |-----------|--------|-------|--------|
-| **Sanity** | ⏳ Do potwierdzenia | SaaS (zero infra), najlepszy UI dla nietech. użytkownika, wbudowany CDN na zdjęcia z cropperem, dobra integracja z Astro, free tier 3 userów | GROQ (własny język zapytań) |
+| **Sanity** | ✅ Wdrożone (blog en/pl/es/it + `notificationRecipients`) | SaaS (zero infra), najlepszy UI dla nietech. użytkownika, wbudowany CDN na zdjęcia z cropperem, dobra integracja z Astro, free tier 3 userów. Studio pod `/admin`, dataset prywatny (read token po stronie serwera). Reszta treści (jachty/marki/dealerzy) wciąż w plikach `src/content/` — migracja do Sanity to osobny, nieplanowany jeszcze krok | GROQ (własny język zapytań) |
 | Payload CMS | Alternatywa | TypeScript-native, pełna kontrola, własna baza | Wymaga bazy danych (Postgres) + serwera, więcej infrastruktury |
 | Contentful | Alternatywa | Bardzo dojrzały, duże community | Droższy, mniej developer-friendly |
 | Directus | Alternatywa | Open source, self-hosted lub cloud | Mniej popularne, mniejsze community |

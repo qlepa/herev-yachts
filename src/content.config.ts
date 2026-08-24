@@ -68,17 +68,4 @@ const dealers = defineCollection({
   }),
 });
 
-const blog = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
-  schema: z.object({
-    translationKey: z.string(),
-    title: z.string(),
-    excerpt: z.string().max(200),
-    publishedAt: z.date(),
-    category: z.string().optional(),
-    draft: z.boolean().default(false),
-    seo: seoSchema.optional(),
-  }),
-});
-
-export const collections = { yachts, brands, dealers, blog };
+export const collections = { yachts, brands, dealers };

@@ -26,7 +26,7 @@ content team), `docs/design-handoff/` (visual reference, read-only).
 - **App:** Astro (static output) + React islands, TypeScript strict
 - **Styling:** Tailwind v4, tokens in `@theme` (`src/styles/global.css`)
 - **Content:** content collections (Zod) + `src/data/locations.json`
-- **CMS:** Sanity — blog (pl/en) + notificationRecipients singleton;
+- **CMS:** Sanity — blog (en/pl/es/it) + notificationRecipients singleton;
   Studio mounted as `/admin` route (client:only, noindex)
 - **Integrations:** Pipedrive (CRM), Resend (email), Turnstile
   (antispam), Mux (video), Mapbox GL (network page only), GA4 with

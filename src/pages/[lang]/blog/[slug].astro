@@ -1,52 +1,88 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { toHTML } from '@portabletext/to-html';
 import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import { type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
+import { listAllBlogPosts, translationGroupId, type BlogPost } from '../../../lib/server/sanity';
+import { urlForImage, srcsetForImage, imageDimensions } from '../../../lib/sanityImage';
 
 export async function getStaticPaths() {
-  const entries = await getCollection('blog', (e) => !e.data.draft);
-  return entries.map((entry) => {
-    const [lang, ...rest] = entry.id.split('/');
-    const slug = rest.join('/');
-    return { params: { lang, slug }, props: { entry } };
+  const posts = await listAllBlogPosts();
+  return posts.map((post) => {
+    const groupId = translationGroupId(post);
+    const related = posts.filter((p) => translationGroupId(p) === groupId);
+    const alternates = related.map((p) => ({
+      lang: p.locale,
+      href: `/${p.locale}/blog/${p.slug}/`,
+    }));
+    return {
+      params: { lang: post.locale, slug: post.slug },
+      props: { post, alternates },
+    };
   });
 }
 
 const { lang, slug } = Astro.params as { lang: Locale; slug: string };
-const { entry } = Astro.props;
+const { post, alternates } = Astro.props as {
+  post: BlogPost;
+  alternates: Array<{ lang: string; href: string }>;
+};
 const t = getTranslations(lang);
-const { Content } = await render(entry);
 
-const allPosts = await getCollection('blog', (e) => !e.data.draft);
-const related = allPosts.filter(
-  (e) => e.data.translationKey === entry.data.translationKey,
-);
-const alternates = related.map((e) => {
-  const [entryLang, ...rest] = e.id.split('/');
-  const entrySlug = rest.join('/');
-  return { lang: entryLang, href: `/${entryLang}/blog/${entrySlug}/` };
+function escapeAttr(value: string): string {
+  return value
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
+const bodyHtml = toHTML(post.body as never, {
+  components: {
+    types: {
+      image: ({ value }) => {
+        const dims = imageDimensions(value);
+        const src = urlForImage(value).width(1200).auto('format').url();
+        const srcset = srcsetForImage(value);
+        const alt = escapeAttr(value.alt ?? '');
+        return `<img src="${src}" srcset="${srcset}" sizes="(min-width: 1024px) 720px, 100vw" width="${dims.width}" height="${dims.height}" alt="${alt}" loading="lazy" />`;
+      },
+    },
+  },
 });
 
-const pageTitle = (entry.data.seo?.title ?? `${entry.data.title} — Herev`);
-const pageDescription = entry.data.seo?.description ?? entry.data.excerpt;
+const pageTitle = post.seo?.title ?? `${post.title} — Herev`;
+const pageDescription = post.seo?.description ?? post.excerpt;
+
+const coverImage = post.image
+  ? {
+      src: urlForImage(post.image).width(1600).auto('format').url(),
+      ogSrc: urlForImage(post.image).width(1200).height(630).fit('crop').auto('format').url(),
+      srcset: srcsetForImage(post.image),
+      dims: imageDimensions(post.image),
+      alt: post.image.alt ?? '',
+    }
+  : null;
 ---
 
 <Layout
   lang={lang}
   title={pageTitle}
   description={pageDescription}
+  image={coverImage?.ogSrc}
   alternates={alternates}
   ogType="article"
+  datePublished={post.publishedAt}
+  dateModified={post.updatedAt}
   breadcrumbs={[
     { position: 1, name: 'Blog', item: `/${lang}/blog/` },
-    { position: 2, name: entry.data.title, item: `/${lang}/blog/${slug}/` },
+    { position: 2, name: post.title, item: `/${lang}/blog/${slug}/` },
   ]}
 >
-  <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/blog/${slug}/`} nav={t.nav} />
+  <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/blog/${slug}/`} nav={t.nav} alternates={alternates} />
 
   <main>
     <article>
@@ -62,23 +98,23 @@ const pageDescription = entry.data.seo?.description ?? entry.data.excerpt;
             {t.blogPage.backToBlog}
           </a>
 
-          {entry.data.category && (
-            <SectionLabel text={entry.data.category} class="mb-4" />
+          {post.category && (
+            <SectionLabel text={post.category} class="mb-4" />
           )}
 
           <h1
             class="font-display text-h1 text-ink max-w-[800px] mb-6"
             style="font-weight: 400; letter-spacing: var(--tracking-tight); line-height: 1.08;"
           >
-            {entry.data.title}
+            {post.title}
           </h1>
 
           <p class="text-lg text-[var(--color-ink-70)] max-w-[640px] leading-relaxed mb-8">
-            {entry.data.excerpt}
+            {post.excerpt}
           </p>
 
           <p class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] uppercase">
-            {t.blogPage.publishedLabel} · {entry.data.publishedAt.toLocaleDateString(lang, {
+            {t.blogPage.publishedLabel} · {new Date(post.publishedAt).toLocaleDateString(lang, {
               year: 'numeric',
               month: 'long',
               day: 'numeric',
@@ -88,12 +124,26 @@ const pageDescription = entry.data.seo?.description ?? entry.data.excerpt;
         </div>
       </section>
 
+      {coverImage && (
+        <section class="bg-white">
+          <img
+            src={coverImage.src}
+            srcset={coverImage.srcset}
+            sizes="100vw"
+            width={coverImage.dims.width}
+            height={coverImage.dims.height}
+            alt={coverImage.alt}
+            loading="eager"
+            fetchpriority="high"
+            class="w-full max-h-[70vh] object-cover"
+          />
+        </section>
+      )}
+
       <!-- Article body -->
       <section class="py-section bg-white">
         <div class="max-w-[1440px] mx-auto px-gutter">
-          <div class="max-w-[720px] prose-blog">
-            <Content />
-          </div>
+          <div class="max-w-[720px] prose-blog" set:html={bodyHtml} />
         </div>
       </section>
 

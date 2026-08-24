@@ -62,9 +62,10 @@ brandów tam, gdzie jest muxPlaybackId.
 
 ## Krok 4 — Sanity: blog + ustawienia
 
-Blog: schemat posta (tytuł, slug, treść, obraz, seo, locale pl/en —
+Blog: schemat posta (tytuł, slug, treść, obraz, seo, locale —
 NIE rozbudowuj), Studio /admin, webhook -> deploy hook, template posta
-i listingu. Ustawienia: dokument singleton "notificationRecipients"
+i listingu. Locale: en/pl/es/it (zgodnie z istniejącą treścią — pierwotny
+plan "pl/en" zaktualizowany po odkryciu, że blog już miał 4 języki). Ustawienia: dokument singleton "notificationRecipients"
 (lista adresów e-mail) edytowalny w Studio — konsumowany przez
 /api/lead w kroku 5. Scenariusz demo: user wpisuje w Studio 3 dowolne
 adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.

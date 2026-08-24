@@ -19,6 +19,9 @@ interface Props {
    * Position numbering starts at 1. Item hrefs may be relative.
    */
   breadcrumbs?: Array<{ name: string; item: string; position: number }>;
+  /** ISO 8601 date. Set for blog posts to emit datePublished/dateModified in WebPage JSON-LD. */
+  datePublished?: string;
+  dateModified?: string;
   /**
    * Explicit hreflang alternates. When omitted, Layout auto-generates them
    * from Astro.url.pathname by swapping the locale prefix — correct for all
@@ -38,6 +41,8 @@ const {
   noindex = false,
   ogType = 'website',
   breadcrumbs,
+  datePublished,
+  dateModified,
   alternates: explicitAlternates,
 } = Astro.props;
 
@@ -96,6 +101,8 @@ const webpageNode = {
   inLanguage: lang,
   isPartOf: { '@id': `${siteOrigin}/#website` },
   about: { '@id': `${siteOrigin}/#identity` },
+  ...(datePublished ? { datePublished } : {}),
+  ...(dateModified ? { dateModified } : {}),
 };
 
 const breadcrumbNode = breadcrumbs

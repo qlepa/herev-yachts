@@ -1,6 +1,12 @@
 {
+  "rewrites": [
+    { "source": "/admin/:path+", "destination": "/admin" }
+  ],
   "redirects": [
     { "source": "/", "destination": "/en/", "permanent": true },
+
+    { "source": "/:lang(en|pl|es|it)/admin", "destination": "/admin", "permanent": false },
+    { "source": "/:lang(en|pl|es|it)/admin/:path*", "destination": "/admin/:path*", "permanent": false },
 
     { "source": "/:lang/yachts/aurora-42",          "destination": "/:lang/yachts/chris-craft/aurora-42",          "permanent": true },
     { "source": "/:lang/yachts/aurora-42/",         "destination": "/:lang/yachts/chris-craft/aurora-42/",         "permanent": true },
