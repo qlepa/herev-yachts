@@ -1,6 +1,7 @@
 ---
 translationKey: saxdor-270-open
 name: 270 Open
+tagline: "Skandynawska klarowność w rozsądnej cenie."
 brand: saxdor
 year: 2024
 lengthM: 8.30

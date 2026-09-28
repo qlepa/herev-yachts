@@ -1,6 +1,5 @@
 ---
 import { getCollection, render } from 'astro:content';
-import type { ImageMetadata } from 'astro';
 import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
@@ -14,7 +13,7 @@ import MobileCta from '../../../components/ui/MobileCta.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import type { CategoryKey } from '../../../content.config';
 import { getTranslations } from '../../../lib/i18n-strings';
-import { getStockHero } from '../../../lib/images';
+import { getStockHero, getStockGallery } from '../../../lib/images';
 import { formatPrice } from '../../../lib/format';
 import { brandDisplayMap } from '../../../lib/stock';
 import leadPic from '../../../assets/site/lead-image.avif';
@@ -52,16 +51,9 @@ const heroImage = await getStockHero(data.translationKey, data.draft);
 
 const specLine = [categoryLabel, String(data.year), `${data.lengthM} M`].filter(Boolean).join(' · ');
 
-const galleryGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/stock/*/gallery-*.*');
-const galleryPrefix = `/src/assets/stock/${data.translationKey}/gallery-`;
-const galleryImages: ImageMetadata[] = await Promise.all(
-  Object.keys(galleryGlob)
-    .filter((k) => k.startsWith(galleryPrefix))
-    .sort()
-    .map(async (k) => (await galleryGlob[k]()).default),
-);
+const galleryImages = await getStockGallery(data.translationKey);
 
-const leadImage = galleryImages[0] ?? leadPic;
+const leadImage = galleryImages[0]?.src ?? leadPic;
 
 const keyNumbers = [
   { value: priceLabel, sub: taxLabel, label: t.stock.page.keyNumbers.price },
@@ -129,8 +121,8 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
     </div>
 
     <YachtOverview
-      label={t.yachtPage.overviewLabel}
-      insideImage={galleryImages[0] ?? heroImage}
+      label={t.stock.page.overviewLabel}
+      image={galleryImages[0]?.src ?? heroImage}
       yachtName={fullName}
       enquireLabel={t.yachtPage.enquireCta}
       enquireHref="#lead"
@@ -143,10 +135,13 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
       eyebrow={t.yachtPage.galleryHeading}
       titlePrefix={t.yachtPage.galleryTitle}
       yachtName={fullName}
+      allLabel={t.yachtPage.galleryAll}
+      categoryLabels={t.yachtPage.galleryCategories}
+      imagesLabel={t.yachtPage.galleryImages}
     />
 
     <YachtSpecs
-      eyebrow={t.yachtPage.anchorNav.specs}
+      eyebrow={t.yachtPage.specsEyebrow}
       subtitle={t.yachtPage.specsSubtitle}
       groups={t.yachtPage.specsGroups}
       labels={t.yachtPage.specs}

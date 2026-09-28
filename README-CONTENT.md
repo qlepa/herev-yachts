@@ -27,24 +27,56 @@ yachts/
 zdjecia/
   aurora-42/
     hero.jpg
-    gallery-01.jpg
-    gallery-02.jpg
+    gallery-exterior-01.jpg
+    gallery-interior-01.jpg
+    layout-01.jpg
+    space-01.jpg
+    brochure.pdf
 ```
 
 ## Plik jachtu — wzór
 
 Skopiuj załączony `aurora-42.md` i podmień wartości. Część nad `---`
-to dane techniczne (identyczne w każdym języku), część pod — opis
-w danym języku (dowolna długość, nagłówki przez `##`).
+to dane techniczne (identyczne w każdym języku) oraz teksty sekcji
+(tłumaczone w każdym języku). Część pod `---` to sekcja „Dlaczego
+ten model": nagłówek przez `##`, pogrubiony lead, akapit i lista
+korzyści przez `-` (renderuje się jako checklista).
 
 Pola obowiązkowe: klucz (`translationKey`), nazwa, brand, rok,
 długość w metrach (`lengthM`), liczba kabin (`cabins`).
 
-Pola opcjonalne: szerokość, zanurzenie, koje, prędkość maks., cena
-w EUR (pole wyłącznie do użytku wewnętrznego — ceny nigdy nie
-pojawiają się na stronie ani w treści opisów; na pytania cenowe
-w copy odpowiada fraza „cena zależy od konfiguracji — zapytaj
-o wycenę").
+Pola techniczne opcjonalne (takie same w każdym języku): `beamM`
+(szerokość), `draftM` (zanurzenie), `berths` (miejsca noclegowe =
+liczba gości), `maxSpeedKn`, `cruiseSpeedKn` (prędkość rejsowa),
+`fuelL` i `waterL` (zbiorniki w litrach), `engines` (tekst),
+`ceCategory` (np. `B`), cena w EUR (pole wyłącznie do użytku
+wewnętrznego — ceny nigdy nie pojawiają się na stronie ani w treści
+opisów; na pytania cenowe w copy odpowiada fraza „cena zależy od
+konfiguracji — zapytaj o wycenę").
+
+Pola tekstowe opcjonalne (tłumaczone w każdym pliku językowym) —
+każde odpowiada jednej sekcji strony; brak pola = sekcja nie pojawia
+się na stronie:
+
+- `tagline` — jedno zdanie pod nazwą w hero (maks. 140 znaków).
+- `features` — do 6 cech charakterystycznych: `title` (maks. 40 zn.)
+  + `body` (maks. 160 zn.). Zdjęcia opcjonalne: `feature-01.jpg`…
+  w folderze jachtu (numer = pozycja na liście).
+- `lifestyle` — nagłówek (`heading`, opcjonalny) i 1–3 filary
+  (`pillars`): `title`, `body`, opcjonalna ikona `icon` z listy:
+  `sun`, `family`, `palm`, `anchor`, `wave`, `compass`.
+- `spaces` — do 6 wnętrz pokazywanych jako zakładki: `title` (nazwa
+  zakładki), `heading`, `body`, `highlights` (lista do 6 punktów).
+  Zdjęcie: `space-01.jpg` dla pierwszego wnętrza, `space-02.jpg` dla
+  drugiego itd.
+- `video` — `url` to adres strony filmu na YouTube lub Vimeo (nie kod
+  osadzenia) + opcjonalny `caption`. Film ładuje się dopiero po
+  kliknięciu.
+- `layouts` — nazwy pokładów w kolejności plików `layout-01.jpg`,
+  `layout-02.jpg`… (np. „Pokład główny", „Pokład dolny").
+
+Tabela „Porównaj gamę" i „Może cię zainteresować" liczą się
+automatycznie z pozostałych jachtów — nie wymagają treści.
 
 Pole `seo.description` — maks. 160 znaków, to tekst widoczny
 w wynikach Google.
@@ -53,8 +85,13 @@ w wynikach Google.
 
 - `hero.jpg` — obowiązkowe, poziome, min. 2400 px szerokości.
   Bez hero jacht NIE zostanie opublikowany.
-- `gallery-01.jpg` … `gallery-12.jpg` — numeracja dwucyfrowa,
-  kolejność numerów = kolejność na stronie, maks. 12 sztuk.
+- Galeria: `gallery-<kategoria>-01.jpg` … — numeracja dwucyfrowa,
+  kolejność numerów = kolejność na stronie, maks. 12 sztuk łącznie.
+  Kategoria to jedno ze słów: `exterior`, `interior`, `cockpit`,
+  `cabins`, `lifestyle` — na stronie działa jako filtr galerii
+  (przykład: `gallery-exterior-01.jpg`, `gallery-interior-01.jpg`).
+  Inne słowo = błąd publikacji. Plik bez kategorii (`gallery-01.jpg`)
+  jest dozwolony, ale pokazuje się tylko w widoku „Wszystkie".
 - Format JPG, bez logotypów/watermarków, min. 2000 px szerokości
   dla galerii.
 - Nazwy plików dokładnie jak wyżej — `Hero.JPG`, `hero (1).jpg`
@@ -62,7 +99,13 @@ w wynikach Google.
 - `layout-01.jpg`, `layout-02.jpg`… — plany pokładów, opcjonalne.
   Numeracja dwucyfrowa, ten sam folder co hero i galeria, poziome,
   min. 2000 px szerokości. Brak plików = sekcja nie pojawia się
-  na stronie.
+  na stronie. Nazwy pokładów podajesz w polu `layouts` w pliku .md.
+- `space-01.jpg`, `space-02.jpg`… — zdjęcia wnętrz do zakładek
+  z pola `spaces` (numer = pozycja na liście), poziome, min. 2000 px.
+- `feature-01.jpg`… — opcjonalne zdjęcia do cech z pola `features`.
+- `brochure.pdf` — broszura modelu, jeden plik wspólny dla wszystkich
+  języków, w tym samym folderze co `hero.jpg`. Brak pliku = przycisk
+  „Pobierz broszurę" nie pojawia się na stronie.
 
 ## Brandy
 

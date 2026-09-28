@@ -1,6 +1,7 @@
 ---
 translationKey: galeon-380-hardtop
 name: 380 Hardtop
+tagline: "Sport cruiser fuori. Un vero yacht dentro."
 brand: galeon
 year: 2024
 lengthM: 11.65

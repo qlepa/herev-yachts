@@ -1,6 +1,7 @@
 ---
 translationKey: aurora-42
 name: Aurora 42
+tagline: "Confort de gran yate en un casco ágil de 42 pies."
 brand: galeon
 year: 2024
 lengthM: 13.2

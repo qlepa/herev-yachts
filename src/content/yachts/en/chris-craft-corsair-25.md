@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-corsair-25
 name: Corsair 25
+tagline: "Mahogany, chrome and 45 knots of American nostalgia."
 brand: chris-craft
 year: 2025
 lengthM: 7.62

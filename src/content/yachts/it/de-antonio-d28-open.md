@@ -1,6 +1,7 @@
 ---
 translationKey: de-antonio-d28-open
 name: D28 Open
+tagline: "Design mediterraneo. Libertà fuoribordo."
 brand: de-antonio
 year: 2024
 lengthM: 8.75

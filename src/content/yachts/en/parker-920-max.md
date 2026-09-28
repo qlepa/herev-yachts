@@ -1,6 +1,7 @@
 ---
 translationKey: parker-920-max
 name: 920 MAX
+tagline: "Maximum deck. Maximum range. Minimum fuss."
 brand: parker
 year: 2025
 lengthM: 9.99

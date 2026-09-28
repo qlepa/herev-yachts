@@ -1,6 +1,7 @@
 ---
 translationKey: saxdor-320-gtc
 name: 320 GTC
+tagline: "A grand tourer for the coast."
 brand: saxdor
 year: 2024
 lengthM: 9.70

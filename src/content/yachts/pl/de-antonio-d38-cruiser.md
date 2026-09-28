@@ -1,6 +1,7 @@
 ---
 translationKey: de-antonio-d38-cruiser
 name: D38 Cruiser
+tagline: "Dwie kabiny, ukryte silniki, niekończące się weekendy."
 brand: de-antonio
 year: 2024
 lengthM: 11.80

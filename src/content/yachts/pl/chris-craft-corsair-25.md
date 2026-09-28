@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-corsair-25
 name: Corsair 25
+tagline: "Mahoń, chrom i 45 węzłów amerykańskiej nostalgii."
 brand: chris-craft
 year: 2025
 lengthM: 7.62

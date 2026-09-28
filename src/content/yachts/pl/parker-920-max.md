@@ -1,6 +1,7 @@
 ---
 translationKey: parker-920-max
 name: 920 MAX
+tagline: "Maksimum pokładu. Maksimum zasięgu. Minimum zachodu."
 brand: parker
 year: 2025
 lengthM: 9.99

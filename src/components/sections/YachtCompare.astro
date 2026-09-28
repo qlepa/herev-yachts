@@ -1,0 +1,73 @@
+---
+/** Compare-the-range table: catalogue models of the same brand, computed at build time. */
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Row {
+  name: string;
+  href: string;
+  lengthM: number;
+  cabins: number;
+  berths?: number;
+  maxSpeedKn?: number;
+  current: boolean;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  columns: { model: string; length: string; cabins: string; guests: string; speed: string };
+  currentLabel: string;
+  rows: Row[];
+}
+
+const { eyebrow, heading, columns, currentLabel, rows } = Astro.props;
+
+const th = 'font-mono font-bold text-[10px] tracking-[.24em] uppercase text-teal py-3 border-b border-[var(--color-line-strong)]';
+const td = 'font-mono text-[13px] py-4 border-b border-[var(--color-line)]';
+const dash = '—';
+---
+
+{rows.length > 1 && (
+  <section id="compare" class="py-section bg-paper">
+    <div class="max-w-[1440px] mx-auto px-gutter">
+
+      <SectionLabel text={eyebrow} class="mb-3" />
+      <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{heading}</h2>
+
+      <div class="overflow-x-auto">
+        <table class="w-full min-w-[640px] text-left border-collapse">
+          <thead>
+            <tr>
+              <th class={`${th} pr-6`}>{columns.model}</th>
+              <th class={`${th} px-4 text-right`}>{columns.length}</th>
+              <th class={`${th} px-4 text-right`}>{columns.cabins}</th>
+              <th class={`${th} px-4 text-right`}>{columns.guests}</th>
+              <th class={`${th} pl-4 text-right`}>{columns.speed}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr class:list={[r.current && 'bg-white']}>
+                <td class={`${td} pr-6 ${r.current ? 'pl-4' : ''}`}>
+                  {r.current ? (
+                    <span class="font-bold text-ink">
+                      {r.name}
+                      <span class="ml-3 font-normal text-[10px] tracking-[.2em] uppercase text-brass">{currentLabel}</span>
+                    </span>
+                  ) : (
+                    <a href={r.href} class="text-ink hover:text-teal transition-colors underline-offset-4 hover:underline">{r.name}</a>
+                  )}
+                </td>
+                <td class={`${td} px-4 text-right text-ink`}>{r.lengthM} m</td>
+                <td class={`${td} px-4 text-right text-ink`}>{r.cabins}</td>
+                <td class={`${td} px-4 text-right text-ink`}>{r.berths ?? dash}</td>
+                <td class={`${td} pl-4 text-right text-ink ${r.current ? 'pr-4' : ''}`}>{r.maxSpeedKn !== undefined ? `${r.maxSpeedKn} kn` : dash}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+)}

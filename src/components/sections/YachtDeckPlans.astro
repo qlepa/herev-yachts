@@ -5,12 +5,16 @@ import SectionLabel from '../ui/SectionLabel.astro';
 
 interface Props {
   images: ImageMetadata[];
+  /** Deck titles in layout-NN order; falls back to "<fallbackPrefix> N". */
+  titles?: string[];
+  fallbackPrefix: string;
   eyebrow: string;
   subtitle: string;
+  viewFullSizeLabel: string;
   yachtName: string;
 }
 
-const { images, eyebrow, subtitle, yachtName } = Astro.props;
+const { images, titles = [], fallbackPrefix, eyebrow, subtitle, viewFullSizeLabel, yachtName } = Astro.props;
 ---
 
 {images.length > 0 && (
@@ -21,25 +25,36 @@ const { images, eyebrow, subtitle, yachtName } = Astro.props;
       <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{subtitle}</h2>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {images.map((img, i) => (
-          <div class="bg-white overflow-hidden">
-            <div class="overflow-hidden" style="aspect-ratio: 3/4;">
-              <Image
-                src={img}
-                alt={`${yachtName} deck plan ${i + 1}`}
-                widths={[500, 800]}
-                sizes="(min-width: 1024px) 30vw, 90vw"
-                loading="lazy"
-                class="w-full h-full object-contain grayscale contrast-[1.05] opacity-[.82] mix-blend-multiply"
-              />
+        {images.map((img, i) => {
+          const title = titles[i] ?? `${fallbackPrefix} ${i + 1}`;
+          return (
+            <div class="bg-white overflow-hidden flex flex-col">
+              <p class="font-mono font-bold text-[11px] tracking-[.24em] uppercase text-ink text-center pt-5 pb-3">
+                {title}
+              </p>
+              <a href={img.src} target="_blank" rel="noopener" class="block overflow-hidden px-4" style="aspect-ratio: 16/9;">
+                <Image
+                  src={img}
+                  alt={`${yachtName} — ${title}`}
+                  widths={[500, 800]}
+                  sizes="(min-width: 768px) 30vw, 90vw"
+                  loading="lazy"
+                  class="w-full h-full object-contain grayscale contrast-[1.05] opacity-[.82] mix-blend-multiply"
+                />
+              </a>
+              <div class="flex justify-center px-5 py-4 mt-auto border-t border-[var(--color-line)]">
+                <a
+                  href={img.src}
+                  target="_blank"
+                  rel="noopener"
+                  class="font-mono font-semibold text-[12px] tracking-[.08em] uppercase text-teal hover:text-ink transition-colors"
+                >
+                  {viewFullSizeLabel}
+                </a>
+              </div>
             </div>
-            <div class="flex items-center justify-between px-5 py-4 border-t border-[var(--color-line)]">
-              <span class="font-display text-ink" style="font-size: 1.1875rem; font-weight: 450;">
-                Plan {i + 1}
-              </span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
     </div>

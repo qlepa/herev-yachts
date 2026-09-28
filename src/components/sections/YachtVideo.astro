@@ -1,0 +1,70 @@
+---
+/**
+ * Click-to-play video embed. Renders a static poster + play button; the
+ * third-party iframe is injected only after the user clicks, so no YouTube /
+ * Vimeo script or cookie loads with the page. The tiny script below is the
+ * only client JS in this section and is justified by media performance.
+ */
+import type { VideoEmbed } from '../../lib/video';
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  video: VideoEmbed;
+  caption?: string;
+  playLabel: string;
+}
+
+const { eyebrow, heading, video, caption, playLabel } = Astro.props;
+---
+
+<section id="video" class="py-section bg-paper">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+    <div class="text-center mb-8">
+      <p class="font-mono font-bold text-brass text-label tracking-label uppercase mb-3">{eyebrow}</p>
+      <h2 class="font-display text-h2 text-ink" style="font-weight: 400;">{heading}</h2>
+    </div>
+
+    <div class="max-w-[1080px] mx-auto">
+      <div class="yacht-video relative bg-ink overflow-hidden" style="aspect-ratio: 16/9;" data-embed={video.embedUrl}>
+        {video.posterUrl && (
+          <img
+            src={video.posterUrl}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            class="absolute inset-0 w-full h-full object-cover opacity-80"
+          />
+        )}
+        <button
+          type="button"
+          class="absolute inset-0 w-full h-full flex items-center justify-center cursor-pointer group"
+          aria-label={playLabel}
+        >
+          <span class="w-[76px] h-[76px] rounded-pill bg-[rgba(236,239,238,.92)] group-hover:bg-gilt transition-colors flex items-center justify-center">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor" class="text-ink translate-x-[2px]" aria-hidden="true">
+              <polygon points="6 3 20 12 6 21" />
+            </svg>
+          </span>
+        </button>
+      </div>
+      {caption && (
+        <p class="font-mono text-[11px] tracking-[.16em] uppercase text-[var(--color-ink-55)] text-center mt-4">{caption}</p>
+      )}
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('.yacht-video').forEach((box) => {
+    box.querySelector('button')?.addEventListener('click', () => {
+      const iframe = document.createElement('iframe');
+      iframe.src = box.dataset.embed ?? '';
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.className = 'absolute inset-0 w-full h-full';
+      iframe.title = box.querySelector('button')?.getAttribute('aria-label') ?? 'Video';
+      box.replaceChildren(iframe);
+    }, { once: true });
+  });
+</script>

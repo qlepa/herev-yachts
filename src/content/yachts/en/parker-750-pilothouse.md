@@ -1,6 +1,7 @@
 ---
 translationKey: parker-750-pilothouse
 name: 750 Pilothouse
+tagline: "All-weather fishing and family cruising in one hull."
 brand: parker
 year: 2024
 lengthM: 7.55

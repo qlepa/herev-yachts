@@ -20,6 +20,9 @@ interface Props {
   messagePlaceholder: string;
   financingLabel: string;
   privacyLabel: string;
+  /** Optional brochure PDF shown next to the submit button. */
+  brochureHref?: string;
+  brochureLabel?: string;
 }
 
 const {
@@ -38,6 +41,8 @@ const {
   messagePlaceholder,
   financingLabel,
   privacyLabel,
+  brochureHref,
+  brochureLabel,
 } = Astro.props;
 
 const inputBase =
@@ -153,9 +158,14 @@ const inputBase =
           <span class="text-[13px] leading-[1.5] text-[rgba(236,239,238,.7)]">{privacyLabel}</span>
         </label>
 
-        <Btn variant="gilt" type="submit" disabled>
-          {ctaLabel}
-        </Btn>
+        <div class="flex flex-wrap gap-3">
+          <Btn variant="gilt" type="submit" disabled>
+            {ctaLabel}
+          </Btn>
+          {brochureHref && brochureLabel && (
+            <Btn variant="ghost" href={brochureHref} external>{brochureLabel}</Btn>
+          )}
+        </div>
 
         <p class="text-[var(--color-paper-72)] text-micro font-mono tracking-mono mt-5 uppercase">
           {/* Form submission active in Step 5 · */}

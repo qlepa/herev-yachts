@@ -1,6 +1,7 @@
 ---
 translationKey: parker-750-pilothouse
 name: 750 Pilothouse
+tagline: "Wędkowanie w każdą pogodę i rodzinne rejsy w jednym kadłubie."
 brand: parker
 year: 2024
 lengthM: 7.55

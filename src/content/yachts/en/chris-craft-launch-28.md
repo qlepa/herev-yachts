@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-launch-28
 name: Launch 28 GT
+tagline: "A silhouette unchanged in fifty years. For a reason."
 brand: chris-craft
 year: 2025
 lengthM: 8.60

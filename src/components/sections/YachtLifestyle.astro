@@ -1,0 +1,82 @@
+---
+/** Lifestyle pillars over a full-width image with ink overlay. */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { LifestyleIcon } from '../../lib/yacht-enums';
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Pillar {
+  icon?: LifestyleIcon;
+  title: string;
+  body: string;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  pillars: Pillar[];
+  image: ImageMetadata;
+  yachtName: string;
+}
+
+const { eyebrow, heading, pillars, image, yachtName } = Astro.props;
+
+const icons: Record<LifestyleIcon, string> = {
+  sun:     '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  family:  '<circle cx="9" cy="7" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M2 21v-1a7 7 0 0 1 14 0v1"/><path d="M15 21v-1a4 4 0 0 1 7 0v1"/>',
+  palm:    '<path d="M12 22V10"/><path d="M12 10c-1-4-5-6-9-4 3 0 6 2 9 4Z"/><path d="M12 10c1-4 5-6 9-4-3 0-6 2-9 4Z"/><path d="M12 10c-3-2-4-6-2-9 1 3 2 6 2 9Z"/><path d="M12 10c3-2 4-6 2-9-1 3-2 6-2 9Z"/>',
+  anchor:  '<circle cx="12" cy="5" r="2.5"/><path d="M12 7.5V22"/><path d="M4 13a8 8 0 0 0 16 0"/><path d="M2 13h4M18 13h4"/>',
+  wave:    '<path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0 2 2 2 2"/><path d="M2 17c2-2 4-2 6 0s4 2 6 0 4-2 6 0 2 2 2 2"/><path d="M2 7c2-2 4-2 6 0s4 2 6 0 4-2 6 0 2 2 2 2"/>',
+  compass: '<circle cx="12" cy="12" r="9"/><polygon points="15.5 8.5 13.5 13.5 8.5 15.5 10.5 10.5 15.5 8.5"/>',
+};
+---
+
+{pillars.length > 0 && (
+  <section id="lifestyle" class="relative overflow-hidden bg-ink text-white">
+    <Image
+      src={image}
+      alt={`${yachtName} — lifestyle`}
+      widths={[900, 1400, 1920]}
+      sizes="100vw"
+      loading="lazy"
+      class="absolute inset-0 w-full h-full object-cover"
+    />
+    <div
+      class="absolute inset-0 pointer-events-none"
+      style="background: linear-gradient(180deg, rgba(15,37,46,.78) 0%, rgba(15,37,46,.62) 50%, rgba(15,37,46,.85) 100%);"
+    />
+
+    <div class="relative z-10 max-w-[1440px] mx-auto px-gutter py-section md:py-24 text-center">
+      <SectionLabel text={eyebrow} on="ink" class="mb-5" />
+      <h2
+        class="font-display text-white mx-auto max-w-[720px] mb-14"
+        style="font-size: clamp(1.9rem, 3.4vw, 2.75rem); font-weight: 360; line-height: 1.1; letter-spacing: var(--tracking-tight); text-wrap: balance;"
+      >
+        {heading}
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 max-w-[1080px] mx-auto">
+        {pillars.map((p, i) => (
+          <div class:list={['flex flex-col items-center px-4', i > 0 && 'md:border-l md:border-[rgba(236,239,238,.16)]']}>
+            {p.icon ? (
+              <svg
+                width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" class="text-gilt mb-5"
+                aria-hidden="true"
+                set:html={icons[p.icon]}
+              />
+            ) : (
+              <span class="font-mono font-bold text-gilt mb-5" style="font-size: 11px; letter-spacing: .30em;">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+            )}
+            <h3 class="font-mono font-bold text-white uppercase mb-3" style="font-size: 12px; letter-spacing: .22em;">
+              {p.title}
+            </h3>
+            <p class="text-[var(--color-paper-72)] text-body leading-relaxed max-w-[300px]">{p.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}

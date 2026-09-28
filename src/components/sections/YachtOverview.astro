@@ -1,4 +1,9 @@
 ---
+/**
+ * "Why choose the <model>" — image left, prose right. The slot receives the
+ * yacht's markdown body: `## heading`, paragraphs and a `-` list that
+ * renders as a benefit checklist.
+ */
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import SectionLabel from '../ui/SectionLabel.astro';
@@ -6,25 +11,35 @@ import Btn from '../ui/Btn.astro';
 
 interface Props {
   label: string;
-  insideImage?: ImageMetadata | null;
+  image?: ImageMetadata | null;
   yachtName: string;
   enquireLabel?: string;
   enquireHref?: string;
 }
 
-const { label, insideImage, yachtName, enquireLabel, enquireHref } = Astro.props;
+const { label, image, yachtName, enquireLabel, enquireHref } = Astro.props;
 ---
 
 <section id="overview" class="py-section bg-paper">
   <div class="max-w-[1440px] mx-auto px-gutter">
-    <div class="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-14 lg:items-center">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 lg:items-center">
 
-      <!-- Left: label + prose content + CTA -->
-      <div class="min-w-0">
+      <div class="overflow-hidden bg-ink" style="aspect-ratio: 4/3;">
+        {image && (
+          <Image
+            src={image}
+            alt={`${yachtName} under way`}
+            widths={[700, 1000, 1400]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            loading="lazy"
+            class="w-full h-full object-cover"
+          />
+        )}
+      </div>
+
+      <div class="min-w-0 lg:pl-4">
         <SectionLabel text={label} class="mb-5" />
-        <div
-          class="overview-prose text-[var(--color-ink-70)] leading-[1.7] max-w-[520px]"
-        >
+        <div class="overview-prose text-[var(--color-ink-70)] leading-[1.7] max-w-[560px]">
           <slot />
         </div>
         {enquireLabel && enquireHref && (
@@ -34,43 +49,53 @@ const { label, insideImage, yachtName, enquireLabel, enquireHref } = Astro.props
         )}
       </div>
 
-      <!-- Right: inside image (always shown; bg-ink placeholder if none) -->
-      <div class="hidden lg:block overflow-hidden bg-ink" style="aspect-ratio: 4/5;">
-        {insideImage ? (
-          <Image
-            src={insideImage}
-            alt={`${yachtName} interior`}
-            widths={[600, 900]}
-            sizes="40vw"
-            loading="lazy"
-            class="w-full h-full object-cover"
-          />
-        ) : null}
-      </div>
-
     </div>
   </div>
 </section>
 
 <style is:global>
   .overview-prose h2 {
-    font-family: 'Fraunces', serif;
+    font-family: var(--font-display);
     font-weight: 400;
-    font-size: 42px;
+    font-size: clamp(2rem, 3vw, 2.625rem);
     line-height: 1.1;
-    letter-spacing: -0.01em;
+    letter-spacing: var(--tracking-tight);
     text-wrap: balance;
     color: var(--color-ink);
     margin: 0 0 24px;
   }
   .overview-prose p {
-    font-size: 17px;
+    font-size: var(--text-lg);
     line-height: 1.7;
     margin: 0 0 18px;
   }
-  .overview-prose p:last-child {
-    margin-bottom: 0;
-    font-size: 15px;
-    color: rgba(15, 37, 46, .68);
+  .overview-prose p strong {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+  .overview-prose ul {
+    list-style: none;
+    padding: 0;
+    margin: 28px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .overview-prose li {
+    position: relative;
+    padding-left: 30px;
+    font-size: var(--text-body);
+    color: var(--color-ink);
+  }
+  .overview-prose li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.42em;
+    width: 12px;
+    height: 6px;
+    border-left: 1.5px solid var(--color-brass);
+    border-bottom: 1.5px solid var(--color-brass);
+    transform: rotate(-45deg);
   }
 </style>

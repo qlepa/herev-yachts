@@ -1,6 +1,7 @@
 ---
 translationKey: galeon-420-fly
 name: 420 FLY
+tagline: "The flybridge that handles like a sportboat."
 brand: galeon
 year: 2024
 lengthM: 12.85

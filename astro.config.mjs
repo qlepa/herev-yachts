@@ -8,6 +8,12 @@ export default defineConfig({
   site: 'https://herev.com',
   vite: {
     plugins: [tailwindcss()],
+    build: {
+      // Never inline brochure PDFs as data: URIs — they must be real,
+      // downloadable files regardless of size.
+      assetsInlineLimit: (filePath, content) =>
+        filePath.endsWith('.pdf') ? false : content.byteLength < 4096,
+    },
   },
   integrations: [
     react(),

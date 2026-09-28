@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-launch-25
 name: Launch 25
+tagline: "Il day boat più puro sull'acqua."
 brand: chris-craft
 year: 2025
 lengthM: 7.62

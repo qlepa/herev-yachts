@@ -1,6 +1,7 @@
 ---
 translationKey: de-antonio-d50
 name: D50
+tagline: "El buque insignia. Cincuenta pies de confianza serena."
 brand: de-antonio
 year: 2025
 lengthM: 15.60

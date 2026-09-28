@@ -13,6 +13,9 @@ interface Props {
   cta1Href?: string;
   cta2Label?: string;
   cta2Href?: string;
+  /** Optional third CTA (yacht page: brochure download). Opens in a new tab. */
+  cta3Label?: string;
+  cta3Href?: string;
   image: ImageMetadata;
   imageAlt: string;
   videoSrc?: string;
@@ -21,7 +24,7 @@ interface Props {
   muxPlaybackId?: string; // reserved for Step 5 — ignored here
 }
 
-const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta2Href, image, imageAlt, videoSrc, posterSrc, fullscreen } =
+const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta2Href, cta3Label, cta3Href, image, imageAlt, videoSrc, posterSrc, fullscreen } =
   Astro.props;
 ---
 
@@ -170,6 +173,9 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
           <div class="flex flex-wrap gap-3">
             <Btn variant="gilt" href={cta1Href!}>{cta1Label}</Btn>
             <Btn variant="ghost" href={cta2Href!}>{cta2Label}</Btn>
+            {cta3Label && cta3Href && (
+              <Btn variant="ghost" href={cta3Href} external>{cta3Label}</Btn>
+            )}
           </div>
         </div>
       ) : (

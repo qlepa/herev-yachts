@@ -1,6 +1,7 @@
 ---
 translationKey: de-antonio-d50
 name: D50
+tagline: "L'ammiraglia. Cinquanta piedi di tranquilla sicurezza."
 brand: de-antonio
 year: 2025
 lengthM: 15.60

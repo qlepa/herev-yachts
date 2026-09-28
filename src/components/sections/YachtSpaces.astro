@@ -1,0 +1,96 @@
+---
+/**
+ * Interior spaces as tabs — zero JS. A hidden radio per tab and `:has()`
+ * rules (generated below) show the matching panel; labels are the tab bar.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Space {
+  title: string;
+  heading: string;
+  body: string;
+  highlights?: string[];
+}
+
+interface Props {
+  eyebrow: string;
+  spaces: Space[];
+  images: ImageMetadata[];
+  yachtName: string;
+}
+
+const { eyebrow, spaces, images, yachtName } = Astro.props;
+
+const css = spaces
+  .map(
+    (_, i) =>
+      `.yacht-spaces:has(#space-${i}:checked) [data-space="${i}"]{display:grid}` +
+      `.yacht-spaces:has(#space-${i}:checked) [for="space-${i}"]{color:var(--color-ink);border-color:var(--color-brass)}`,
+  )
+  .join('');
+---
+
+{spaces.length > 0 && (
+  <section id="spaces" class="py-section bg-white">
+    <div class="yacht-spaces max-w-[1440px] mx-auto px-gutter">
+      <style is:inline set:html={css} />
+
+      <SectionLabel text={eyebrow} class="mb-6" />
+
+      <div class="flex overflow-x-auto border-b border-[var(--color-line)] mb-10" role="tablist">
+        {spaces.map((s, i) => (
+          <Fragment>
+            <input type="radio" name="space" id={`space-${i}`} checked={i === 0} class="sr-only" />
+            <label
+              for={`space-${i}`}
+              class="font-mono font-semibold text-[12px] tracking-[.08em] uppercase text-[var(--color-ink-55)] hover:text-ink cursor-pointer shrink-0 px-5 py-4 -mb-px border-b-2 border-transparent transition-colors"
+            >
+              {s.title}
+            </label>
+          </Fragment>
+        ))}
+      </div>
+
+      {spaces.map((s, i) => {
+        const img = images[i];
+        return (
+          <div data-space={i} class="hidden grid-cols-1 lg:grid-cols-[1.1fr_.9fr] gap-10 lg:gap-16 lg:items-center">
+            <div class="overflow-hidden bg-paper" style="aspect-ratio: 4/3;">
+              {img && (
+                <Image
+                  src={img}
+                  alt={`${yachtName} — ${s.title}`}
+                  widths={[700, 1000, 1400]}
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                />
+              )}
+            </div>
+            <div class="max-w-[520px]">
+              <h3
+                class="font-display text-ink mb-5"
+                style="font-size: clamp(1.75rem, 2.6vw, 2.25rem); font-weight: 400; line-height: 1.12; letter-spacing: var(--tracking-tight); text-wrap: balance;"
+              >
+                {s.heading}
+              </h3>
+              <p class="text-[var(--color-ink-70)] text-lg leading-[1.7] mb-6">{s.body}</p>
+              {s.highlights && s.highlights.length > 0 && (
+                <ul class="flex flex-col gap-2.5">
+                  {s.highlights.map((h) => (
+                    <li class="flex gap-3 items-baseline text-body text-ink">
+                      <span aria-hidden="true" class="shrink-0 w-[6px] h-[6px] rounded-pill bg-gilt translate-y-[-2px]" />
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </section>
+)}

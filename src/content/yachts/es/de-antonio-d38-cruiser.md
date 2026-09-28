@@ -1,6 +1,7 @@
 ---
 translationKey: de-antonio-d38-cruiser
 name: D38 Cruiser
+tagline: "Dos cabinas, fuerabordas ocultos, fines de semana sin fin."
 brand: de-antonio
 year: 2024
 lengthM: 11.80

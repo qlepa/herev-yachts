@@ -3,6 +3,7 @@ import SectionLabel from '../ui/SectionLabel.astro';
 import { metresToFeet } from '../../lib/format';
 
 interface SpecRow { label: string; value: string }
+interface SpecGroup { title: string; rows: SpecRow[] }
 
 interface Props {
   eyebrow: string;
@@ -11,6 +12,7 @@ interface Props {
     dimensions: string;
     accommodation: string;
     performance: string;
+    capacities: string;
   };
   labels: {
     length: string;
@@ -20,6 +22,10 @@ interface Props {
     berths: string;
     engines: string;
     speed: string;
+    cruiseSpeed: string;
+    fuel: string;
+    water: string;
+    ceCategory: string;
     year: string;
   };
   lengthM: number;
@@ -29,36 +35,64 @@ interface Props {
   berths?: number;
   engines?: string;
   maxSpeedKn?: number;
+  cruiseSpeedKn?: number;
+  fuelL?: number;
+  waterL?: number;
+  ceCategory?: string;
   year: number;
 }
 
 const {
   eyebrow, subtitle, groups, labels,
-  lengthM, beamM, draftM, cabins, berths, engines, maxSpeedKn, year,
+  lengthM, beamM, draftM, cabins, berths, engines,
+  maxSpeedKn, cruiseSpeedKn, fuelL, waterL, ceCategory, year,
 } = Astro.props;
 
-const dimensionRows: SpecRow[] = [
-  { label: labels.length, value: `${lengthM} m / ${metresToFeet(lengthM)}` },
-  ...(beamM !== undefined ? [{ label: labels.beam, value: `${beamM} m` }] : []),
-  ...(draftM !== undefined ? [{ label: labels.draft, value: `${draftM} m` }] : []),
+const row = (label: string, value: string | number | undefined, unit = ''): SpecRow[] =>
+  value === undefined || value === '' ? [] : [{ label, value: `${value}${unit}` }];
+
+// Two columns, as on the client's layout: left = what she is, right = how she performs.
+const left: SpecGroup[] = [
+  {
+    title: groups.dimensions,
+    rows: [
+      { label: labels.length, value: `${lengthM} m / ${metresToFeet(lengthM)}` },
+      ...row(labels.beam, beamM, ' m'),
+      ...row(labels.draft, draftM, ' m'),
+    ],
+  },
+  {
+    title: groups.accommodation,
+    rows: [
+      { label: labels.cabins, value: String(cabins) },
+      ...row(labels.berths, berths),
+      { label: labels.year, value: String(year) },
+    ],
+  },
 ];
 
-const accommodationRows: SpecRow[] = [
-  { label: labels.cabins, value: String(cabins) },
-  ...(berths !== undefined ? [{ label: labels.berths, value: String(berths) }] : []),
+const right: SpecGroup[] = [
+  {
+    title: groups.performance,
+    rows: [
+      ...row(labels.engines, engines),
+      ...row(labels.speed, maxSpeedKn, ' kn'),
+      ...row(labels.cruiseSpeed, cruiseSpeedKn, ' kn'),
+    ],
+  },
+  {
+    title: groups.capacities,
+    rows: [
+      ...row(labels.fuel, fuelL, ' l'),
+      ...row(labels.water, waterL, ' l'),
+      ...row(labels.ceCategory, ceCategory),
+    ],
+  },
 ];
 
-const performanceRows: SpecRow[] = [
-  ...(engines ? [{ label: labels.engines, value: engines }] : []),
-  ...(maxSpeedKn !== undefined ? [{ label: labels.speed, value: `${maxSpeedKn} kn` }] : []),
-  { label: labels.year, value: String(year) },
-];
-
-const columnData = [
-  { title: groups.dimensions, rows: dimensionRows },
-  { title: groups.accommodation, rows: accommodationRows },
-  { title: groups.performance, rows: performanceRows },
-].filter((col) => col.rows.length > 0);
+const columns = [left, right]
+  .map((groups) => groups.filter((g) => g.rows.length > 0))
+  .filter((col) => col.length > 0);
 ---
 
 <section id="specs" class="py-section bg-white">
@@ -67,16 +101,20 @@ const columnData = [
     <SectionLabel text={eyebrow} class="mb-3" />
     <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{subtitle}</h2>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-14">
-      {columnData.map((col) => (
-        <div>
-          <p class="font-mono font-bold text-[10px] tracking-[.26em] uppercase text-teal border-b border-[var(--color-line-strong)] pb-3 mb-0">
-            {col.title}
-          </p>
-          {col.rows.map((row) => (
-            <div class="flex justify-between items-baseline py-3.5 border-b border-[var(--color-line)]">
-              <span class="font-mono text-[12px] tracking-[.08em] text-ink/55">{row.label}</span>
-              <span class="font-mono font-bold text-[14px] text-ink text-right ml-4">{row.value}</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-12">
+      {columns.map((col) => (
+        <div class="flex flex-col gap-12">
+          {col.map((g) => (
+            <div>
+              <p class="font-mono font-bold text-[10px] tracking-[.26em] uppercase text-teal border-b border-[var(--color-line-strong)] pb-3 mb-0">
+                {g.title}
+              </p>
+              {g.rows.map((r) => (
+                <div class="flex justify-between items-baseline py-3.5 border-b border-[var(--color-line)]">
+                  <span class="font-mono text-[12px] tracking-[.08em] text-ink/55">{r.label}</span>
+                  <span class="font-mono font-bold text-[14px] text-ink text-right ml-4">{r.value}</span>
+                </div>
+              ))}
             </div>
           ))}
         </div>

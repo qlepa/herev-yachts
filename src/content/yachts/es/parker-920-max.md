@@ -1,6 +1,7 @@
 ---
 translationKey: parker-920-max
 name: 920 MAX
+tagline: "Máxima cubierta. Máxima autonomía. Mínimas complicaciones."
 brand: parker
 year: 2025
 lengthM: 9.99

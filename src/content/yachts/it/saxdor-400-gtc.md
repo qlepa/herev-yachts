@@ -1,6 +1,7 @@
 ---
 translationKey: saxdor-400-gtc
 name: 400 GTC
+tagline: "Veloce, riparato e inconfondibilmente nordico."
 brand: saxdor
 year: 2025
 lengthM: 12.20

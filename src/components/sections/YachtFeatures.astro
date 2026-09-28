@@ -1,0 +1,66 @@
+---
+/** Signature features — up to 6 cards, optional image per card (feature-NN.jpg). */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface Feature {
+  title: string;
+  body: string;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  features: Feature[];
+  images: ImageMetadata[];
+  yachtName: string;
+}
+
+const { eyebrow, heading, features, images, yachtName } = Astro.props;
+---
+
+{features.length > 0 && (
+  <section id="features" class="py-section bg-white">
+    <div class="max-w-[1440px] mx-auto px-gutter">
+
+      <SectionLabel text={eyebrow} class="mb-3" />
+      <h2 class="font-display text-h2 text-ink mb-10" style="font-weight: 400;">{heading}</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-5">
+        {features.map((f, i) => {
+          const img = images[i];
+          return (
+            <article class="bg-paper flex flex-col">
+              {img ? (
+                <div class="overflow-hidden" style="aspect-ratio: 4/3;">
+                  <Image
+                    src={img}
+                    alt={`${yachtName} — ${f.title}`}
+                    widths={[400, 700]}
+                    sizes="(min-width: 1280px) 16vw, (min-width: 640px) 50vw, 100vw"
+                    loading="lazy"
+                    class="w-full h-full object-cover"
+                  />
+                </div>
+              ) : (
+                <div class="px-5 pt-5">
+                  <span class="font-mono font-bold text-brass" style="font-size: 11px; letter-spacing: .30em;">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                </div>
+              )}
+              <div class="px-5 py-5 flex flex-col gap-2">
+                <h3 class="font-display text-ink" style="font-size: 1.1875rem; font-weight: 450; line-height: 1.2;">
+                  {f.title}
+                </h3>
+                <p class="text-[var(--color-ink-70)] text-sm leading-relaxed">{f.body}</p>
+              </div>
+            </article>
+          );
+        })}
+      </div>
+
+    </div>
+  </section>
+)}

@@ -1,6 +1,7 @@
 ---
 translationKey: parker-750-pilothouse
 name: 750 Pilothouse
+tagline: "Pesca con ogni tempo e crociere in famiglia in un solo scafo."
 brand: parker
 year: 2024
 lengthM: 7.55

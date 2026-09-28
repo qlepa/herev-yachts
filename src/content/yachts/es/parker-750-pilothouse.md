@@ -1,6 +1,7 @@
 ---
 translationKey: parker-750-pilothouse
 name: 750 Pilothouse
+tagline: "Pesca en cualquier clima y navegación familiar en un casco."
 brand: parker
 year: 2024
 lengthM: 7.55

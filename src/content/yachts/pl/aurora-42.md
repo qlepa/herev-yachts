@@ -1,6 +1,7 @@
 ---
 translationKey: aurora-42
 name: Aurora 42
+tagline: "Komfort dużego jachtu w zwinnym kadłubie 42 stóp."
 brand: galeon
 year: 2024
 lengthM: 13.2

@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-corsair-25
 name: Corsair 25
+tagline: "Caoba, cromo y 45 nudos de nostalgia americana."
 brand: chris-craft
 year: 2025
 lengthM: 7.62

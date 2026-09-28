@@ -1,6 +1,7 @@
 ---
 translationKey: chris-craft-launch-28
 name: Launch 28 GT
+tagline: "Sylwetka niezmieniona od pięćdziesięciu lat. Nie bez powodu."
 brand: chris-craft
 year: 2025
 lengthM: 8.60

@@ -1,6 +1,7 @@
 ---
 translationKey: parker-1050-sport
 name: 1050 Sport
+tagline: "Una timoneria fatta per traversate lunghe e veloci."
 brand: parker
 year: 2025
 lengthM: 10.60

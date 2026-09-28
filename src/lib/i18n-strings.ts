@@ -1,5 +1,6 @@
 import type { Locale } from './i18n';
 import type { CategoryKey } from '../content.config';
+import type { GalleryCategory } from './yacht-enums';
 import type { RegionKey } from './regions';
 
 /** Strings for the NetworkDirectory island (map + filters + dealer list) */
@@ -92,6 +93,7 @@ export interface Translations {
       keyNumbers: { price: string; year: string; length: string; hours: string; location: string };
       enquireHeadingPrefix: string;
       brandLine: string;
+      overviewLabel: string;
     };
   };
   guide: { heading: string; body: string; emailPlaceholder: string; cta: string };
@@ -156,39 +158,53 @@ export interface Translations {
   yachtPage: {
     enquireCta: string;
     bookViewingCta: string;
-    keyNumbers: { length: string; cabins: string; speed: string; engines: string };
-    anchorNav: { overview: string; gallery: string; deckPlans: string; specs: string; financing: string };
-    overviewLabel: string;
+    brochureCta: string;
+    keyNumbers: { length: string; cabins: string; guests: string; speed: string };
+    /** "{name}" is replaced with the model name, "{brand}" with the brand */
+    whyLabel: string;
+    features: { eyebrow: string; heading: string };
+    lifestyle: { eyebrow: string; heading: string };
+    spacesEyebrow: string;
+    video: { eyebrow: string; heading: string; play: string };
     galleryHeading: string;
     galleryTitle: string;
+    galleryAll: string;
+    galleryImages: string;
+    galleryCategories: Record<GalleryCategory, string>;
     deckPlansHeading: string;
     deckPlansSubtitle: string;
+    deckFallback: string;
+    viewFullSize: string;
+    specsEyebrow: string;
     specsSubtitle: string;
-    recommendedHeading: string;
-    financing: { eyebrow: string; copy: string; cta: string };
-    enquireHeadingPrefix: string;
-    mobileCta: { enquire: string };
-    recommendedEyebrow: string;
-    viewAllLabel: string;
-    leadEyebrow: string;
-    financingCheckbox: string;
-    privacyCheckbox: string;
-    emailPlaceholder: string;
-    phonePlaceholder: string;
-    sendEnquiry: string;
-    specsGroups: { dimensions: string; accommodation: string; performance: string };
+    specsGroups: { dimensions: string; accommodation: string; performance: string; capacities: string };
     specs: {
       length: string;
       beam: string;
       draft: string;
       cabins: string;
       berths: string;
-      speed: string;
-      year: string;
-      brand: string;
-      category: string;
       engines: string;
+      speed: string;
+      cruiseSpeed: string;
+      fuel: string;
+      water: string;
+      ceCategory: string;
+      year: string;
     };
+    compare: { eyebrow: string; heading: string; model: string; length: string; cabins: string; guests: string; speed: string; current: string };
+    recommendedEyebrow: string;
+    recommendedHeading: string;
+    viewAllLabel: string;
+    financing: { eyebrow: string; copy: string; cta: string };
+    readyHeading: string;
+    leadEyebrow: string;
+    mobileCta: { enquire: string };
+    financingCheckbox: string;
+    privacyCheckbox: string;
+    emailPlaceholder: string;
+    phonePlaceholder: string;
+    sendEnquiry: string;
   };
   servicesPage: {
     hero: { eyebrow: string; heading: string; subtext: string };
@@ -286,6 +302,7 @@ const en: Translations = {
       keyNumbers: { price: 'PRICE', year: 'YEAR', length: 'LENGTH OVERALL', hours: 'ENGINE HOURS', location: 'LOCATION' },
       enquireHeadingPrefix: 'Enquire about this',
       brandLine: 'AVAILABLE FOR IMMEDIATE DELIVERY',
+      overviewLabel: 'ABOUT THIS UNIT',
     },
   },
   categories: {
@@ -393,60 +410,95 @@ const en: Translations = {
     },
   },
   yachtPage: {
-    enquireCta: 'Enquire about this yacht →',
-    bookViewingCta: 'Book a private viewing',
+    enquireCta: 'Request an offer →',
+    bookViewingCta: 'Schedule a viewing',
+    brochureCta: 'Download brochure',
     keyNumbers: {
       length: 'LENGTH OVERALL',
       cabins: 'CABINS',
+      guests: 'GUESTS',
       speed: 'MAX SPEED',
-      engines: 'ENGINES',
     },
-    anchorNav: {
-      overview: 'Overview',
-      gallery: 'Gallery',
-      deckPlans: 'Deck Plans',
-      specs: 'Specification',
-      financing: 'Financing',
+    whyLabel: 'WHY CHOOSE THE {name}',
+    features: {
+      eyebrow: 'SIGNATURE FEATURES',
+      heading: 'What sets her apart',
     },
-    overviewLabel: 'WHO IT\'S FOR',
+    lifestyle: {
+      eyebrow: 'THE {name} LIFESTYLE',
+      heading: 'Designed around the way you actually use a yacht',
+    },
+    spacesEyebrow: 'INTERIOR EXPERIENCE',
+    video: {
+      eyebrow: 'IN ACTION',
+      heading: 'See the {name} in action',
+      play: 'Play video',
+    },
     galleryHeading: 'GALLERY',
     galleryTitle: 'Aboard the',
-    deckPlansHeading: 'DECK PLANS',
-    deckPlansSubtitle: 'Three decks, arranged for real life',
+    galleryAll: 'All',
+    galleryImages: 'images',
+    galleryCategories: {
+      exterior: 'Exterior',
+      interior: 'Interior',
+      cockpit: 'Cockpit',
+      cabins: 'Cabins',
+      lifestyle: 'Lifestyle',
+    },
+    deckPlansHeading: 'DECK PLANS & LAYOUTS',
+    deckPlansSubtitle: 'Every deck, arranged for real life',
+    deckFallback: 'Deck',
+    viewFullSize: 'View full size',
+    specsEyebrow: 'TECHNICAL SPECIFICATIONS',
     specsSubtitle: 'The full measure',
+    specsGroups: {
+      dimensions: 'DIMENSIONS',
+      accommodation: 'ACCOMMODATION',
+      performance: 'PERFORMANCE',
+      capacities: 'CAPACITIES',
+    },
+    specs: {
+      length: 'Length overall',
+      beam: 'Beam',
+      draft: 'Draft',
+      cabins: 'Cabins',
+      berths: 'Guests',
+      engines: 'Engines',
+      speed: 'Max speed',
+      cruiseSpeed: 'Cruise speed',
+      fuel: 'Fuel capacity',
+      water: 'Water capacity',
+      ceCategory: 'CE category',
+      year: 'Model year',
+    },
+    compare: {
+      eyebrow: 'COMPARE THE RANGE',
+      heading: 'How she sits in the {brand} range',
+      model: 'Model',
+      length: 'Length',
+      cabins: 'Cabins',
+      guests: 'Guests',
+      speed: 'Max speed',
+      current: 'This model',
+    },
+    recommendedEyebrow: 'YOU MIGHT ALSO CONSIDER',
     recommendedHeading: 'You might also consider',
+    viewAllLabel: 'VIEW ALL YACHTS →',
     financing: {
       eyebrow: 'LEASING · CREDIT · CHARTER INVESTMENT',
       copy: 'There are several sensible ways to own this yacht — from marine leasing to charter-management that puts her to work when you\'re ashore. We\'ll walk you through the options that fit.',
       cta: 'Ask about financing →',
     },
-    enquireHeadingPrefix: 'Enquire about the',
-    mobileCta: { enquire: 'Enquire' },
-    recommendedEyebrow: 'YOU MIGHT ALSO CONSIDER',
-    viewAllLabel: 'VIEW ALL YACHTS →',
+    readyHeading: 'Ready to experience the {name}?',
     leadEyebrow: 'NO OBLIGATION',
+    mobileCta: {
+      enquire: 'Enquire',
+    },
     financingCheckbox: 'I\'m interested in financing options',
     privacyCheckbox: 'I agree to be contacted by Herev regarding this enquiry and accept the privacy policy.',
     emailPlaceholder: 'Email',
     phonePlaceholder: 'Phone',
     sendEnquiry: 'Send enquiry →',
-    specsGroups: {
-      dimensions: 'DIMENSIONS',
-      accommodation: 'ACCOMMODATION',
-      performance: 'PERFORMANCE',
-    },
-    specs: {
-      length: 'Length',
-      beam: 'Beam',
-      draft: 'Draft',
-      cabins: 'Cabins',
-      berths: 'Berths',
-      speed: 'Max speed',
-      year: 'Model year',
-      brand: 'Brand',
-      category: 'Category',
-      engines: 'Engines',
-    },
   },
   servicesPage: {
     hero: {
@@ -629,6 +681,7 @@ const pl: Translations = {
       keyNumbers: { price: 'CENA', year: 'ROCZNIK', length: 'DŁUGOŚĆ', hours: 'MOTOGODZINY', location: 'LOKALIZACJA' },
       enquireHeadingPrefix: 'Zapytaj o ten',
       brandLine: 'DOSTĘPNY DO NATYCHMIASTOWEGO ODBIORU',
+      overviewLabel: 'O TYM EGZEMPLARZU',
     },
   },
   categories: {
@@ -736,60 +789,95 @@ const pl: Translations = {
     },
   },
   yachtPage: {
-    enquireCta: 'Zapytaj o ten jacht →',
-    bookViewingCta: 'Umów prywatne oglądanie',
+    enquireCta: 'Zapytaj o ofertę →',
+    bookViewingCta: 'Umów oglądanie',
+    brochureCta: 'Pobierz broszurę',
     keyNumbers: {
       length: 'DŁUGOŚĆ CAŁKOWITA',
       cabins: 'KABINY',
+      guests: 'GOŚCI',
       speed: 'MAKS. PRĘDKOŚĆ',
-      engines: 'SILNIKI',
     },
-    anchorNav: {
-      overview: 'Przegląd',
-      gallery: 'Galeria',
-      deckPlans: 'Plany pokładu',
-      specs: 'Specyfikacja',
-      financing: 'Finansowanie',
+    whyLabel: 'DLACZEGO {name}',
+    features: {
+      eyebrow: 'CECHY CHARAKTERYSTYCZNE',
+      heading: 'Co ją wyróżnia',
     },
-    overviewLabel: 'DLA KOGO',
+    lifestyle: {
+      eyebrow: 'STYL ŻYCIA Z {name}',
+      heading: 'Zaprojektowana wokół tego, jak naprawdę używasz jachtu',
+    },
+    spacesEyebrow: 'WNĘTRZA',
+    video: {
+      eyebrow: 'W AKCJI',
+      heading: 'Zobacz {name} w akcji',
+      play: 'Odtwórz wideo',
+    },
     galleryHeading: 'GALERIA',
     galleryTitle: 'Na pokładzie',
-    deckPlansHeading: 'PLANY POKŁADU',
-    deckPlansSubtitle: 'Trzy pokłady, zaplanowane na życie',
+    galleryAll: 'Wszystkie',
+    galleryImages: 'zdjęć',
+    galleryCategories: {
+      exterior: 'Zewnątrz',
+      interior: 'Wnętrze',
+      cockpit: 'Kokpit',
+      cabins: 'Kabiny',
+      lifestyle: 'Styl życia',
+    },
+    deckPlansHeading: 'PLANY POKŁADÓW',
+    deckPlansSubtitle: 'Każdy pokład zaplanowany na prawdziwe życie',
+    deckFallback: 'Pokład',
+    viewFullSize: 'Zobacz w pełnym rozmiarze',
+    specsEyebrow: 'SPECYFIKACJA TECHNICZNA',
     specsSubtitle: 'Pełny wymiar',
+    specsGroups: {
+      dimensions: 'WYMIARY',
+      accommodation: 'ZAKWATEROWANIE',
+      performance: 'OSIĄGI',
+      capacities: 'POJEMNOŚCI',
+    },
+    specs: {
+      length: 'Długość całkowita',
+      beam: 'Szerokość',
+      draft: 'Zanurzenie',
+      cabins: 'Kabiny',
+      berths: 'Gości',
+      engines: 'Silniki',
+      speed: 'Maks. prędkość',
+      cruiseSpeed: 'Prędkość rejsowa',
+      fuel: 'Zbiornik paliwa',
+      water: 'Zbiornik wody',
+      ceCategory: 'Kategoria CE',
+      year: 'Rok modelowy',
+    },
+    compare: {
+      eyebrow: 'PORÓWNAJ GAMĘ',
+      heading: 'Miejsce w gamie {brand}',
+      model: 'Model',
+      length: 'Długość',
+      cabins: 'Kabiny',
+      guests: 'Gości',
+      speed: 'Maks. prędkość',
+      current: 'Ten model',
+    },
+    recommendedEyebrow: 'MOŻE CIĘ ZAINTERESOWAĆ',
     recommendedHeading: 'Możesz również rozważyć',
+    viewAllLabel: 'WSZYSTKIE JACHTY →',
     financing: {
       eyebrow: 'LEASING · KREDYT · INWESTYCJA CZARTEROWA',
       copy: 'Jest kilka rozsądnych sposobów na posiadanie tego jachtu — od leasingu morskiego po zarządzanie czarterowe, które sprawia, że pracuje, gdy ty jesteś na lądzie. Przeprowadzimy cię przez opcje, które pasują.',
       cta: 'Zapytaj o finansowanie →',
     },
-    enquireHeadingPrefix: 'Zapytaj o',
-    mobileCta: { enquire: 'Zapytaj' },
-    recommendedEyebrow: 'MOŻE CIĘ ZAINTERESOWAĆ',
-    viewAllLabel: 'WSZYSTKIE JACHTY →',
+    readyHeading: 'Gotowy poznać {name}?',
     leadEyebrow: 'BEZ ZOBOWIĄZAŃ',
+    mobileCta: {
+      enquire: 'Zapytaj',
+    },
     financingCheckbox: 'Interesuje mnie finansowanie',
     privacyCheckbox: 'Wyrażam zgodę na kontakt ze strony Herev w sprawie tego zapytania i akceptuję politykę prywatności.',
     emailPlaceholder: 'Email',
     phonePlaceholder: 'Telefon',
     sendEnquiry: 'Wyślij zapytanie →',
-    specsGroups: {
-      dimensions: 'WYMIARY',
-      accommodation: 'ZAKWATEROWANIE',
-      performance: 'OSIĄGI',
-    },
-    specs: {
-      length: 'Długość',
-      beam: 'Szerokość',
-      draft: 'Zanurzenie',
-      cabins: 'Kabiny',
-      berths: 'Miejsca noclegowe',
-      speed: 'Maks. prędkość',
-      year: 'Rok modelowy',
-      brand: 'Marka',
-      category: 'Kategoria',
-      engines: 'Silniki',
-    },
   },
   servicesPage: {
     hero: {
@@ -972,6 +1060,7 @@ const es: Translations = {
       keyNumbers: { price: 'PRECIO', year: 'AÑO', length: 'ESLORA', hours: 'HORAS DE MOTOR', location: 'UBICACIÓN' },
       enquireHeadingPrefix: 'Consultar sobre este',
       brandLine: 'DISPONIBLE PARA ENTREGA INMEDIATA',
+      overviewLabel: 'SOBRE ESTA UNIDAD',
     },
   },
   categories: {
@@ -1079,60 +1168,95 @@ const es: Translations = {
     },
   },
   yachtPage: {
-    enquireCta: 'Consultar sobre este yate →',
-    bookViewingCta: 'Reservar una visita privada',
+    enquireCta: 'Solicitar oferta →',
+    bookViewingCta: 'Programar una visita',
+    brochureCta: 'Descargar folleto',
     keyNumbers: {
       length: 'ESLORA TOTAL',
       cabins: 'CABINAS',
+      guests: 'INVITADOS',
       speed: 'VELOCIDAD MÁX.',
-      engines: 'MOTORES',
     },
-    anchorNav: {
-      overview: 'Resumen',
-      gallery: 'Galería',
-      deckPlans: 'Planos de cubierta',
-      specs: 'Especificación',
-      financing: 'Financiación',
+    whyLabel: 'POR QUÉ ELEGIR EL {name}',
+    features: {
+      eyebrow: 'CARACTERÍSTICAS DISTINTIVAS',
+      heading: 'Lo que la distingue',
     },
-    overviewLabel: 'PARA QUIÉN',
+    lifestyle: {
+      eyebrow: 'EL ESTILO DE VIDA {name}',
+      heading: 'Diseñado en torno a cómo realmente usa un yate',
+    },
+    spacesEyebrow: 'EXPERIENCIA INTERIOR',
+    video: {
+      eyebrow: 'EN ACCIÓN',
+      heading: 'Vea el {name} en acción',
+      play: 'Reproducir vídeo',
+    },
     galleryHeading: 'GALERÍA',
     galleryTitle: 'A bordo del',
+    galleryAll: 'Todas',
+    galleryImages: 'imágenes',
+    galleryCategories: {
+      exterior: 'Exterior',
+      interior: 'Interior',
+      cockpit: 'Bañera',
+      cabins: 'Cabinas',
+      lifestyle: 'Estilo de vida',
+    },
     deckPlansHeading: 'PLANOS DE CUBIERTA',
-    deckPlansSubtitle: 'Tres cubiertas, diseñadas para la vida real',
+    deckPlansSubtitle: 'Cada cubierta, diseñada para la vida real',
+    deckFallback: 'Cubierta',
+    viewFullSize: 'Ver a tamaño completo',
+    specsEyebrow: 'ESPECIFICACIONES TÉCNICAS',
     specsSubtitle: 'La medida completa',
+    specsGroups: {
+      dimensions: 'DIMENSIONES',
+      accommodation: 'ALOJAMIENTO',
+      performance: 'RENDIMIENTO',
+      capacities: 'CAPACIDADES',
+    },
+    specs: {
+      length: 'Eslora total',
+      beam: 'Manga',
+      draft: 'Calado',
+      cabins: 'Cabinas',
+      berths: 'Invitados',
+      engines: 'Motores',
+      speed: 'Velocidad máx.',
+      cruiseSpeed: 'Velocidad de crucero',
+      fuel: 'Capacidad de combustible',
+      water: 'Capacidad de agua',
+      ceCategory: 'Categoría CE',
+      year: 'Año del modelo',
+    },
+    compare: {
+      eyebrow: 'COMPARE LA GAMA',
+      heading: 'Su lugar en la gama {brand}',
+      model: 'Modelo',
+      length: 'Eslora',
+      cabins: 'Cabinas',
+      guests: 'Invitados',
+      speed: 'Velocidad máx.',
+      current: 'Este modelo',
+    },
+    recommendedEyebrow: 'TAMBIÉN PUEDE CONSIDERAR',
     recommendedHeading: 'También puede considerar',
+    viewAllLabel: 'VER TODOS LOS YATES →',
     financing: {
       eyebrow: 'LEASING · CRÉDITO · INVERSIÓN EN CHARTER',
       copy: 'Hay varias formas razonables de poseer este yate — desde el leasing marítimo hasta la gestión de chárter que la pone a trabajar cuando usted está en tierra. Le guiaremos por las opciones que se adaptan.',
       cta: 'Preguntar sobre financiación →',
     },
-    enquireHeadingPrefix: 'Consultar sobre el',
-    mobileCta: { enquire: 'Consultar' },
-    recommendedEyebrow: 'TAMBIÉN PUEDE CONSIDERAR',
-    viewAllLabel: 'VER TODOS LOS YATES →',
+    readyHeading: '¿Listo para vivir el {name}?',
     leadEyebrow: 'SIN COMPROMISO',
+    mobileCta: {
+      enquire: 'Consultar',
+    },
     financingCheckbox: 'Estoy interesado en opciones de financiación',
     privacyCheckbox: 'Acepto ser contactado por Herev sobre esta consulta y acepto la política de privacidad.',
     emailPlaceholder: 'Email',
     phonePlaceholder: 'Teléfono',
     sendEnquiry: 'Enviar consulta →',
-    specsGroups: {
-      dimensions: 'DIMENSIONES',
-      accommodation: 'ALOJAMIENTO',
-      performance: 'RENDIMIENTO',
-    },
-    specs: {
-      length: 'Eslora',
-      beam: 'Manga',
-      draft: 'Calado',
-      cabins: 'Cabinas',
-      berths: 'Literas',
-      speed: 'Velocidad máx.',
-      year: 'Año del modelo',
-      brand: 'Marca',
-      category: 'Categoría',
-      engines: 'Motores',
-    },
   },
   servicesPage: {
     hero: {
@@ -1315,6 +1439,7 @@ const it: Translations = {
       keyNumbers: { price: 'PREZZO', year: 'ANNO', length: 'LUNGHEZZA', hours: 'ORE MOTORE', location: 'UBICAZIONE' },
       enquireHeadingPrefix: 'Richiedi informazioni su questo',
       brandLine: 'DISPONIBILE PER CONSEGNA IMMEDIATA',
+      overviewLabel: 'SU QUESTA UNITÀ',
     },
   },
   categories: {
@@ -1422,60 +1547,95 @@ const it: Translations = {
     },
   },
   yachtPage: {
-    enquireCta: 'Richiedi informazioni su questo yacht →',
-    bookViewingCta: 'Prenota una visione privata',
+    enquireCta: 'Richiedi un\'offerta →',
+    bookViewingCta: 'Prenota una visita',
+    brochureCta: 'Scarica la brochure',
     keyNumbers: {
       length: 'LUNGHEZZA TOTALE',
       cabins: 'CABINE',
+      guests: 'OSPITI',
       speed: 'VELOCITÀ MAX.',
-      engines: 'MOTORI',
     },
-    anchorNav: {
-      overview: 'Panoramica',
-      gallery: 'Galleria',
-      deckPlans: 'Piani di coperta',
-      specs: 'Specifiche',
-      financing: 'Finanziamento',
+    whyLabel: 'PERCHÉ SCEGLIERE IL {name}',
+    features: {
+      eyebrow: 'CARATTERISTICHE DISTINTIVE',
+      heading: 'Ciò che la distingue',
     },
-    overviewLabel: 'PER CHI',
+    lifestyle: {
+      eyebrow: 'LO STILE DI VITA {name}',
+      heading: 'Progettata attorno al modo in cui usi davvero uno yacht',
+    },
+    spacesEyebrow: 'ESPERIENZA DEGLI INTERNI',
+    video: {
+      eyebrow: 'IN AZIONE',
+      heading: 'Guarda il {name} in azione',
+      play: 'Riproduci video',
+    },
     galleryHeading: 'GALLERIA',
     galleryTitle: 'A bordo del',
+    galleryAll: 'Tutte',
+    galleryImages: 'immagini',
+    galleryCategories: {
+      exterior: 'Esterni',
+      interior: 'Interni',
+      cockpit: 'Pozzetto',
+      cabins: 'Cabine',
+      lifestyle: 'Stile di vita',
+    },
     deckPlansHeading: 'PIANI DI COPERTA',
-    deckPlansSubtitle: 'Tre ponti, pensati per la vita reale',
+    deckPlansSubtitle: 'Ogni ponte, pensato per la vita reale',
+    deckFallback: 'Ponte',
+    viewFullSize: 'Vedi a grandezza naturale',
+    specsEyebrow: 'SPECIFICHE TECNICHE',
     specsSubtitle: 'La misura completa',
+    specsGroups: {
+      dimensions: 'DIMENSIONI',
+      accommodation: 'ALLOGGIO',
+      performance: 'PRESTAZIONI',
+      capacities: 'CAPACITÀ',
+    },
+    specs: {
+      length: 'Lunghezza totale',
+      beam: 'Larghezza',
+      draft: 'Pescaggio',
+      cabins: 'Cabine',
+      berths: 'Ospiti',
+      engines: 'Motori',
+      speed: 'Velocità max.',
+      cruiseSpeed: 'Velocità di crociera',
+      fuel: 'Capacità carburante',
+      water: 'Capacità acqua',
+      ceCategory: 'Categoria CE',
+      year: 'Anno modello',
+    },
+    compare: {
+      eyebrow: 'CONFRONTA LA GAMMA',
+      heading: 'La sua posizione nella gamma {brand}',
+      model: 'Modello',
+      length: 'Lunghezza',
+      cabins: 'Cabine',
+      guests: 'Ospiti',
+      speed: 'Velocità max.',
+      current: 'Questo modello',
+    },
+    recommendedEyebrow: 'POTRESTI ANCHE CONSIDERARE',
     recommendedHeading: 'Potresti anche considerare',
+    viewAllLabel: 'TUTTI GLI YACHT →',
     financing: {
       eyebrow: 'LEASING · CREDITO · INVESTIMENTO IN CHARTER',
       copy: 'Ci sono diversi modi sensati per possedere questo yacht — dal leasing marittimo alla gestione charter che la mette al lavoro quando sei a terra. Ti guideremo attraverso le opzioni più adatte.',
       cta: 'Chiedi informazioni sul finanziamento →',
     },
-    enquireHeadingPrefix: 'Richiedi informazioni su',
-    mobileCta: { enquire: 'Richiedi' },
-    recommendedEyebrow: 'POTRESTI ANCHE CONSIDERARE',
-    viewAllLabel: 'TUTTI GLI YACHT →',
+    readyHeading: 'Pronto a vivere il {name}?',
     leadEyebrow: 'NESSUN OBBLIGO',
+    mobileCta: {
+      enquire: 'Richiedi',
+    },
     financingCheckbox: 'Sono interessato alle opzioni di finanziamento',
     privacyCheckbox: 'Accetto di essere contattato da Herev riguardo a questa richiesta e accetto la politica sulla privacy.',
     emailPlaceholder: 'Email',
     phonePlaceholder: 'Telefono',
     sendEnquiry: 'Invia richiesta →',
-    specsGroups: {
-      dimensions: 'DIMENSIONI',
-      accommodation: 'ALLOGGIO',
-      performance: 'PRESTAZIONI',
-    },
-    specs: {
-      length: 'Lunghezza',
-      beam: 'Larghezza',
-      draft: 'Pescaggio',
-      cabins: 'Cabine',
-      berths: 'Cuccette',
-      speed: 'Velocità max.',
-      year: 'Anno modello',
-      brand: 'Marchio',
-      category: 'Categoria',
-      engines: 'Motori',
-    },
   },
   servicesPage: {
     hero: {

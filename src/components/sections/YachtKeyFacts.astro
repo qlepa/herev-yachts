@@ -1,0 +1,54 @@
+---
+/**
+ * Key-numbers band under the yacht hero: up to 4 facts with a gilt icon.
+ * Absent facts are simply omitted — the grid collapses to what exists.
+ */
+type FactIcon = 'length' | 'cabins' | 'guests' | 'speed';
+
+interface Fact {
+  icon: FactIcon;
+  value: string;
+  label: string;
+}
+
+interface Props {
+  facts: Fact[];
+}
+
+const { facts } = Astro.props;
+
+const icons: Record<FactIcon, string> = {
+  length: '<line x1="3" y1="12" x2="21" y2="12"/><polyline points="6 9 3 12 6 15"/><polyline points="18 9 21 12 18 15"/>',
+  cabins: '<path d="M3 20v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6"/><line x1="3" y1="20" x2="21" y2="20"/><path d="M6 12V8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v4"/>',
+  guests: '<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20v-1a6 6 0 0 1 12 0v1"/><path d="M15 20v-1a4 4 0 0 1 6 0v1"/>',
+  speed:  '<line x1="12" y1="12" x2="18" y2="8"/><path d="M4 18a9 9 0 0 1 16 0"/><circle cx="12" cy="12" r=".5" fill="currentColor"/>',
+};
+---
+
+{facts.length > 0 && (
+  <div class="bg-ink text-white border-b border-[var(--color-line-on-ink)]">
+    <div class="max-w-[1440px] mx-auto px-gutter py-[30px]">
+      <dl class="grid grid-cols-2 md:grid-cols-4 gap-y-6">
+        {facts.map((f, i) => (
+          <div
+            class:list={[
+              'flex flex-col gap-3.5 py-2 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0',
+              i < facts.length - 1 && 'md:border-r md:border-[rgba(236,239,238,.14)]',
+            ]}
+          >
+            <svg
+              width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-gilt"
+              aria-hidden="true"
+              set:html={icons[f.icon]}
+            />
+            <div>
+              <dd class="font-display text-[1.875rem] text-white leading-none" style="font-weight: 400;">{f.value}</dd>
+              <dt class="font-mono text-[10px] tracking-[.24em] uppercase text-[rgba(236,239,238,.6)] mt-2">{f.label}</dt>
+            </div>
+          </div>
+        ))}
+      </dl>
+    </div>
+  </div>
+)}
