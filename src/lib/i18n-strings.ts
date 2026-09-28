@@ -1,5 +1,41 @@
 import type { Locale } from './i18n';
 import type { CategoryKey } from '../content.config';
+import type { RegionKey } from './regions';
+
+/** Strings for the NetworkDirectory island (map + filters + dealer list) */
+export interface DirectoryStrings {
+  filters: {
+    title: string;
+    reset: string;
+    brands: string;
+    allBrands: string;
+    region: string;
+    allRegions: string;
+    viewList: string; // "View list ({n})"
+  };
+  list: {
+    title: string;
+    found: string; // "{n} dealers found"
+    sortBy: string;
+    sortCountry: string;
+    sortName: string;
+    sortNearest: string;
+    authorised: string;
+    viewDetails: string;
+    loadMore: string;
+    noResults: string;
+  };
+  map: {
+    containerLabel: string;
+    useLocation: string;
+    locating: string;
+    located: string; // "Located · {country}"
+    denied: string;
+    tapToExplore: string;
+    zoomIn: string;
+    zoomOut: string;
+  };
+}
 
 export interface NavStrings {
   yachts: string;
@@ -175,14 +211,12 @@ export interface Translations {
     comingSoon: string;
   };
   networkPage: {
-    hero: { eyebrow: string; heading: string; subtext: string };
-    strip: { neutral: string; neutralCta: string };
-    howItWorks: {
-      eyebrow: string;
-      heading: string;
-      steps: Array<{ no: string; title: string; body: string }>;
-    };
+    hero: { breadcrumbHome: string; eyebrow: string; heading: string; subtext: string };
+    stats: { brands: string; dealers: string; countries: string; continents: string };
+    regions: Record<RegionKey, string>;
+    explorer: DirectoryStrings;
     directory: { eyebrow: string; heading: string; viewAll: string };
+    brandsStrip: { title: string };
     cta: { eyebrow: string; heading: string; subtext: string; ctaLabel: string };
     countryPage: {
       breadcrumb: string;
@@ -193,18 +227,6 @@ export interface Translations {
       seaTrials: string;
       mapLabel: string;
       backToNetwork: string;
-    };
-    mapAria: {
-      containerLabel: string;
-      closePanel: string;
-      useLocation: string;
-      locating: string;
-      located: string;
-      denied: string;
-      tapToExplore: string;
-      jumpToCountry: string;
-      enquireAtShowroom: string;
-      seaTrialsNote: string;
     };
   };
 }
@@ -479,33 +501,65 @@ const en: Translations = {
   },
   networkPage: {
     hero: {
+      breadcrumbHome: 'Home',
       eyebrow: 'AUTHORISED REPRESENTATION · WORLDWIDE',
-      heading: 'Our Network',
-      subtext: 'Wherever you berth, an official dealer is already close. One relationship, five marques, a presence that spans the map.',
+      heading: 'Global Dealer Network',
+      subtext: "Find authorised dealers and service partners for the world's leading yacht brands. Our global network ensures you receive the highest level of expertise and support, wherever you are.",
     },
-    strip: {
-      neutral: 'A global network of official dealers',
-      neutralCta: 'Browse directory →',
+    stats: { brands: 'YACHT BRANDS', dealers: 'DEALERS', countries: 'COUNTRIES', continents: 'CONTINENTS' },
+    regions: {
+      europe: 'Europe',
+      'north-america': 'North America',
+      'south-america': 'South America',
+      asia: 'Asia & Middle East',
+      africa: 'Africa',
+      oceania: 'Oceania',
+      other: 'Other',
     },
-    howItWorks: {
-      eyebrow: 'HOW THE NETWORK WORKS',
-      heading: 'One enquiry. The right official dealer. A reply within the day.',
-      steps: [
-        { no: '01', title: 'Enquire online', body: 'Send one enquiry through Herev — about a model, or simply to find who is nearest to your berth.' },
-        { no: '02', title: 'We route you to the official dealer', body: 'Your enquiry goes to the authorised dealer for your country and marque — never a call centre, never resold.' },
-        { no: '03', title: 'Contact within 24 hours', body: 'A named specialist replies personally, usually the same day, to arrange a viewing or sea trial.' },
-      ],
+    explorer: {
+      filters: {
+        title: 'Filter dealers',
+        reset: 'Reset all',
+        brands: 'BRAND',
+        allBrands: 'All brands',
+        region: 'REGION',
+        allRegions: 'All regions',
+        viewList: 'View list ({n})',
+      },
+      list: {
+        title: 'Dealer list',
+        found: '{n} dealers found',
+        sortBy: 'Sort by',
+        sortCountry: 'Country',
+        sortName: 'Name',
+        sortNearest: 'Nearest',
+        authorised: 'AUTHORISED DEALER',
+        viewDetails: 'View details',
+        loadMore: 'Load more dealers',
+        noResults: 'No dealers match these filters.',
+      },
+      map: {
+        containerLabel: 'Dealer network map',
+        useLocation: 'Use my location',
+        locating: 'Locating…',
+        located: 'Located · {country}',
+        denied: 'Location off',
+        tapToExplore: 'Tap to explore the map',
+        zoomIn: 'Zoom in',
+        zoomOut: 'Zoom out',
+      },
     },
     directory: {
       eyebrow: 'DIRECTORY',
-      heading: 'Find the network by country',
+      heading: 'Browse the network by country',
       viewAll: 'VIEW ALL COUNTRIES →',
     },
+    brandsStrip: { title: 'OUR BRANDS' },
     cta: {
-      eyebrow: 'NO SHOWROOM NEARBY?',
-      heading: "Can't find a showroom near you?",
-      subtext: "Tell us where you berth. We'll connect you with the nearest official dealer — and travel to you when it matters.",
-      ctaLabel: 'Speak with an advisor →',
+      eyebrow: 'NO DEALER NEARBY?',
+      heading: 'Looking for a dealer in your area?',
+      subtext: "Can't find what you're looking for? Contact us and we'll connect you with the right partner.",
+      ctaLabel: 'Contact us',
     },
     countryPage: {
       breadcrumb: 'OUR NETWORK',
@@ -516,18 +570,6 @@ const en: Translations = {
       seaTrials: 'SEA TRIALS ARRANGED ON REQUEST',
       mapLabel: 'COVERAGE MAP',
       backToNetwork: '← Back to network',
-    },
-    mapAria: {
-      containerLabel: 'Dealer network map',
-      closePanel: 'Close showroom panel',
-      useLocation: 'Use my location',
-      locating: 'Locating…',
-      located: 'Located · {country}',
-      denied: 'Location off',
-      tapToExplore: 'TAP TO EXPLORE THE MAP',
-      jumpToCountry: 'JUMP TO COUNTRY',
-      enquireAtShowroom: 'Enquire at this showroom →',
-      seaTrialsNote: 'SEA TRIALS ARRANGED ON REQUEST',
     },
   },
 };
@@ -802,33 +844,65 @@ const pl: Translations = {
   },
   networkPage: {
     hero: {
+      breadcrumbHome: 'Strona główna',
       eyebrow: 'AUTORYZOWANA REPREZENTACJA · ŚWIAT',
-      heading: 'Nasza Sieć',
-      subtext: 'Gdziekolwiek cumujeszku, oficjalny dealer jest już w pobliżu. Jedna relacja, pięć marek, obecność na całym świecie.',
+      heading: 'Globalna sieć dealerów',
+      subtext: 'Znajdź autoryzowanych dealerów i partnerów serwisowych wiodących marek jachtowych. Nasza globalna sieć zapewnia najwyższy poziom wiedzy i wsparcia, gdziekolwiek jesteś.',
     },
-    strip: {
-      neutral: 'Globalna sieć oficjalnych dealerów',
-      neutralCta: 'Przeglądaj katalog →',
+    stats: { brands: 'MARKI JACHTÓW', dealers: 'DEALERÓW', countries: 'KRAJÓW', continents: 'KONTYNENTÓW' },
+    regions: {
+      europe: 'Europa',
+      'north-america': 'Ameryka Północna',
+      'south-america': 'Ameryka Południowa',
+      asia: 'Azja i Bliski Wschód',
+      africa: 'Afryka',
+      oceania: 'Oceania',
+      other: 'Inne',
     },
-    howItWorks: {
-      eyebrow: 'JAK DZIAŁA SIEĆ',
-      heading: 'Jedno zapytanie. Właściwy oficjalny dealer. Odpowiedź w ciągu dnia.',
-      steps: [
-        { no: '01', title: 'Wyślij zapytanie', body: 'Wyślij jedno zapytanie przez Herev — o konkretny model lub po prostu, żeby znaleźć najbliższe stoisko.' },
-        { no: '02', title: 'Kierujemy cię do oficjalnego dealera', body: 'Twoje zapytanie trafia do autoryzowanego dealera dla twojego kraju i marki — nigdy do call center, nigdy dalej.' },
-        { no: '03', title: 'Kontakt w ciągu 24 godzin', body: 'Nazwany specjalista odpowiada osobiście, zazwyczaj tego samego dnia, aby umówić oglądanie lub rejs próbny.' },
-      ],
+    explorer: {
+      filters: {
+        title: 'Filtruj dealerów',
+        reset: 'Wyczyść',
+        brands: 'MARKA',
+        allBrands: 'Wszystkie marki',
+        region: 'REGION',
+        allRegions: 'Wszystkie regiony',
+        viewList: 'Zobacz listę ({n})',
+      },
+      list: {
+        title: 'Lista dealerów',
+        found: 'Znaleziono dealerów: {n}',
+        sortBy: 'Sortuj',
+        sortCountry: 'Kraj',
+        sortName: 'Nazwa',
+        sortNearest: 'Najbliżej',
+        authorised: 'AUTORYZOWANY DEALER',
+        viewDetails: 'Zobacz szczegóły',
+        loadMore: 'Pokaż więcej dealerów',
+        noResults: 'Brak dealerów spełniających te kryteria.',
+      },
+      map: {
+        containerLabel: 'Mapa sieci dealerów',
+        useLocation: 'Użyj mojej lokalizacji',
+        locating: 'Lokalizowanie…',
+        located: 'Znaleziono · {country}',
+        denied: 'Lokalizacja wyłączona',
+        tapToExplore: 'Dotknij, aby eksplorować mapę',
+        zoomIn: 'Przybliż',
+        zoomOut: 'Oddal',
+      },
     },
     directory: {
       eyebrow: 'KATALOG',
-      heading: 'Znajdź sieć według kraju',
+      heading: 'Przeglądaj sieć według kraju',
       viewAll: 'WSZYSTKIE KRAJE →',
     },
+    brandsStrip: { title: 'NASZE MARKI' },
     cta: {
-      eyebrow: 'BRAK SALONU W POBLIŻU?',
-      heading: 'Nie możesz znaleźć salonu w pobliżu?',
-      subtext: 'Powiedz nam, gdzie cumujesz. Połączymy cię z najbliższym oficjalnym dealerem — i przyjedziemy do ciebie, gdy to ważne.',
-      ctaLabel: 'Porozmawiaj z doradcą →',
+      eyebrow: 'BRAK DEALERA W POBLIŻU?',
+      heading: 'Szukasz dealera w swojej okolicy?',
+      subtext: 'Nie znalazłeś tego, czego szukasz? Skontaktuj się z nami — połączymy Cię z właściwym partnerem.',
+      ctaLabel: 'Skontaktuj się',
     },
     countryPage: {
       breadcrumb: 'NASZA SIEĆ',
@@ -839,18 +913,6 @@ const pl: Translations = {
       seaTrials: 'REJSY PRÓBNE NA ŻYCZENIE',
       mapLabel: 'MAPA ZASIĘGU',
       backToNetwork: '← Wróć do sieci',
-    },
-    mapAria: {
-      containerLabel: 'Mapa sieci dealerów',
-      closePanel: 'Zamknij panel salonu',
-      useLocation: 'Użyj mojej lokalizacji',
-      locating: 'Lokalizowanie…',
-      located: 'Znaleziono · {country}',
-      denied: 'Lokalizacja wyłączona',
-      tapToExplore: 'DOTKNIJ, ABY EKSPLOROWAĆ MAPĘ',
-      jumpToCountry: 'PRZEJDŹ DO KRAJU',
-      enquireAtShowroom: 'Zapytaj w tym salonie →',
-      seaTrialsNote: 'REJSY PRÓBNE NA ŻYCZENIE',
     },
   },
 };
@@ -1125,33 +1187,65 @@ const es: Translations = {
   },
   networkPage: {
     hero: {
+      breadcrumbHome: 'Inicio',
       eyebrow: 'REPRESENTACIÓN AUTORIZADA · MUNDIAL',
-      heading: 'Nuestra Red',
-      subtext: 'Donde quiera que fondees, ya hay un concesionario oficial cerca. Una relación, cinco marcas, presencia en todo el mundo.',
+      heading: 'Red global de concesionarios',
+      subtext: 'Encuentra concesionarios autorizados y socios de servicio de las principales marcas de yates del mundo. Nuestra red global te garantiza el máximo nivel de experiencia y soporte, estés donde estés.',
     },
-    strip: {
-      neutral: 'Una red global de concesionarios oficiales',
-      neutralCta: 'Explorar directorio →',
+    stats: { brands: 'MARCAS', dealers: 'CONCESIONARIOS', countries: 'PAÍSES', continents: 'CONTINENTES' },
+    regions: {
+      europe: 'Europa',
+      'north-america': 'América del Norte',
+      'south-america': 'América del Sur',
+      asia: 'Asia y Oriente Medio',
+      africa: 'África',
+      oceania: 'Oceanía',
+      other: 'Otros',
     },
-    howItWorks: {
-      eyebrow: 'CÓMO FUNCIONA LA RED',
-      heading: 'Una consulta. El concesionario oficial correcto. Respuesta en el día.',
-      steps: [
-        { no: '01', title: 'Envía tu consulta', body: 'Envía una consulta a través de Herev — sobre un modelo, o simplemente para saber quién está más cerca de tu fondeadero.' },
-        { no: '02', title: 'Te dirigimos al concesionario oficial', body: 'Tu consulta va al concesionario autorizado para tu país y marca — nunca a un call centre, nunca revendido.' },
-        { no: '03', title: 'Contacto en 24 horas', body: 'Un especialista responde personalmente, generalmente el mismo día, para organizar una visita o prueba de mar.' },
-      ],
+    explorer: {
+      filters: {
+        title: 'Filtrar concesionarios',
+        reset: 'Restablecer',
+        brands: 'MARCA',
+        allBrands: 'Todas las marcas',
+        region: 'REGIÓN',
+        allRegions: 'Todas las regiones',
+        viewList: 'Ver lista ({n})',
+      },
+      list: {
+        title: 'Lista de concesionarios',
+        found: '{n} concesionarios encontrados',
+        sortBy: 'Ordenar por',
+        sortCountry: 'País',
+        sortName: 'Nombre',
+        sortNearest: 'Más cercano',
+        authorised: 'CONCESIONARIO AUTORIZADO',
+        viewDetails: 'Ver detalles',
+        loadMore: 'Cargar más concesionarios',
+        noResults: 'Ningún concesionario coincide con estos filtros.',
+      },
+      map: {
+        containerLabel: 'Mapa de la red de concesionarios',
+        useLocation: 'Usar mi ubicación',
+        locating: 'Localizando…',
+        located: 'Ubicado · {country}',
+        denied: 'Ubicación desactivada',
+        tapToExplore: 'Toca para explorar el mapa',
+        zoomIn: 'Acercar',
+        zoomOut: 'Alejar',
+      },
     },
     directory: {
       eyebrow: 'DIRECTORIO',
-      heading: 'Encuentra la red por país',
+      heading: 'Explora la red por país',
       viewAll: 'VER TODOS LOS PAÍSES →',
     },
+    brandsStrip: { title: 'NUESTRAS MARCAS' },
     cta: {
       eyebrow: '¿SIN CONCESIONARIO CERCA?',
-      heading: '¿No encuentras un concesionario cerca?',
-      subtext: 'Dinos dónde fondeas. Te conectaremos con el concesionario oficial más cercano — y viajamos a ti cuando importa.',
-      ctaLabel: 'Hablar con un asesor →',
+      heading: '¿Buscas un concesionario en tu zona?',
+      subtext: '¿No encuentras lo que buscas? Contáctanos y te pondremos en contacto con el socio adecuado.',
+      ctaLabel: 'Contáctanos',
     },
     countryPage: {
       breadcrumb: 'NUESTRA RED',
@@ -1162,18 +1256,6 @@ const es: Translations = {
       seaTrials: 'PRUEBAS DE MAR BAJO PETICIÓN',
       mapLabel: 'MAPA DE COBERTURA',
       backToNetwork: '← Volver a la red',
-    },
-    mapAria: {
-      containerLabel: 'Mapa de la red de concesionarios',
-      closePanel: 'Cerrar panel de concesionario',
-      useLocation: 'Usar mi ubicación',
-      locating: 'Localizando…',
-      located: 'Ubicado · {country}',
-      denied: 'Ubicación desactivada',
-      tapToExplore: 'TOCA PARA EXPLORAR EL MAPA',
-      jumpToCountry: 'IR A PAÍS',
-      enquireAtShowroom: 'Consultar en este concesionario →',
-      seaTrialsNote: 'PRUEBAS DE MAR BAJO PETICIÓN',
     },
   },
 };
@@ -1448,33 +1530,65 @@ const it: Translations = {
   },
   networkPage: {
     hero: {
+      breadcrumbHome: 'Home',
       eyebrow: 'RAPPRESENTANZA AUTORIZZATA · MONDIALE',
-      heading: 'La Nostra Rete',
-      subtext: 'Ovunque tu attracci, un concessionario ufficiale è già vicino. Una relazione, cinque marchi, una presenza che copre il globo.',
+      heading: 'Rete globale di concessionari',
+      subtext: 'Trova concessionari autorizzati e partner di assistenza dei principali marchi nautici del mondo. La nostra rete globale ti garantisce il massimo livello di competenza e supporto, ovunque tu sia.',
     },
-    strip: {
-      neutral: 'Una rete globale di concessionari ufficiali',
-      neutralCta: 'Sfoglia il catalogo →',
+    stats: { brands: 'MARCHI', dealers: 'CONCESSIONARI', countries: 'PAESI', continents: 'CONTINENTI' },
+    regions: {
+      europe: 'Europa',
+      'north-america': 'America del Nord',
+      'south-america': 'America del Sud',
+      asia: 'Asia e Medio Oriente',
+      africa: 'Africa',
+      oceania: 'Oceania',
+      other: 'Altro',
     },
-    howItWorks: {
-      eyebrow: 'COME FUNZIONA LA RETE',
-      heading: 'Una richiesta. Il concessionario ufficiale giusto. Una risposta entro la giornata.',
-      steps: [
-        { no: '01', title: 'Invia la tua richiesta', body: 'Invia una richiesta attraverso Herev — su un modello, o semplicemente per trovare chi è più vicino al tuo ormeggio.' },
-        { no: '02', title: 'Ti indirizziamo al concessionario ufficiale', body: 'La tua richiesta va al concessionario autorizzato per il tuo paese e marchio — mai a un call centre, mai rivenduta.' },
-        { no: '03', title: 'Contatto entro 24 ore', body: 'Uno specialista risponde personalmente, di solito il giorno stesso, per organizzare una visione o una prova in mare.' },
-      ],
+    explorer: {
+      filters: {
+        title: 'Filtra concessionari',
+        reset: 'Azzera',
+        brands: 'MARCHIO',
+        allBrands: 'Tutti i marchi',
+        region: 'REGIONE',
+        allRegions: 'Tutte le regioni',
+        viewList: 'Vedi elenco ({n})',
+      },
+      list: {
+        title: 'Elenco concessionari',
+        found: '{n} concessionari trovati',
+        sortBy: 'Ordina per',
+        sortCountry: 'Paese',
+        sortName: 'Nome',
+        sortNearest: 'Più vicino',
+        authorised: 'CONCESSIONARIO AUTORIZZATO',
+        viewDetails: 'Vedi dettagli',
+        loadMore: 'Carica altri concessionari',
+        noResults: 'Nessun concessionario corrisponde a questi filtri.',
+      },
+      map: {
+        containerLabel: 'Mappa della rete di concessionari',
+        useLocation: 'Usa la mia posizione',
+        locating: 'Localizzazione…',
+        located: 'Trovato · {country}',
+        denied: 'Posizione disattivata',
+        tapToExplore: 'Tocca per esplorare la mappa',
+        zoomIn: 'Ingrandisci',
+        zoomOut: 'Riduci',
+      },
     },
     directory: {
       eyebrow: 'CATALOGO',
-      heading: 'Trova la rete per paese',
+      heading: 'Esplora la rete per paese',
       viewAll: 'VEDI TUTTI I PAESI →',
     },
+    brandsStrip: { title: 'I NOSTRI MARCHI' },
     cta: {
-      eyebrow: 'NESSUNO SHOWROOM VICINO?',
-      heading: 'Non riesci a trovare uno showroom vicino?',
-      subtext: 'Dicci dove ormeggiai. Ti metteremo in contatto con il concessionario ufficiale più vicino — e ci spostiamo da te quando è importante.',
-      ctaLabel: 'Parla con un consulente →',
+      eyebrow: 'NESSUN CONCESSIONARIO VICINO?',
+      heading: 'Cerchi un concessionario nella tua zona?',
+      subtext: 'Non trovi quello che cerchi? Contattaci e ti metteremo in contatto con il partner giusto.',
+      ctaLabel: 'Contattaci',
     },
     countryPage: {
       breadcrumb: 'LA NOSTRA RETE',
@@ -1485,18 +1599,6 @@ const it: Translations = {
       seaTrials: 'PROVE IN MARE SU RICHIESTA',
       mapLabel: 'MAPPA DI COPERTURA',
       backToNetwork: '← Torna alla rete',
-    },
-    mapAria: {
-      containerLabel: 'Mappa della rete di concessionari',
-      closePanel: 'Chiudi il pannello dello showroom',
-      useLocation: 'Usa la mia posizione',
-      locating: 'Localizzazione…',
-      located: 'Trovato · {country}',
-      denied: 'Posizione disattivata',
-      tapToExplore: 'TOCCA PER ESPLORARE LA MAPPA',
-      jumpToCountry: 'VAI AL PAESE',
-      enquireAtShowroom: 'Richiedi in questo showroom →',
-      seaTrialsNote: 'PROVE IN MARE SU RICHIESTA',
     },
   },
 };

@@ -1,32 +1,33 @@
 ---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
 import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import Btn from '../../../components/ui/Btn.astro';
-import NetworkMap from '../../../islands/NetworkMap';
+import NetworkDirectory from '../../../islands/NetworkDirectory';
+import type { NetworkLocation } from '../../../islands/NetworkDirectory';
 import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
-import type { MapLocation } from '../../../islands/NetworkMap';
+import { REGION_KEYS, regionOf } from '../../../lib/regions';
 import rawLocations from '../../../data/locations.json';
+import heroPic from '../../../assets/site/cannes-marina.avif';
 
 export function getStaticPaths() {
   return getLocalePaths();
 }
 
+type LocationEntry = {
+  id: string; name: string; city: string; country: string;
+  address: string; lat: number; lng: number;
+  brandKeys: string[]; dealerId?: string;
+};
+
 const { lang } = Astro.params as { lang: Locale };
 const t = getTranslations(lang);
 const np = t.networkPage;
 
-// Cast JSON to typed array (JSON import infers narrow types)
-const allLocations = rawLocations as MapLocation[];
-
-// Build-time stats
-const locationCount = allLocations.length;
-const countryCodes = [...new Set(allLocations.map((l) => l.country))];
-const countriesCount = countryCodes.length;
-
-// Helper: Intl.DisplayNames with fallback
 function getDisplayName(locale: string, code: string): string {
   try {
     return new Intl.DisplayNames([locale], { type: 'region' }).of(code) ?? code;
@@ -35,33 +36,52 @@ function getDisplayName(locale: string, code: string): string {
   }
 }
 
-// Country directory: sorted by count desc
+// Brands (ordered, localised entry set — names are proper nouns)
+const brandEntries = (await getCollection('brands', ({ id }) => id.startsWith(`${lang}/`)))
+  .sort((a, b) => a.data.order - b.data.order);
+const brands = brandEntries.map((b) => ({ key: b.data.brandKey, label: b.data.name }));
+
+// Locations enriched at build time: localised country name, region, country-page anchor
+const allLocations: NetworkLocation[] = (rawLocations as LocationEntry[]).map((l) => ({
+  id: l.id,
+  name: l.name,
+  city: l.city,
+  country: l.country,
+  countryName: getDisplayName(lang, l.country),
+  address: l.address,
+  lat: l.lat,
+  lng: l.lng,
+  brandKeys: l.brandKeys,
+  region: regionOf(l.country),
+  href: `/${lang}/network/${l.country.toLowerCase()}/#loc-${l.id}`,
+}));
+
+const regions = REGION_KEYS.map((key) => ({ key, label: np.regions[key] }));
+
+// Stats
+const countryCodes = [...new Set(allLocations.map((l) => l.country))];
+const continentsCount = new Set(allLocations.map((l) => l.region).filter((r) => r !== 'other')).size;
+const heroStats = [
+  { value: String(brands.length), label: np.stats.brands, icon: 'brands' },
+  { value: String(allLocations.length), label: np.stats.dealers, icon: 'dealers' },
+  { value: String(countryCodes.length), label: np.stats.countries, icon: 'countries' },
+  { value: String(continentsCount), label: np.stats.continents, icon: 'continents' },
+];
+
+// Country directory (kept for SEO: every country page linked from here)
 const byCountry = countryCodes
   .map((code) => {
     const locs = allLocations.filter((l) => l.country === code);
-    const cities = [...new Set(locs.map((l) => l.city))].slice(0, 2).join(' · ');
     return {
-      code,
-      displayName: getDisplayName(lang, code),
+      displayName: locs[0]!.countryName,
       count: locs.length,
-      cities,
+      cities: [...new Set(locs.map((l) => l.city))].slice(0, 2).join(' · '),
       href: `/${lang}/network/${code.toLowerCase()}/`,
     };
   })
   .sort((a, b) => b.count - a.count);
 
-// hreflang alternates (placeholder domain — step 7 will centralise)
-const alternates = LOCALES.map((l) => ({
-  lang: l,
-  href: `https://herev.com/${l}/network/`,
-}));
-
-const heroStats = [
-  { value: String(locationCount), label: t.network.locations },
-  { value: '5', label: t.network.brands },
-  { value: String(countriesCount), label: t.network.countries },
-];
-
+const alternates = LOCALES.map((l) => ({ lang: l, href: `https://herev.com/${l}/network/` }));
 const pageTitle = `${np.hero.heading} — Herev`;
 const pageDescription = np.hero.subtext;
 ---
@@ -72,190 +92,156 @@ const pageDescription = np.hero.subtext;
   <main>
 
     <!-- 1. HERO -->
-    <section class="bg-ink text-white">
-      <div class="max-w-[1440px] mx-auto px-gutter pt-16 pb-0">
-        <SectionLabel text={np.hero.eyebrow} on="ink" class="mb-5" />
-        <h1
-          class="font-display text-white max-w-[720px] leading-tight tracking-tight mb-5"
-          style="font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 340;"
-        >
-          {np.hero.heading}
-        </h1>
-        <p class="text-[var(--color-paper-72)] text-lg leading-relaxed max-w-[560px]">
-          {np.hero.subtext}
-        </p>
-      </div>
-      <!-- Stats bar -->
-      <div class="max-w-[1440px] mx-auto px-gutter mt-10">
-        <div class="flex border-t border-[var(--color-line-on-ink)]">
-          {heroStats.map((stat) => (
-            <div class="flex-1 py-6 pr-8 flex flex-col gap-2 border-r border-[var(--color-line-on-ink)] last:border-r-0">
-              <span
-                class="font-display text-white leading-none"
-                style="font-size: 2.75rem; font-weight: 400;"
-              >{stat.value}</span>
-              <span class="font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase"
-                >{stat.label}</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. PERSONALIZATION STRIP -->
-    <div class="bg-paper border-b border-[var(--color-line)]">
-      <div class="max-w-[1440px] mx-auto px-gutter">
-        <!-- Neutral state (always visible until step 5 wires geo-IP) -->
-        <div
-          data-geo-strip="neutral"
-          class="flex items-center justify-between gap-5 py-4"
-        >
-          <div class="flex items-center gap-3">
-            <svg
-              width="17" height="17" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.6"
-              class="text-[var(--color-ink-55)] shrink-0"
-              aria-hidden="true"
-            >
-              <circle cx="12" cy="12" r="9" />
-              <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" />
-            </svg>
-            <span class="text-sm text-ink">{np.strip.neutral}</span>
-          </div>
-          <a href="#directory" class="font-mono font-semibold text-[13px] tracking-mono text-teal shrink-0">
-            {np.strip.neutralCta}
-          </a>
-        </div>
-        <!-- Geo-resolved state (hidden; step 5 will remove 'hidden' and populate data-geo-* attrs) -->
-        <div
-          data-geo-strip="resolved"
-          class="hidden items-center justify-between gap-5 py-4 bg-[rgba(44,110,119,0.05)]"
-          aria-hidden="true"
-        >
-          <div class="flex items-center gap-3">
-            <svg
-              width="17" height="17" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="1.6"
-              class="text-brass shrink-0"
-              aria-hidden="true"
-            >
-              <path d="M12 21s7-5.5 7-11a7 7 0 0 0-14 0c0 5.5 7 11 7 11z" />
-              <circle cx="12" cy="10" r="2.4" />
-            </svg>
-            <span class="text-sm text-ink">
-              <strong data-geo-count></strong>
-              {' · '}nearest:{' '}
-              <strong data-geo-nearest></strong>
-            </span>
-          </div>
-          <a data-geo-link href="#directory" class="font-mono font-semibold text-[13px] tracking-mono text-teal shrink-0"></a>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3. MAP ISLAND -->
-    <section style="background: #12222a;">
-      <NetworkMap
-        client:visible
-        locations={allLocations}
-        accessToken={import.meta.env.PUBLIC_MAPBOX_TOKEN ?? ''}
-        lang={lang}
-        mapAria={np.mapAria}
+    <section class="relative bg-ink text-white overflow-hidden">
+      <Image
+        src={heroPic}
+        alt=""
+        widths={[800, 1440]}
+        sizes="100vw"
+        loading="eager"
+        class="absolute inset-0 w-full h-full object-cover opacity-20 pointer-events-none"
+        aria-hidden="true"
       />
-      <noscript>
-        <div class="bg-ink text-center py-12 px-gutter">
-          <p class="font-mono text-sm text-[var(--color-paper-72)]">
-            Interactive map requires JavaScript. Browse the directory below.
+      <div
+        class="absolute inset-0 pointer-events-none"
+        style="background: linear-gradient(90deg, var(--color-ink) 35%, rgba(15,37,46,.55) 100%);"
+        aria-hidden="true"
+      />
+      <div class="relative max-w-[1440px] mx-auto px-gutter pt-8 pb-14">
+        <nav aria-label="Breadcrumb" class="mb-8">
+          <p class="font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase m-0">
+            <a href={`/${lang}/`} class="hover:text-gilt transition-colors">{np.hero.breadcrumbHome}</a>
+            {' / '}
+            <span class="text-white">{np.hero.heading}</span>
           </p>
-        </div>
-      </noscript>
-    </section>
-
-    <!-- 4. HOW IT WORKS -->
-    <section class="bg-paper py-section">
-      <div class="max-w-[1440px] mx-auto px-gutter">
-        <SectionLabel text={np.howItWorks.eyebrow} class="mb-4" />
-        <h2
-          class="font-display text-ink max-w-[520px] mb-12 leading-tight tracking-tight"
-          style="font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 400;"
-        >
-          {np.howItWorks.heading}
-        </h2>
-        <div
-          class="grid grid-cols-1 md:grid-cols-3"
-          style="border-top: 1px solid var(--color-line-strong);"
-        >
-          {np.howItWorks.steps.map((step) => (
-            <div class="pt-8 pb-10 md:pr-10 border-b md:border-b-0 md:border-r border-[var(--color-line)] last:border-r-0 flex flex-col gap-4">
-              <span
-                class="font-mono font-bold text-brass"
-                style="font-size: 12px; letter-spacing: .30em;"
-              >{step.no}</span>
-              <h3
-                class="font-display text-ink leading-tight"
-                style="font-size: 1.4375rem; font-weight: 450;"
-              >{step.title}</h3>
-              <p class="text-[var(--color-ink-70)] text-sm leading-relaxed m-0">{step.body}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-
-    <!-- 5. COUNTRY DIRECTORY -->
-    <section id="directory" class="bg-white py-section border-t border-[var(--color-line)]">
-      <div class="max-w-[1440px] mx-auto px-gutter">
-        <div class="flex items-end justify-between mb-8 gap-4 flex-wrap">
+        </nav>
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-16 items-center">
           <div>
-            <SectionLabel
-              text={`${np.directory.eyebrow} · ${countriesCount} COUNTRIES`}
-              class="mb-3"
-            />
-            <h2
-              class="font-display text-ink leading-tight tracking-tight"
-              style="font-size: clamp(1.5rem, 3vw, 2.125rem); font-weight: 400;"
+            <SectionLabel text={np.hero.eyebrow} on="ink" class="mb-5" />
+            <h1
+              class="font-display text-white uppercase leading-tight mb-5"
+              style="font-size: clamp(1.9rem, 3.6vw, 2.9rem); font-weight: 400; letter-spacing: .14em;"
             >
-              {np.directory.heading}
-            </h2>
+              {np.hero.heading}
+            </h1>
+            <p class="text-[var(--color-paper-72)] text-body leading-relaxed max-w-[560px] m-0">
+              {np.hero.subtext}
+            </p>
+          </div>
+          <!-- Stats -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 lg:flex">
+            {heroStats.map((stat) => (
+              <div class="flex flex-col items-center text-center gap-2 px-6 py-4 border-l border-[var(--color-line-on-ink)] first:border-l-0 lg:min-w-[120px]">
+                <svg
+                  width="26" height="26" viewBox="0 0 24 24" fill="none"
+                  stroke="var(--color-gilt)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  {stat.icon === 'brands' && (
+                    <><path d="M3 17h18l-2 3H5z" /><path d="M5 17V9l7-6 7 6v8" /><path d="M9 17v-4h6v4" /></>
+                  )}
+                  {stat.icon === 'dealers' && (
+                    <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18" /></>
+                  )}
+                  {stat.icon === 'countries' && (
+                    <><circle cx="12" cy="12" r="9" /><path d="m15 9-2 6-4 0 2-6z" /><circle cx="12" cy="12" r="1" /></>
+                  )}
+                  {stat.icon === 'continents' && (
+                    <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="3" /><path d="M12 3v6M12 15v6M3 12h6M15 12h6M5.6 5.6l4.3 4.3M14.1 14.1l4.3 4.3M5.6 18.4l4.3-4.3M14.1 9.9l4.3-4.3" /></>
+                  )}
+                </svg>
+                <span class="font-display text-gilt leading-none" style="font-size: 2rem; font-weight: 400;">{stat.value}</span>
+                <span class="font-mono text-micro tracking-mono text-[var(--color-paper-72)] uppercase">{stat.label}</span>
+              </div>
+            ))}
           </div>
         </div>
-        <!-- Grid: 4-col desktop, 2-col mobile; gap-px on bg-line creates borders -->
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-[var(--color-line)] border border-[var(--color-line)]">
-          {byCountry.map((country) => (
-            <a
-              href={country.href}
-              class="bg-white px-5 py-5 flex items-center justify-between gap-3 hover:bg-paper transition-colors"
-            >
-              <div class="flex flex-col gap-1 min-w-0">
-                <span
-                  class="font-display text-ink leading-tight truncate"
-                  style="font-size: 1.125rem; font-weight: 450;"
-                >{country.displayName}</span>
-                <span class="font-mono text-micro tracking-mono text-[var(--color-ink-55)] uppercase truncate">
-                  {country.cities}
-                </span>
-              </div>
-              <span
-                class="font-mono font-bold text-brass shrink-0"
-                style="font-size: 15px;"
-              >{country.count}</span>
-            </a>
-          ))}
+      </div>
+    </section>
+
+    <!-- 2. MAP + FILTERS + DEALER LIST (island) -->
+    <section class="bg-paper py-10">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <NetworkDirectory
+          client:visible
+          locations={allLocations}
+          brands={brands}
+          regions={regions}
+          accessToken={import.meta.env.PUBLIC_MAPBOX_TOKEN ?? ''}
+          lang={lang}
+          t={np.explorer}
+        />
+      </div>
+    </section>
+
+    <!-- 3. COUNTRY DIRECTORY -->
+    <section id="directory" class="bg-paper pb-section">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="bg-white border border-[var(--color-line)] rounded-soft p-5 md:p-7">
+          <SectionLabel text={`${np.directory.eyebrow} · ${countryCodes.length} ${np.stats.countries}`} class="mb-3" />
+          <h2
+            class="font-display text-ink leading-tight tracking-tight mb-6"
+            style="font-size: clamp(1.375rem, 2.5vw, 1.75rem); font-weight: 400;"
+          >
+            {np.directory.heading}
+          </h2>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-[var(--color-line)] border border-[var(--color-line)]">
+            {byCountry.map((country) => (
+              <a
+                href={country.href}
+                class="bg-white px-5 py-4 flex items-center justify-between gap-3 hover:bg-paper transition-colors"
+              >
+                <div class="flex flex-col gap-1 min-w-0">
+                  <span class="font-display text-ink leading-tight truncate" style="font-size: 1.0625rem; font-weight: 450;">
+                    {country.displayName}
+                  </span>
+                  <span class="font-mono text-micro tracking-mono text-[var(--color-ink-55)] uppercase truncate">
+                    {country.cities}
+                  </span>
+                </div>
+                <span class="font-mono font-bold text-brass shrink-0" style="font-size: 15px;">{country.count}</span>
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 6. CLOSING CTA -->
-    <section id="enquire" class="bg-ink text-white py-section text-center">
-      <div class="max-w-[1440px] mx-auto px-gutter">
-        <SectionLabel text={np.cta.eyebrow} on="ink" class="mb-5 justify-center" />
-        <h2
-          class="font-display text-white mb-4 max-w-[640px] mx-auto leading-tight tracking-tight"
-          style="font-size: clamp(1.75rem, 3vw, 2.75rem); font-weight: 340;"
-        >
-          {np.cta.heading}
-        </h2>
-        <p class="text-[var(--color-paper-72)] text-body leading-relaxed max-w-[500px] mx-auto mb-10">
+    <!-- 4. OUR BRANDS -->
+    <section class="bg-white border-t border-[var(--color-line)] py-10">
+      <div class="max-w-[1440px] mx-auto px-gutter flex flex-col md:flex-row md:items-center gap-8">
+        <p class="font-mono font-semibold text-[12px] tracking-mono text-ink uppercase m-0 shrink-0">
+          {np.brandsStrip.title}
+        </p>
+        <ul class="flex flex-wrap items-center justify-start md:justify-around gap-x-10 gap-y-4 flex-1 m-0 p-0 list-none">
+          {brands.map((b) => (
+            <li>
+              <a
+                href={`/${lang}/brands/${b.key}/`}
+                class="font-display text-ink hover:text-teal transition-colors uppercase"
+                style="font-size: 1.375rem; font-weight: 380; letter-spacing: .2em;"
+              >
+                {b.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- 5. CTA BAND -->
+    <section id="enquire" class="bg-ink text-white py-12">
+      <div class="max-w-[1440px] mx-auto px-gutter grid grid-cols-1 lg:grid-cols-[1fr_1fr_auto] gap-8 items-center">
+        <div>
+          <SectionLabel text={np.cta.eyebrow} on="ink" class="mb-3" />
+          <h2
+            class="font-display text-white uppercase leading-tight m-0"
+            style="font-size: clamp(1.25rem, 2.2vw, 1.75rem); font-weight: 400; letter-spacing: .12em;"
+          >
+            {np.cta.heading}
+          </h2>
+        </div>
+        <p class="text-[var(--color-paper-72)] text-body leading-relaxed m-0 lg:border-l lg:border-[var(--color-line-on-ink)] lg:pl-8">
           {np.cta.subtext}
         </p>
         <Btn variant="gilt" href={`/${lang}/#lead`}>{np.cta.ctaLabel}</Btn>
