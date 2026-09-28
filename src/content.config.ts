@@ -68,4 +68,41 @@ const dealers = defineCollection({
   }),
 });
 
-export const collections = { yachts, brands, dealers };
+// Stock = individual units available for immediate delivery (typically
+// pre-owned). The ONLY place a price is published on the site — catalogue
+// yachts keep priceEur internal.
+export const CURRENCY_KEYS = ['EUR', 'GBP', 'PLN'] as const;
+export type CurrencyKey = (typeof CURRENCY_KEYS)[number];
+export const TAX_STATUS_KEYS = ['ex-tax', 'tax-paid'] as const;
+export type TaxStatusKey = (typeof TAX_STATUS_KEYS)[number];
+
+const stock = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/stock' }),
+  schema: z.object({
+    translationKey: z.string(),
+    name: z.string(),
+    brand: z.enum(BRAND_KEYS),
+    /** translationKey of the catalogue model, when one exists */
+    modelKey: z.string().optional(),
+    year: z.number().int(),
+    lengthM: z.number(),
+    cabins: z.number().int(),
+    price: z.number().positive(),
+    currency: z.enum(CURRENCY_KEYS),
+    taxStatus: z.enum(TAX_STATUS_KEYS),
+    condition: z.enum(['new', 'used']).default('used'),
+    engineHours: z.number().int().nonnegative().optional(),
+    location: z.string().optional(),
+    beamM: z.number().optional(),
+    draftM: z.number().optional(),
+    berths: z.number().int().optional(),
+    maxSpeedKn: z.number().optional(),
+    engines: z.string().optional(),
+    category: z.enum(CATEGORY_KEYS).optional(),
+    sold: z.boolean().default(false),
+    draft: z.boolean().default(true),
+    seo: seoSchema.optional(),
+  }),
+});
+
+export const collections = { yachts, brands, dealers, stock };

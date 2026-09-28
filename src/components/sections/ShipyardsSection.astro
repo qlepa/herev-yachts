@@ -1,0 +1,82 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+
+interface BrandTile {
+  name: string;
+  href: string;
+  image: ImageMetadata | null;
+}
+
+interface Props {
+  eyebrow: string;
+  heading: string;
+  body: string;
+  image: ImageMetadata;
+  imageAlt: string;
+  brands: BrandTile[];
+}
+
+const { eyebrow, heading, body, image, imageAlt, brands } = Astro.props;
+---
+
+<section class="bg-white py-section">
+  <div class="max-w-[1440px] mx-auto px-gutter">
+
+    <!-- Wide image -->
+    <div class="relative overflow-hidden mb-14" style="aspect-ratio: 21/9;">
+      <Image
+        src={image}
+        alt={imageAlt}
+        widths={[800, 1200, 1920]}
+        sizes="(min-width: 1440px) 1352px, 100vw"
+        loading="lazy"
+        class="w-full h-full object-cover"
+      />
+    </div>
+
+    <!-- Heading -->
+    <div class="text-center max-w-[720px] mx-auto mb-12">
+      <SectionLabel text={eyebrow} class="mb-3" />
+      <h2
+        class="font-mono font-bold text-ink uppercase mb-5"
+        style="font-size: clamp(1.1rem, 2.2vw, 1.5rem); letter-spacing: var(--tracking-label);"
+      >
+        {heading}
+      </h2>
+      <p class="text-[var(--color-ink-70)] text-lg leading-relaxed" style="text-wrap: pretty;">
+        {body}
+      </p>
+    </div>
+
+    <!-- Brand tiles -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-2">
+      {brands.map((b) => (
+        <a href={b.href} class="group relative block overflow-hidden bg-ink" style="aspect-ratio: 4/3;">
+          {b.image && (
+            <Image
+              src={b.image}
+              alt={b.name}
+              widths={[300, 600]}
+              sizes="(min-width: 768px) 20vw, 50vw"
+              loading="lazy"
+              class="w-full h-full object-cover opacity-80 transition-transform ease-herev duration-image group-hover:scale-105"
+            />
+          )}
+          <div
+            class="absolute inset-0 pointer-events-none"
+            style="background: linear-gradient(180deg, rgba(15,37,46,.15) 0%, rgba(15,37,46,.55) 100%);"
+          />
+          <span
+            class="absolute inset-0 flex items-center justify-center font-display text-white text-center px-3"
+            style="font-weight: 380; font-size: 22px; letter-spacing: .18em; text-shadow: 0 1px 6px rgba(15,37,46,.6);"
+          >
+            {b.name}
+          </span>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

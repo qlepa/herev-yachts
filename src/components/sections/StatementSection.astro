@@ -1,0 +1,23 @@
+---
+interface Props {
+  headingLine1: string;
+  headingLine2: string;
+  body: string;
+}
+
+const { headingLine1, headingLine2, body } = Astro.props;
+---
+
+<section class="bg-ink py-section px-gutter">
+  <div class="max-w-[900px] mx-auto text-center">
+    <h2
+      class="font-mono font-bold text-gilt uppercase mb-8"
+      style="font-size: clamp(1.1rem, 2.4vw, 1.6rem); letter-spacing: var(--tracking-label); line-height: 1.7;"
+    >
+      {headingLine1}<br />{headingLine2}
+    </h2>
+    <p class="text-[var(--color-paper-72)] text-lg leading-relaxed" style="text-wrap: pretty;">
+      {body}
+    </p>
+  </div>
+</section>

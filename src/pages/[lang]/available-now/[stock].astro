@@ -1,0 +1,193 @@
+---
+import { getCollection, render } from 'astro:content';
+import type { ImageMetadata } from 'astro';
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import HeroSection from '../../../components/sections/HeroSection.astro';
+import YachtOverview from '../../../components/sections/YachtOverview.astro';
+import YachtGallery from '../../../components/sections/YachtGallery.astro';
+import YachtSpecs from '../../../components/sections/YachtSpecs.astro';
+import YachtLeadModule from '../../../components/sections/YachtLeadModule.astro';
+import TextLink from '../../../components/ui/TextLink.astro';
+import MobileCta from '../../../components/ui/MobileCta.astro';
+import { LOCALES, type Locale } from '../../../lib/i18n';
+import type { CategoryKey } from '../../../content.config';
+import { getTranslations } from '../../../lib/i18n-strings';
+import { getStockHero } from '../../../lib/images';
+import { formatPrice } from '../../../lib/format';
+import { brandDisplayMap } from '../../../lib/stock';
+import leadPic from '../../../assets/site/lead-image.avif';
+
+export async function getStaticPaths() {
+  const all = await getCollection('stock', (e) => !e.data.draft && !e.data.sold);
+  const paths = [];
+  for (const lang of LOCALES) {
+    for (const entry of all.filter((e) => e.id.startsWith(`${lang}/`))) {
+      paths.push({ params: { lang, stock: entry.data.translationKey } });
+    }
+  }
+  return paths;
+}
+
+const { lang, stock: slug } = Astro.params as { lang: Locale; stock: string };
+const t = getTranslations(lang);
+
+const entries = await getCollection(
+  'stock',
+  (e) => e.id.startsWith(`${lang}/`) && !e.data.draft && !e.data.sold,
+);
+const entry = entries.find((e) => e.data.translationKey === slug);
+if (!entry) return Astro.redirect(`/${lang}/available-now/`);
+
+const { Content } = await render(entry);
+const data = entry.data;
+const brandDisplay = brandDisplayMap[data.brand];
+const fullName = `${brandDisplay} ${data.name}`;
+const categoryLabel = data.category ? t.categories[data.category as CategoryKey] : undefined;
+const priceLabel = formatPrice(data.price, data.currency, lang);
+const taxLabel = data.taxStatus === 'tax-paid' ? t.stock.taxPaid : t.stock.exTax;
+
+const heroImage = await getStockHero(data.translationKey, data.draft);
+
+const specLine = [categoryLabel, String(data.year), `${data.lengthM} M`].filter(Boolean).join(' · ');
+
+const galleryGlob = import.meta.glob<{ default: ImageMetadata }>('/src/assets/stock/*/gallery-*.*');
+const galleryPrefix = `/src/assets/stock/${data.translationKey}/gallery-`;
+const galleryImages: ImageMetadata[] = await Promise.all(
+  Object.keys(galleryGlob)
+    .filter((k) => k.startsWith(galleryPrefix))
+    .sort()
+    .map(async (k) => (await galleryGlob[k]()).default),
+);
+
+const leadImage = galleryImages[0] ?? leadPic;
+
+const keyNumbers = [
+  { value: priceLabel, sub: taxLabel, label: t.stock.page.keyNumbers.price },
+  { value: String(data.year), label: t.stock.page.keyNumbers.year },
+  { value: `${data.lengthM} m`, label: t.stock.page.keyNumbers.length },
+  ...(data.engineHours !== undefined
+    ? [{ value: String(data.engineHours), label: t.stock.page.keyNumbers.hours }]
+    : []),
+  ...(data.location ? [{ value: data.location, label: t.stock.page.keyNumbers.location }] : []),
+];
+
+const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/available-now/${slug}/` }));
+
+const seoTitle       = data.seo?.title       ?? `${fullName} ${data.year} — Herev`;
+const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${priceLabel} ${taxLabel}.`;
+---
+
+<Layout lang={lang} title={seoTitle} description={seoDescription} alternates={alternates}>
+
+  <SiteHeader
+    lang={lang}
+    variant="ink"
+    currentPath={`/${lang}/available-now/${slug}/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    {heroImage && (
+      <HeroSection
+        eyebrow={t.stock.page.brandLine}
+        heading={fullName}
+        specLine={specLine}
+        cta1Label={t.yachtPage.enquireCta}
+        cta1Href="#lead"
+        cta2Label={t.yachtPage.bookViewingCta}
+        cta2Href="#lead"
+        image={heroImage}
+        imageAlt={`${fullName} yacht`}
+      />
+    )}
+
+    <!-- Key numbers incl. price — stock is the only place a price is published -->
+    <div class="bg-ink text-white border-b border-[var(--color-line-on-ink)]">
+      <div class="max-w-[1440px] mx-auto px-gutter py-[30px]">
+        <dl class="grid grid-cols-2 md:grid-cols-5 gap-y-6">
+          {keyNumbers.map((k, i) => (
+            <div
+              class:list={[
+                'flex flex-col py-2 md:py-0 md:px-8 first:md:pl-0 last:md:pr-0',
+                i < keyNumbers.length - 1 && 'md:border-r md:border-[rgba(236,239,238,.14)]',
+              ]}
+            >
+              <dd class="font-display text-[1.6rem] text-white leading-none" style="font-weight: 400;">
+                {k.value}
+                {k.sub && (
+                  <span class="font-mono text-[10px] tracking-[.2em] text-gilt ml-2 align-middle">{k.sub}</span>
+                )}
+              </dd>
+              <dt class="font-mono text-[10px] tracking-[.24em] uppercase text-[rgba(236,239,238,.6)] mt-2">{k.label}</dt>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </div>
+
+    <YachtOverview
+      label={t.yachtPage.overviewLabel}
+      insideImage={galleryImages[0] ?? heroImage}
+      yachtName={fullName}
+      enquireLabel={t.yachtPage.enquireCta}
+      enquireHref="#lead"
+    >
+      <Content />
+    </YachtOverview>
+
+    <YachtGallery
+      images={galleryImages}
+      eyebrow={t.yachtPage.galleryHeading}
+      titlePrefix={t.yachtPage.galleryTitle}
+      yachtName={fullName}
+    />
+
+    <YachtSpecs
+      eyebrow={t.yachtPage.anchorNav.specs}
+      subtitle={t.yachtPage.specsSubtitle}
+      groups={t.yachtPage.specsGroups}
+      labels={t.yachtPage.specs}
+      lengthM={data.lengthM}
+      beamM={data.beamM}
+      draftM={data.draftM}
+      cabins={data.cabins}
+      berths={data.berths}
+      engines={data.engines}
+      maxSpeedKn={data.maxSpeedKn}
+      year={data.year}
+    />
+
+    <div class="bg-white px-gutter pb-10">
+      <div class="max-w-[1440px] mx-auto">
+        <TextLink href={`/${lang}/available-now/`}>{t.stock.page.backToList}</TextLink>
+      </div>
+    </div>
+
+    <YachtLeadModule
+      eyebrow={t.yachtPage.leadEyebrow}
+      heading={`${t.stock.page.enquireHeadingPrefix} ${fullName}`}
+      brandLine={t.stock.page.brandLine}
+      ctaLabel={t.yachtPage.sendEnquiry}
+      image={leadImage}
+      imageAlt={`${fullName} yacht`}
+      fallbackContact={t.lead.fallbackContact}
+      orCallLabel={t.lead.orCall}
+      namePlaceholder={t.lead.namePlaceholder}
+      emailPlaceholder={t.yachtPage.emailPlaceholder}
+      phonePlaceholder={t.yachtPage.phonePlaceholder}
+      modelValue={`${fullName} (${data.year})`}
+      messagePlaceholder={t.lead.messagePlaceholder}
+      financingLabel={t.yachtPage.financingCheckbox}
+      privacyLabel={t.yachtPage.privacyCheckbox}
+    />
+
+    <MobileCta enquireLabel={t.yachtPage.mobileCta.enquire} />
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>

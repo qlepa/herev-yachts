@@ -36,10 +36,31 @@ export interface Translations {
   };
   categories: Record<CategoryKey, string>;
   advisory: {
+    advise: { heading: string; bullets: Array<{ lead: string; rest: string }> };
+    represent: { heading: string; bullets: Array<{ lead: string; rest: string }> };
+  };
+  stock: {
     eyebrow: string;
     heading: string;
-    steps: Array<{ number: string; title: string; body: string }>;
+    subheading: string;
+    viewAll: string;
+    enquire: string;
+    moreInfo: string;
+    exTax: string;
+    taxPaid: string;
+    page: {
+      eyebrow: string;
+      heading: string;
+      subheading: string;
+      backToList: string;
+      keyNumbers: { price: string; year: string; length: string; hours: string; location: string };
+      enquireHeadingPrefix: string;
+      brandLine: string;
+    };
   };
+  guide: { heading: string; body: string; emailPlaceholder: string; cta: string };
+  shipyards: { eyebrow: string; heading: string; body: string };
+  statement: { headingLine1: string; headingLine2: string; body: string };
   lead: {
     eyebrow: string;
     heading: string;
@@ -61,6 +82,7 @@ export interface Translations {
     countries: string;
     berths: string;
     years: string;
+    models: string;
     linkLabel: string;
     imageCaption: string;
   };
@@ -203,17 +225,17 @@ const en: Translations = {
     call: 'Call',
   },
   hero: {
-    eyebrow: 'AUTHORISED REPRESENTATION · FIVE ATELIERS',
-    heading: 'The sea, on your terms.',
+    eyebrow: 'INDEPENDENT YACHT BUYER ADVISORY',
+    heading: 'Helping you find the perfect yacht.',
     subtext:
-      "We represent five of the world's most considered yacht builders — each chosen for a different reason, all sharing an uncommon standard of finish.",
-    cta1: 'Explore by brand',
-    cta2: 'Find by length',
+      'Independent advice for yacht buyers, from first consideration to final acquisition.',
+    cta1: 'Speak with advisor',
+    cta2: 'Explore yachts',
   },
   intro: {
-    eyebrow: 'ABOUT HEREV',
-    heading: 'Five ateliers. One exacting standard.',
-    body: "We represent five of the world's most considered motor-yacht ateliers — each chosen for a different reason, all held to one standard of build. No marketplace noise; a single, trusted introduction to the boat that is yours.",
+    eyebrow: 'HEREV PARTNERS',
+    heading: 'Yacht advisory. Buyer representation. Deal negotiation.',
+    body: 'We are the leading yacht buyer advisor in Central Europe, providing end-to-end support from yacht selection to dealer negotiations, insurance and ownership solutions.',
     statLabels: { ateliers: 'ATELIERS', years: 'YEARS', relationship: 'RELATIONSHIP' },
   },
   fleet: {
@@ -223,6 +245,26 @@ const en: Translations = {
       'Five builders. One standard. Every vessel chosen because nothing else performs its role as well.',
     viewAll: 'VIEW ALL MODELS →',
     enquire: 'Enquire →',
+  },
+  stock: {
+    eyebrow: 'IMMEDIATE DELIVERY',
+    heading: 'Yachts available now',
+    subheading:
+      'For clients where time matters, we offer a handpicked selection of yachts available for immediate delivery this season.',
+    viewAll: 'VIEW ALL AVAILABLE →',
+    enquire: 'Enquire',
+    moreInfo: 'More info →',
+    exTax: 'EX TAX',
+    taxPaid: 'TAX PAID',
+    page: {
+      eyebrow: 'AVAILABLE NOW',
+      heading: 'Yachts available for immediate delivery.',
+      subheading: 'Individual units ready this season — inspected, priced and ready to hand over.',
+      backToList: '← All available yachts',
+      keyNumbers: { price: 'PRICE', year: 'YEAR', length: 'LENGTH OVERALL', hours: 'ENGINE HOURS', location: 'LOCATION' },
+      enquireHeadingPrefix: 'Enquire about this',
+      brandLine: 'AVAILABLE FOR IMMEDIATE DELIVERY',
+    },
   },
   categories: {
     flybridge: 'FLYBRIDGE CRUISER',
@@ -234,25 +276,40 @@ const en: Translations = {
     runabout: 'CLASSIC RUNABOUT',
   },
   advisory: {
-    eyebrow: 'HOW HEREV HELPS YOU BUY',
-    heading: 'Not a marketplace. A considered introduction.',
-    steps: [
-      {
-        number: '01',
-        title: 'A brief conversation',
-        body: 'We listen first: your habits on the water, the kind of anchorage you seek, the people you take. Everything else follows from that.',
-      },
-      {
-        number: '02',
-        title: 'A curated proposal',
-        body: 'From five ateliers — Galeon, Parker, Saxdor, De Antonio, Chris-Craft — we propose the two or three models that genuinely fit. No catalogue, no noise.',
-      },
-      {
-        number: '03',
-        title: 'A personal introduction',
-        body: 'We arrange a sea trial with the right marque, in the right port. You meet the builder; we stay beside you until the keys are in your hand.',
-      },
-    ],
+    advise: {
+      heading: 'We advise buyers throughout the purchase of a new yacht:',
+      bullets: [
+        { lead: 'Define the right fit', rest: 'through buyer needs analysis, model comparison and shortlist creation.' },
+        { lead: 'Secure better terms', rest: 'with pricing benchmarks, discount guidance and support in dealer negotiations.' },
+        { lead: 'Optimize specification', rest: 'across engines, layout and equipment to match real use and budget.' },
+        { lead: 'Oversee the full process', rest: 'from purchase structure and registration to handover & delivery' },
+      ],
+    },
+    represent: {
+      heading: 'Already chosen your yacht and know exactly what you want? Let us represent you.',
+      bullets: [
+        { lead: 'Leverage our experience', rest: 'and direct relationships with yacht builders across Europe.' },
+        { lead: 'Inspect the yacht in person', rest: 'through one of our trusted partner marinas.' },
+        { lead: 'Review your decision', rest: 'with our advisor and make sure nothing important has been overlooked.' },
+        { lead: 'Buy with confidence', rest: '— the wrong yacht is an expensive mistake.' },
+      ],
+    },
+  },
+  guide: {
+    heading: 'THE YACHT BUYER’S GUIDE',
+    body: 'Avoid costly mistakes and make a smarter buying decision with our practical guide for new yacht buyers.',
+    emailPlaceholder: 'Enter your email address',
+    cta: 'Get Your Copy',
+  },
+  shipyards: {
+    eyebrow: 'WE WORK WITH',
+    heading: 'THE EUROPE’S LEADING SHIPYARDS',
+    body: 'As independent advisors, we present a curated selection of brands and models we know well and regularly recommend to our clients.',
+  },
+  statement: {
+    headingLine1: 'WE DON’T SELL YACHTS',
+    headingLine2: 'WE HELP YOU BUY THE RIGHT ONE',
+    body: 'Buying a yacht is complex. We simplify the process by representing your interests at every stage — sourcing the right opportunities, navigating the market and ensuring a smooth acquisition',
   },
   lead: {
     eyebrow: 'A WARM INTRODUCTION · NO OBLIGATION',
@@ -276,6 +333,7 @@ const en: Translations = {
     countries: 'COUNTRIES',
     berths: 'BERTHS',
     years: 'YEARS',
+    models: 'MODELS',
     linkLabel: 'VIEW FULL NETWORK →',
     imageCaption: 'WARSAW · GDYNIA · PALMA',
   },
@@ -490,17 +548,17 @@ const pl: Translations = {
     call: 'Zadzwoń',
   },
   hero: {
-    eyebrow: 'AUTORYZOWANA REPREZENTACJA · PIĘĆ ATELIER',
-    heading: 'Morze, na Twoich zasadach.',
+    eyebrow: 'NIEZALEŻNE DORADZTWO DLA KUPUJĄCYCH JACHTY',
+    heading: 'Pomagamy znaleźć idealny jacht.',
     subtext:
-      'Reprezentujemy pięciu najbardziej przemyślanych producentów jachtów na świecie — każdego z innego powodu, wszystkich łączy wyjątkowy standard wykończenia.',
-    cta1: 'Odkryj według marki',
-    cta2: 'Szukaj według długości',
+      'Niezależne doradztwo dla kupujących jachty — od pierwszej myśli do finalizacji zakupu.',
+    cta1: 'Porozmawiaj z doradcą',
+    cta2: 'Zobacz jachty',
   },
   intro: {
-    eyebrow: 'O HEREV',
-    heading: 'Pięć atelier. Jeden wymagający standard.',
-    body: 'Reprezentujemy pięć najbardziej przemyślanych atelier jachtów motorowych na świecie — każde wybrane z innego powodu, wszystkie spełniające jeden standard wykonania. Żadnego rynkowego szumu; jedno, zaufane wprowadzenie do jachtu, który jest Twój.',
+    eyebrow: 'HEREV PARTNERS',
+    heading: 'Doradztwo jachtowe. Reprezentacja kupującego. Negocjacje.',
+    body: 'Jesteśmy wiodącym doradcą kupujących jachty w Europie Środkowej, zapewniając kompleksowe wsparcie — od wyboru jachtu, przez negocjacje z dealerami, po ubezpieczenie i rozwiązania własnościowe.',
     statLabels: { ateliers: 'ATELIER', years: 'LAT', relationship: 'RELACJA' },
   },
   fleet: {
@@ -510,6 +568,26 @@ const pl: Translations = {
       'Pięciu producentów. Jeden standard. Każda jednostka wybrana dlatego, że nic innego nie spełnia swojej roli równie dobrze.',
     viewAll: 'WSZYSTKIE MODELE →',
     enquire: 'Zapytaj →',
+  },
+  stock: {
+    eyebrow: 'DOSTĘPNE OD RĘKI',
+    heading: 'Jachty dostępne teraz',
+    subheading:
+      'Dla klientów, dla których liczy się czas, oferujemy starannie wybrane jachty dostępne do natychmiastowego odbioru w tym sezonie.',
+    viewAll: 'WSZYSTKIE DOSTĘPNE →',
+    enquire: 'Zapytaj',
+    moreInfo: 'Więcej →',
+    exTax: 'NETTO',
+    taxPaid: 'Z VAT',
+    page: {
+      eyebrow: 'DOSTĘPNE TERAZ',
+      heading: 'Jachty dostępne do natychmiastowego odbioru.',
+      subheading: 'Konkretne egzemplarze gotowe na ten sezon — sprawdzone, wycenione i gotowe do przekazania.',
+      backToList: '← Wszystkie dostępne jachty',
+      keyNumbers: { price: 'CENA', year: 'ROCZNIK', length: 'DŁUGOŚĆ', hours: 'MOTOGODZINY', location: 'LOKALIZACJA' },
+      enquireHeadingPrefix: 'Zapytaj o ten',
+      brandLine: 'DOSTĘPNY DO NATYCHMIASTOWEGO ODBIORU',
+    },
   },
   categories: {
     flybridge: 'KRĄŻOWNIK FLYBRIDGE',
@@ -521,25 +599,40 @@ const pl: Translations = {
     runabout: 'KLASYCZNY RUNABOUT',
   },
   advisory: {
-    eyebrow: 'JAK HEREV POMAGA KUPIĆ',
-    heading: 'Nie marketplace. Przemyślana rekomendacja.',
-    steps: [
-      {
-        number: '01',
-        title: 'Krótka rozmowa',
-        body: 'Najpierw słuchamy: Twoje nawyki na wodzie, rodzaj kotwicowiska, które szukasz, ludzie, których zabierasz. Reszta z tego wynika.',
-      },
-      {
-        number: '02',
-        title: 'Dopasowana propozycja',
-        body: 'Spośród pięciu atelier — Galeon, Parker, Saxdor, De Antonio, Chris-Craft — proponujemy dwa lub trzy modele, które naprawdę pasują. Bez katalogu, bez szumu.',
-      },
-      {
-        number: '03',
-        title: 'Osobiste wprowadzenie',
-        body: 'Organizujemy rejsy próbne z odpowiednią marką, w odpowiednim porcie. Poznajesz producenta; pozostajemy przy Tobie aż klucze znajdą się w Twoich rękach.',
-      },
-    ],
+    advise: {
+      heading: 'Doradzamy kupującym na każdym etapie zakupu nowego jachtu:',
+      bullets: [
+        { lead: 'Określamy właściwy wybór', rest: 'poprzez analizę potrzeb, porównanie modeli i stworzenie krótkiej listy.' },
+        { lead: 'Zapewniamy lepsze warunki', rest: 'dzięki benchmarkom cenowym, wiedzy o rabatach i wsparciu w negocjacjach z dealerem.' },
+        { lead: 'Optymalizujemy specyfikację', rest: 'silników, układu i wyposażenia pod realne użytkowanie i budżet.' },
+        { lead: 'Nadzorujemy cały proces', rest: 'od struktury zakupu i rejestracji po przekazanie i dostawę' },
+      ],
+    },
+    represent: {
+      heading: 'Masz już wybrany jacht i dokładnie wiesz, czego chcesz? Pozwól nam Cię reprezentować.',
+      bullets: [
+        { lead: 'Skorzystaj z naszego doświadczenia', rest: 'i bezpośrednich relacji ze stoczniami w całej Europie.' },
+        { lead: 'Obejrzyj jacht osobiście', rest: 'w jednej z naszych zaufanych marin partnerskich.' },
+        { lead: 'Zweryfikuj decyzję', rest: 'z naszym doradcą i upewnij się, że nic ważnego nie zostało pominięte.' },
+        { lead: 'Kupuj z pewnością', rest: '— niewłaściwy jacht to kosztowny błąd.' },
+      ],
+    },
+  },
+  guide: {
+    heading: 'PRZEWODNIK KUPUJĄCEGO JACHT',
+    body: 'Uniknij kosztownych błędów i podejmij mądrzejszą decyzję dzięki naszemu praktycznemu przewodnikowi dla nowych nabywców jachtów.',
+    emailPlaceholder: 'Podaj swój adres e-mail',
+    cta: 'Pobierz egzemplarz',
+  },
+  shipyards: {
+    eyebrow: 'WSPÓŁPRACUJEMY Z',
+    heading: 'WIODĄCYMI STOCZNIAMI EUROPY',
+    body: 'Jako niezależni doradcy prezentujemy starannie wybrane marki i modele, które dobrze znamy i regularnie polecamy naszym klientom.',
+  },
+  statement: {
+    headingLine1: 'NIE SPRZEDAJEMY JACHTÓW',
+    headingLine2: 'POMAGAMY KUPIĆ TEN WŁAŚCIWY',
+    body: 'Zakup jachtu jest złożony. Upraszczamy ten proces, reprezentując Twoje interesy na każdym etapie — od znalezienia właściwych okazji, przez poruszanie się po rynku, po sprawne sfinalizowanie zakupu',
   },
   lead: {
     eyebrow: 'CIEPŁE WPROWADZENIE · BEZ ZOBOWIĄZAŃ',
@@ -563,6 +656,7 @@ const pl: Translations = {
     countries: 'KRAJE',
     berths: 'MIEJSCA CUMOWANIA',
     years: 'LAT',
+    models: 'MODELI',
     linkLabel: 'PEŁNA SIEĆ →',
     imageCaption: 'WARSZAWA · GDYNIA · PALMA',
   },
@@ -777,17 +871,17 @@ const es: Translations = {
     call: 'Llamar',
   },
   hero: {
-    eyebrow: 'REPRESENTACIÓN AUTORIZADA · CINCO ATELIERS',
-    heading: 'El mar, en tus términos.',
+    eyebrow: 'ASESORÍA INDEPENDIENTE PARA COMPRADORES DE YATES',
+    heading: 'Te ayudamos a encontrar el yate perfecto.',
     subtext:
-      'Representamos a cinco de los constructores de yates más reflexivos del mundo — cada uno elegido por una razón diferente, todos compartiendo un estándar de acabado poco común.',
-    cta1: 'Explorar por marca',
-    cta2: 'Buscar por eslora',
+      'Asesoramiento independiente para compradores de yates, desde la primera idea hasta la adquisición final.',
+    cta1: 'Habla con un asesor',
+    cta2: 'Explorar yates',
   },
   intro: {
-    eyebrow: 'SOBRE HEREV',
-    heading: 'Cinco ateliers. Un estándar exigente.',
-    body: 'Representamos cinco de los ateliers de yates a motor más reflexivos del mundo — cada uno elegido por una razón diferente, todos mantenidos según un mismo estándar de construcción. Sin ruido de mercado; una única introducción de confianza al barco que es tuyo.',
+    eyebrow: 'HEREV PARTNERS',
+    heading: 'Asesoría náutica. Representación del comprador. Negociación.',
+    body: 'Somos el principal asesor de compradores de yates en Europa Central, ofreciendo apoyo integral desde la selección del yate hasta la negociación con concesionarios, el seguro y las soluciones de propiedad.',
     statLabels: { ateliers: 'ATELIERS', years: 'AÑOS', relationship: 'RELACIÓN' },
   },
   fleet: {
@@ -797,6 +891,26 @@ const es: Translations = {
       'Cinco constructores. Un estándar. Cada embarcación elegida porque nada más cumple su función igual de bien.',
     viewAll: 'VER TODOS LOS MODELOS →',
     enquire: 'Consultar →',
+  },
+  stock: {
+    eyebrow: 'ENTREGA INMEDIATA',
+    heading: 'Yates disponibles ahora',
+    subheading:
+      'Para clientes para quienes el tiempo importa, ofrecemos una selección de yates disponibles para entrega inmediata esta temporada.',
+    viewAll: 'VER TODOS LOS DISPONIBLES →',
+    enquire: 'Consultar',
+    moreInfo: 'Más información →',
+    exTax: 'SIN IMPUESTOS',
+    taxPaid: 'IMPUESTOS PAGADOS',
+    page: {
+      eyebrow: 'DISPONIBLES AHORA',
+      heading: 'Yates disponibles para entrega inmediata.',
+      subheading: 'Unidades concretas listas para esta temporada — inspeccionadas, con precio y listas para entregar.',
+      backToList: '← Todos los yates disponibles',
+      keyNumbers: { price: 'PRECIO', year: 'AÑO', length: 'ESLORA', hours: 'HORAS DE MOTOR', location: 'UBICACIÓN' },
+      enquireHeadingPrefix: 'Consultar sobre este',
+      brandLine: 'DISPONIBLE PARA ENTREGA INMEDIATA',
+    },
   },
   categories: {
     flybridge: 'CRUCERO FLYBRIDGE',
@@ -808,25 +922,40 @@ const es: Translations = {
     runabout: 'RUNABOUT CLÁSICO',
   },
   advisory: {
-    eyebrow: 'CÓMO TE AYUDA HEREV A COMPRAR',
-    heading: 'No un marketplace. Una introducción reflexiva.',
-    steps: [
-      {
-        number: '01',
-        title: 'Una breve conversación',
-        body: 'Primero escuchamos: tus hábitos en el agua, el tipo de fondeo que buscas, las personas que llevas. Todo lo demás se deduce de ahí.',
-      },
-      {
-        number: '02',
-        title: 'Una propuesta curada',
-        body: 'De cinco ateliers — Galeon, Parker, Saxdor, De Antonio, Chris-Craft — proponemos los dos o tres modelos que realmente encajan. Sin catálogo, sin ruido.',
-      },
-      {
-        number: '03',
-        title: 'Una introducción personal',
-        body: 'Organizamos una prueba de mar con la marca adecuada, en el puerto adecuado. Conoces al constructor; permanecemos a tu lado hasta que las llaves estén en tu mano.',
-      },
-    ],
+    advise: {
+      heading: 'Asesoramos a los compradores durante toda la compra de un yate nuevo:',
+      bullets: [
+        { lead: 'Definir la opción adecuada', rest: 'mediante el análisis de necesidades, la comparación de modelos y la creación de una lista corta.' },
+        { lead: 'Conseguir mejores condiciones', rest: 'con referencias de precios, orientación sobre descuentos y apoyo en la negociación con concesionarios.' },
+        { lead: 'Optimizar la especificación', rest: 'de motores, distribución y equipamiento según el uso real y el presupuesto.' },
+        { lead: 'Supervisar todo el proceso', rest: 'desde la estructura de compra y el registro hasta la entrega' },
+      ],
+    },
+    represent: {
+      heading: '¿Ya has elegido tu yate y sabes exactamente lo que quieres? Deja que te representemos.',
+      bullets: [
+        { lead: 'Aprovecha nuestra experiencia', rest: 'y nuestras relaciones directas con astilleros de toda Europa.' },
+        { lead: 'Inspecciona el yate en persona', rest: 'en uno de nuestros puertos deportivos asociados de confianza.' },
+        { lead: 'Revisa tu decisión', rest: 'con nuestro asesor y asegúrate de que nada importante se ha pasado por alto.' },
+        { lead: 'Compra con confianza', rest: '— el yate equivocado es un error costoso.' },
+      ],
+    },
+  },
+  guide: {
+    heading: 'LA GUÍA DEL COMPRADOR DE YATES',
+    body: 'Evita errores costosos y toma una decisión de compra más inteligente con nuestra guía práctica para nuevos compradores de yates.',
+    emailPlaceholder: 'Introduce tu correo electrónico',
+    cta: 'Recibir mi copia',
+  },
+  shipyards: {
+    eyebrow: 'TRABAJAMOS CON',
+    heading: 'LOS PRINCIPALES ASTILLEROS DE EUROPA',
+    body: 'Como asesores independientes, presentamos una selección de marcas y modelos que conocemos bien y recomendamos habitualmente a nuestros clientes.',
+  },
+  statement: {
+    headingLine1: 'NO VENDEMOS YATES',
+    headingLine2: 'TE AYUDAMOS A COMPRAR EL ADECUADO',
+    body: 'Comprar un yate es complejo. Simplificamos el proceso representando tus intereses en cada etapa — buscando las oportunidades adecuadas, navegando el mercado y asegurando una adquisición sin sobresaltos',
   },
   lead: {
     eyebrow: 'UNA INTRODUCCIÓN CORDIAL · SIN COMPROMISO',
@@ -850,6 +979,7 @@ const es: Translations = {
     countries: 'PAÍSES',
     berths: 'AMARRES',
     years: 'AÑOS',
+    models: 'MODELOS',
     linkLabel: 'VER RED COMPLETA →',
     imageCaption: 'VARSOVIA · GDYNIA · PALMA',
   },
@@ -1064,17 +1194,17 @@ const it: Translations = {
     call: 'Chiama',
   },
   hero: {
-    eyebrow: 'RAPPRESENTANZA AUTORIZZATA · CINQUE ATELIER',
-    heading: 'Il mare, a modo tuo.',
+    eyebrow: 'CONSULENZA INDIPENDENTE PER ACQUIRENTI DI YACHT',
+    heading: 'Ti aiutiamo a trovare lo yacht perfetto.',
     subtext:
-      'Rappresentiamo cinque dei costruttori di yacht più attenti al mondo — ognuno scelto per una ragione diversa, tutti accomunati da uno standard di finitura fuori dal comune.',
-    cta1: 'Esplora per marchio',
-    cta2: 'Cerca per lunghezza',
+      "Consulenza indipendente per acquirenti di yacht, dalla prima valutazione all'acquisto finale.",
+    cta1: 'Parla con un consulente',
+    cta2: 'Esplora gli yacht',
   },
   intro: {
-    eyebrow: 'CHI SIAMO',
-    heading: 'Cinque atelier. Uno standard esigente.',
-    body: "Rappresentiamo cinque dei più attenti atelier di yacht a motore al mondo — ciascuno scelto per una ragione diversa, tutti tenuti a uno standard costruttivo. Nessun rumore di mercato; un'unica, affidabile introduzione all'imbarcazione che è tua.",
+    eyebrow: 'HEREV PARTNERS',
+    heading: "Consulenza nautica. Rappresentanza dell'acquirente. Negoziazione.",
+    body: "Siamo il principale consulente per acquirenti di yacht nell'Europa centrale, con un supporto completo dalla scelta dello yacht alle trattative con i concessionari, fino ad assicurazione e soluzioni di proprietà.",
     statLabels: { ateliers: 'ATELIER', years: 'ANNI', relationship: 'RELAZIONE' },
   },
   fleet: {
@@ -1084,6 +1214,26 @@ const it: Translations = {
       'Cinque costruttori. Uno standard. Ogni imbarcazione scelta perché nient\'altro svolge il suo ruolo altrettanto bene.',
     viewAll: 'TUTTI I MODELLI →',
     enquire: 'Richiedi →',
+  },
+  stock: {
+    eyebrow: 'CONSEGNA IMMEDIATA',
+    heading: 'Yacht disponibili ora',
+    subheading:
+      'Per i clienti per cui il tempo conta, offriamo una selezione di yacht disponibili per consegna immediata in questa stagione.',
+    viewAll: 'TUTTI I DISPONIBILI →',
+    enquire: 'Richiedi',
+    moreInfo: 'Maggiori info →',
+    exTax: 'IVA ESCLUSA',
+    taxPaid: 'IVA PAGATA',
+    page: {
+      eyebrow: 'DISPONIBILI ORA',
+      heading: 'Yacht disponibili per consegna immediata.',
+      subheading: 'Unità concrete pronte per questa stagione — ispezionate, prezzate e pronte alla consegna.',
+      backToList: '← Tutti gli yacht disponibili',
+      keyNumbers: { price: 'PREZZO', year: 'ANNO', length: 'LUNGHEZZA', hours: 'ORE MOTORE', location: 'UBICAZIONE' },
+      enquireHeadingPrefix: 'Richiedi informazioni su questo',
+      brandLine: 'DISPONIBILE PER CONSEGNA IMMEDIATA',
+    },
   },
   categories: {
     flybridge: 'CRUISER FLYBRIDGE',
@@ -1095,25 +1245,40 @@ const it: Translations = {
     runabout: 'RUNABOUT CLASSICO',
   },
   advisory: {
-    eyebrow: 'COME HEREV TI AIUTA AD ACQUISTARE',
-    heading: 'Non un marketplace. Un\'introduzione ponderata.',
-    steps: [
-      {
-        number: '01',
-        title: 'Una breve conversazione',
-        body: 'Prima ascoltiamo: le tue abitudini in acqua, il tipo di ancoraggio che cerchi, le persone che porti con te. Tutto il resto ne deriva.',
-      },
-      {
-        number: '02',
-        title: 'Una proposta curata',
-        body: 'Da cinque atelier — Galeon, Parker, Saxdor, De Antonio, Chris-Craft — proponiamo i due o tre modelli che si adattano davvero. Nessun catalogo, nessun rumore.',
-      },
-      {
-        number: '03',
-        title: 'Un\'introduzione personale',
-        body: 'Organizziamo una prova in mare con il marchio giusto, nel porto giusto. Incontri il costruttore; restiamo al tuo fianco finché le chiavi non sono nelle tue mani.',
-      },
-    ],
+    advise: {
+      heading: 'Affianchiamo gli acquirenti in tutto il percorso di acquisto di uno yacht nuovo:',
+      bullets: [
+        { lead: 'Definire la scelta giusta', rest: "attraverso l'analisi delle esigenze, il confronto dei modelli e la creazione di una shortlist." },
+        { lead: 'Ottenere condizioni migliori', rest: 'con benchmark di prezzo, indicazioni sugli sconti e supporto nelle trattative con il concessionario.' },
+        { lead: 'Ottimizzare la specifica', rest: "di motori, layout ed equipaggiamento in base all'uso reale e al budget." },
+        { lead: "Supervisionare l'intero processo", rest: "dalla struttura dell'acquisto e l'immatricolazione fino alla consegna" },
+      ],
+    },
+    represent: {
+      heading: 'Hai già scelto il tuo yacht e sai esattamente cosa vuoi? Lascia che ti rappresentiamo.',
+      bullets: [
+        { lead: 'Sfrutta la nostra esperienza', rest: 'e i rapporti diretti con i cantieri di tutta Europa.' },
+        { lead: 'Ispeziona lo yacht di persona', rest: 'in uno dei nostri marina partner di fiducia.' },
+        { lead: 'Verifica la tua decisione', rest: 'con il nostro consulente e assicurati che nulla di importante sia stato trascurato.' },
+        { lead: 'Acquista con fiducia', rest: '— lo yacht sbagliato è un errore costoso.' },
+      ],
+    },
+  },
+  guide: {
+    heading: "LA GUIDA DELL'ACQUIRENTE DI YACHT",
+    body: "Evita errori costosi e prendi una decisione d'acquisto più consapevole con la nostra guida pratica per chi compra il primo yacht.",
+    emailPlaceholder: 'Inserisci il tuo indirizzo email',
+    cta: 'Ricevi la tua copia',
+  },
+  shipyards: {
+    eyebrow: 'LAVORIAMO CON',
+    heading: "I PRINCIPALI CANTIERI D'EUROPA",
+    body: 'Come consulenti indipendenti, presentiamo una selezione curata di marchi e modelli che conosciamo bene e raccomandiamo regolarmente ai nostri clienti.',
+  },
+  statement: {
+    headingLine1: 'NON VENDIAMO YACHT',
+    headingLine2: 'TI AIUTIAMO A COMPRARE QUELLO GIUSTO',
+    body: 'Acquistare uno yacht è complesso. Semplifichiamo il processo rappresentando i tuoi interessi in ogni fase — individuando le opportunità giuste, orientandoci nel mercato e garantendo un acquisto senza intoppi',
   },
   lead: {
     eyebrow: 'UN APPROCCIO CORDIALE · NESSUN OBBLIGO',
@@ -1137,6 +1302,7 @@ const it: Translations = {
     countries: 'PAESI',
     berths: 'ORMEGGI',
     years: 'ANNI',
+    models: 'MODELLI',
     linkLabel: 'VEDI RETE COMPLETA →',
     imageCaption: 'VARSAVIA · DANZICA · PALMA',
   },

@@ -70,6 +70,40 @@ Analogicznie: `brands/pl/nazwa-brandu.md` (wzór w załączniku
 `brand-a.md`) + folder zdjęć z `logo.svg` (lub `logo.png` na
 przezroczystym tle) i `hero.jpg`.
 
+## Jachty dostępne od ręki (`stock/`)
+
+To JEDYNY wyjątek od zasady „ceny nie są publikowane". Dotyczy
+konkretnych egzemplarzy (zwykle używanych lub demo), nie modeli
+z katalogu. Cena jest widoczna na stronie.
+
+Struktura identyczna jak dla jachtów:
+
+```
+stock/
+  en/galeon-335-gto.md
+  pl/galeon-335-gto.md
+  es/galeon-335-gto.md
+  it/galeon-335-gto.md
+zdjecia-stock/
+  galeon-335-gto/
+    hero.jpg
+    gallery-01.jpg
+```
+
+Pola obowiązkowe: `translationKey`, `name`, `brand`, `year`,
+`lengthM`, `cabins`, `price` (liczba, bez separatorów), `currency`
+(`EUR`, `GBP` lub `PLN`), `taxStatus` (`ex-tax` = cena netto /
+bez VAT, `tax-paid` = VAT opłacony).
+
+Pola opcjonalne: `modelKey` (klucz modelu z katalogu, jeśli istnieje),
+`condition` (`used` domyślnie lub `new`), `engineHours` (motogodziny),
+`location` (np. „Palma, ES"), szerokość, zanurzenie, koje, prędkość
+maks., silniki, kategoria, `seo`.
+
+Egzemplarz sprzedany: ustaw `sold: true` — znika ze strony, plik
+zostaje. Zdjęcia — te same wymagania co dla jachtów (hero
+obowiązkowe, galeria `gallery-01.jpg`…, bez planów pokładów).
+
 ## Terminy integracyjne
 
 - Komplet treści PL + EN: **[DATA — uzupełnia dev, koniec kroku 3]**

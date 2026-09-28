@@ -1,0 +1,43 @@
+---
+import Btn from '../ui/Btn.astro';
+
+interface Props {
+  heading: string;
+  body: string;
+  emailPlaceholder: string;
+  ctaLabel: string;
+}
+
+const { heading, body, emailPlaceholder, ctaLabel } = Astro.props;
+---
+
+<section class="bg-paper py-section px-gutter">
+  <div class="max-w-[720px] mx-auto text-center">
+    <h2
+      class="font-mono font-bold text-ink uppercase mb-5"
+      style="font-size: clamp(1.1rem, 2.2vw, 1.5rem); letter-spacing: var(--tracking-label);"
+    >
+      {heading}
+    </h2>
+    <p class="text-[var(--color-ink-70)] text-lg leading-relaxed mb-10" style="text-wrap: pretty;">
+      {body}
+    </p>
+
+    <!--
+      Visual only — email delivery of the guide is not wired yet
+      (same status as the enquiry form until the endpoint step).
+    -->
+    <form aria-label="Yacht buyer's guide" novalidate class="flex flex-col sm:flex-row gap-3 justify-center">
+      <input
+        type="email"
+        name="email"
+        placeholder={emailPlaceholder}
+        autocomplete="email"
+        class="w-full sm:max-w-[400px] bg-white border border-[var(--color-line-strong)] rounded-soft text-ink placeholder-[var(--color-ink-55)] px-5 py-[15px] text-sm font-body focus:outline-none focus:border-ink transition-colors"
+      />
+      <Btn variant="ink" type="submit" disabled class="justify-center shrink-0">
+        {ctaLabel}
+      </Btn>
+    </form>
+  </div>
+</section>

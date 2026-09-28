@@ -5,17 +5,18 @@ import SiteHeader from '../../components/SiteHeader.astro';
 import SiteFooter from '../../components/SiteFooter.astro';
 import HeroSection from '../../components/sections/HeroSection.astro';
 import IntroSection from '../../components/sections/IntroSection.astro';
-import FleetStrip from '../../components/sections/FleetStrip.astro';
-import TrustBand from '../../components/sections/TrustBand.astro';
-import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
+import StockStrip from '../../components/sections/StockStrip.astro';
+import AdvisorySplit from '../../components/sections/AdvisorySplit.astro';
+import GuideCapture from '../../components/sections/GuideCapture.astro';
+import ShipyardsSection from '../../components/sections/ShipyardsSection.astro';
+import StatementSection from '../../components/sections/StatementSection.astro';
 import LeadModule from '../../components/sections/LeadModule.astro';
 import NetworkTeaser from '../../components/sections/NetworkTeaser.astro';
 import MobileCta from '../../components/ui/MobileCta.astro';
 import { getLocalePaths, type Locale } from '../../lib/i18n';
 import { getTranslations } from '../../lib/i18n-strings';
-import { getYachtHero } from '../../lib/images';
-import { metresToFeet } from '../../lib/format';
-import type { CategoryKey } from '../../content.config';
+import { getYachtHero, getBrandHero } from '../../lib/images';
+import { getStockEntries, toStockCards } from '../../lib/stock';
 import locations from '../../data/locations.json';
 import homepageHero from '../../assets/site/homepage-hero.jpeg';
 import marinaPic from '../../assets/site/cannes-marina.avif';
@@ -40,11 +41,6 @@ const brandOrder: Record<string, number> = {
   galeon: 1, parker: 2, saxdor: 3, 'de-antonio': 4, 'chris-craft': 5,
 };
 
-const featuredYachts = await getCollection(
-  'yachts',
-  (e) => e.id.startsWith(`${lang}/`) && e.data.featured && !e.data.draft,
-);
-
 const allYachts = await getCollection(
   'yachts',
   (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
@@ -60,26 +56,20 @@ const allModelNames = [
     .map((y) => `${brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase()} ${y.data.name}`),
 ];
 
-featuredYachts.sort(
-  (a, b) => (brandOrder[a.data.brand] ?? 9) - (brandOrder[b.data.brand] ?? 9),
-);
+const stockUnits = (await toStockCards(await getStockEntries(lang), lang, t)).slice(0, 3);
 
-const yachtCards = await Promise.all(
-  featuredYachts.map(async (y) => ({
-    translationKey: y.data.translationKey,
-    name:           y.data.name,
-    brandDisplay:   brandDisplayMap[y.data.brand] ?? y.data.brand.toUpperCase(),
-    loaM:           y.data.lengthM,
-    loaFt:          metresToFeet(y.data.lengthM),
-    categoryLabel:  y.data.category
-      ? t.categories[y.data.category as CategoryKey]
-      : undefined,
-    image:          await getYachtHero(y.data.translationKey, y.data.draft),
-    href:           `/${lang}/yachts/${y.data.brand}/${y.data.translationKey}/`,
+const countryCount = new Set(locations.map((l) => l.country)).size;
+
+const brandTiles = await Promise.all(
+  Object.keys(brandOrder).map(async (key) => ({
+    name:  brandDisplayMap[key],
+    href:  `/${lang}/yachts/${key}/`,
+    image: await getBrandHero(key),
   })),
 );
 
-const countryCount = new Set(locations.map((l) => l.country)).size;
+const advisePic    = await getYachtHero('galeon-500-fly', false);
+const representPic = await getYachtHero('saxdor-400-gtc', false);
 
 let heroPosterSrc: string | undefined;
 try {
@@ -95,7 +85,7 @@ try {
 const networkStats = [
   { value: String(countryCount), label: t.network.countries },
   { value: '30+',                label: t.network.berths },
-  { value: '17',                 label: t.network.years },
+  { value: '60+',                label: t.network.models },
 ];
 ---
 
@@ -119,7 +109,7 @@ const networkStats = [
       heading={t.hero.heading}
       subtext={t.hero.subtext}
       cta1Label={t.hero.cta1}
-      cta1Href={`/${lang}/brands/`}
+      cta1Href="#lead"
       cta2Label={t.hero.cta2}
       cta2Href={`/${lang}/yachts/`}
     />
@@ -137,25 +127,66 @@ const networkStats = [
       ]}
     />
 
-    <TrustBand
-      brandNames={['GALEON', 'PARKER', 'SAXDOR', 'DE ANTONIO', 'CHRIS-CRAFT']}
-      awardsLine="WORLD YACHTS TROPHIES · EUROPEAN POWERBOAT OF THE YEAR · BOAT BUILDER AWARDS · 2019—2026"
+    <AdvisorySplit
+      blocks={[
+        {
+          heading:  t.advisory.advise.heading,
+          bullets:  t.advisory.advise.bullets,
+          image:    advisePic,
+          imageAlt: 'Galeon flybridge yacht under way',
+        },
+        {
+          heading:  t.advisory.represent.heading,
+          bullets:  t.advisory.represent.bullets,
+          image:    representPic,
+          imageAlt: 'Saxdor yacht at speed on open water',
+        },
+      ]}
     />
 
-    <FleetStrip
-      yachts={yachtCards}
-      eyebrow={t.fleet.eyebrow}
-      heading={t.fleet.heading}
-      subheading={t.fleet.subheading}
-      viewAllLabel={t.fleet.viewAll}
-      viewAllHref={`/${lang}/yachts/`}
-      enquireLabel={t.fleet.enquire}
+    <GuideCapture
+      heading={t.guide.heading}
+      body={t.guide.body}
+      emailPlaceholder={t.guide.emailPlaceholder}
+      ctaLabel={t.guide.cta}
     />
 
-    <AdvisoryGrid
-      eyebrow={t.advisory.eyebrow}
-      heading={t.advisory.heading}
-      steps={t.advisory.steps}
+    <ShipyardsSection
+      eyebrow={t.shipyards.eyebrow}
+      heading={t.shipyards.heading}
+      body={t.shipyards.body}
+      image={homepageHero}
+      imageAlt="Yachts running in formation along the coast"
+      brands={brandTiles}
+    />
+
+    <StatementSection
+      headingLine1={t.statement.headingLine1}
+      headingLine2={t.statement.headingLine2}
+      body={t.statement.body}
+    />
+
+    <NetworkTeaser
+      eyebrow={t.network.eyebrow}
+      heading={t.network.heading}
+      body={t.network.body}
+      stats={networkStats}
+      image={marinaPic}
+      imageAlt="Marina with yachts at sunset"
+      imageCaption={t.network.imageCaption}
+      linkLabel={t.network.linkLabel}
+      linkHref={`/${lang}/network/`}
+    />
+
+    <StockStrip
+      units={stockUnits}
+      eyebrow={t.stock.eyebrow}
+      heading={t.stock.heading}
+      subheading={t.stock.subheading}
+      viewAllLabel={t.stock.viewAll}
+      viewAllHref={`/${lang}/available-now/`}
+      enquireLabel={t.stock.enquire}
+      moreInfoLabel={t.stock.moreInfo}
     />
 
     <LeadModule
@@ -172,18 +203,6 @@ const networkStats = [
       modelPlaceholder={t.lead.modelPlaceholder}
       messagePlaceholder={t.lead.messagePlaceholder}
       models={allModelNames}
-    />
-
-    <NetworkTeaser
-      eyebrow={t.network.eyebrow}
-      heading={t.network.heading}
-      body={t.network.body}
-      stats={networkStats}
-      image={marinaPic}
-      imageAlt="Marina with yachts at sunset"
-      imageCaption={t.network.imageCaption}
-      linkLabel={t.network.linkLabel}
-      linkHref={`/${lang}/network/`}
     />
 
     </div>

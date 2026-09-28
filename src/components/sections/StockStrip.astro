@@ -1,0 +1,72 @@
+---
+import type { ImageMetadata } from 'astro';
+import SectionLabel from '../ui/SectionLabel.astro';
+import TextLink from '../ui/TextLink.astro';
+import StockCard from '../StockCard.astro';
+
+export interface StockCardData {
+  translationKey: string;
+  name: string;
+  brandDisplay: string;
+  year: number;
+  priceLabel: string;
+  taxLabel: string;
+  image: ImageMetadata | null;
+  href: string;
+}
+
+interface Props {
+  units: StockCardData[];
+  eyebrow: string;
+  heading: string;
+  subheading: string;
+  viewAllLabel: string;
+  viewAllHref: string;
+  enquireLabel: string;
+  moreInfoLabel: string;
+}
+
+const { units, eyebrow, heading, subheading, viewAllLabel, viewAllHref, enquireLabel, moreInfoLabel } =
+  Astro.props;
+---
+
+{units.length > 0 && (
+  <section class="py-section bg-paper overflow-hidden">
+    <div class="max-w-[1440px] mx-auto px-gutter">
+
+      <div class="text-center max-w-[760px] mx-auto mb-12">
+        <SectionLabel text={eyebrow} class="mb-3" />
+        <h2
+          class="font-mono font-bold text-ink uppercase mb-5"
+          style="font-size: clamp(1.1rem, 2.2vw, 1.5rem); letter-spacing: var(--tracking-label);"
+        >
+          {heading}
+        </h2>
+        <p class="text-[var(--color-ink-70)] text-lg leading-relaxed" style="text-wrap: pretty;">
+          {subheading}
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        {units.map((u) => (
+          <StockCard
+            name={u.name}
+            brandDisplay={u.brandDisplay}
+            year={u.year}
+            priceLabel={u.priceLabel}
+            taxLabel={u.taxLabel}
+            image={u.image}
+            href={u.href}
+            enquireLabel={enquireLabel}
+            moreInfoLabel={moreInfoLabel}
+          />
+        ))}
+      </div>
+
+      <div class="flex justify-center mt-10">
+        <TextLink href={viewAllHref}>{viewAllLabel}</TextLink>
+      </div>
+
+    </div>
+  </section>
+)}

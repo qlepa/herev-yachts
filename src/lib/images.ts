@@ -2,18 +2,21 @@ import type { ImageMetadata } from 'astro';
 
 type HeroLoader = () => Promise<{ default: ImageMetadata }>;
 
-export function createImageHelper(heroes: Record<string, HeroLoader>) {
-  return async function getYachtHero(
+export function createImageHelper(
+  heroes: Record<string, HeroLoader>,
+  baseDir: 'yachts' | 'stock' = 'yachts',
+) {
+  return async function getHero(
     translationKey: string,
     draft = false,
   ): Promise<ImageMetadata | null> {
     if (draft) return null;
-    const prefix = `/src/assets/yachts/${translationKey}/hero.`;
+    const prefix = `/src/assets/${baseDir}/${translationKey}/hero.`;
     const key = Object.keys(heroes).find((k) => k.startsWith(prefix));
     if (!key) {
       throw new Error(
         `[herev] Missing hero image for published yacht "${translationKey}". ` +
-          `Add src/assets/yachts/${translationKey}/hero.{jpg,jpeg,avif,webp} or keep draft: true.`,
+          `Add src/assets/${baseDir}/${translationKey}/hero.{jpg,jpeg,avif,webp} or keep draft: true.`,
       );
     }
     return (await heroes[key]()).default;
@@ -25,6 +28,12 @@ const yachtHeroes = import.meta.glob<{ default: ImageMetadata }>(
 );
 
 export const getYachtHero = createImageHelper(yachtHeroes);
+
+const stockHeroes = import.meta.glob<{ default: ImageMetadata }>(
+  '/src/assets/stock/*/hero.*',
+);
+
+export const getStockHero = createImageHelper(stockHeroes, 'stock');
 
 const brandHeroes = import.meta.glob<{ default: ImageMetadata }>(
   '/src/assets/brands/*/hero.*',

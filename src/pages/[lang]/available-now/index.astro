@@ -1,0 +1,74 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import SiteHeader from '../../../components/SiteHeader.astro';
+import SiteFooter from '../../../components/SiteFooter.astro';
+import SectionLabel from '../../../components/ui/SectionLabel.astro';
+import StockCard from '../../../components/StockCard.astro';
+import { getLocalePaths, type Locale } from '../../../lib/i18n';
+import { getTranslations } from '../../../lib/i18n-strings';
+import { getStockEntries, toStockCards } from '../../../lib/stock';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+const t = getTranslations(lang);
+
+const units = await toStockCards(await getStockEntries(lang), lang, t);
+
+const pageTitle = t.stock.heading + ' — Herev';
+const pageDescription = t.stock.subheading;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription}>
+
+  <SiteHeader
+    lang={lang}
+    variant="ink"
+    currentPath={`/${lang}/available-now/`}
+    nav={t.nav}
+  />
+
+  <main>
+
+    <section class="bg-paper pt-14 pb-10">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={t.stock.page.eyebrow} class="mb-4" />
+        <h1
+          class="font-display text-h1 text-ink mb-4 max-w-[640px]"
+          style="font-weight: 400; letter-spacing: var(--tracking-tight);"
+        >
+          {t.stock.page.heading}
+        </h1>
+        <p class="text-body text-[var(--color-ink-70)] leading-relaxed max-w-[480px]">
+          {t.stock.page.subheading}
+        </p>
+      </div>
+    </section>
+
+    <section class="bg-paper pb-section">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {units.map((u) => (
+            <StockCard
+              name={u.name}
+              brandDisplay={u.brandDisplay}
+              year={u.year}
+              priceLabel={u.priceLabel}
+              taxLabel={u.taxLabel}
+              image={u.image}
+              href={u.href}
+              enquireLabel={t.stock.enquire}
+              moreInfoLabel={t.stock.moreInfo}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+
+</Layout>
