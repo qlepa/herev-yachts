@@ -17,7 +17,7 @@ if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, {
 const t = await loadTranslations(lang, Astro);
 ---
 
-<Layout lang={lang} title="404 — Herev" noindex={true} alternates={[]}>
+<Layout lang={lang} title={`404 ${Astro.locals.siteSettings.titleSuffix}`} noindex={true} alternates={[]}>
 
   <SiteHeader
     lang={lang}

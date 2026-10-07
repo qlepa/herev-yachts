@@ -53,6 +53,9 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       podmienić URL w webhooku Sanity, stary hook usunąć
 - [ ] Webhook → Deploy Hook: filtr obejmuje wszystkie typy treści z CMS
       (bez `notificationRecipients`); test publikacji end-to-end
+- [ ] Studio → Ustawienia → Kontakt i SEO: obrazek do udostępnień
+      (1200 × 630), profile social, telefon (jeśli ma być na stronie),
+      właściwy e-mail kontaktowy
 - [ ] Odbiorcy leadów: prawdziwe adresy wpisane (dokument jest pod
       `private.notificationRecipients` od kroku 9.2 — niewidoczny bez tokena)
 - [ ] Usunięte treści testowe (posty testowe, przykładowe dokumenty)

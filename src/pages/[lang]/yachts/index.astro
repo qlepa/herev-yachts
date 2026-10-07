@@ -59,7 +59,7 @@ const yachtCards = await Promise.all(
   }),
 );
 
-const pageTitle = t.yachtsPage.heading + ' — Herev';
+const pageTitle = t.yachtsPage.heading + ' ' + Astro.locals.siteSettings.titleSuffix;
 const pageDescription = t.yachtsPage.subheading;
 ---
 

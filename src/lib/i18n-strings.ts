@@ -110,7 +110,6 @@ export interface Translations {
     modelPlaceholder: string;
     messagePlaceholder: string;
     orCall: string;
-    fallbackContact: string;
   };
   network: {
     eyebrow: string;
@@ -353,7 +352,6 @@ const en: Translations = {
     modelPlaceholder: 'Model of interest (optional)',
     messagePlaceholder: 'A few words about your plans on the water…',
     orCall: 'or call us directly',
-    fallbackContact: 'info@herev.com',
   },
   network: {
     eyebrow: 'OUR NETWORK',
@@ -722,7 +720,6 @@ const pl: Translations = {
     modelPlaceholder: 'Model, który Cię interesuje (opcjonalnie)',
     messagePlaceholder: 'Kilka słów o Twoich planach na wodzie…',
     orCall: 'lub zadzwoń do nas bezpośrednio',
-    fallbackContact: 'info@herev.com',
   },
   network: {
     eyebrow: 'NASZA SIEĆ',
@@ -1091,7 +1088,6 @@ const es: Translations = {
     modelPlaceholder: 'Modelo de interés (opcional)',
     messagePlaceholder: 'Unas palabras sobre tus planes en el agua…',
     orCall: 'o llámanos directamente',
-    fallbackContact: 'info@herev.com',
   },
   network: {
     eyebrow: 'NUESTRA RED',
@@ -1460,7 +1456,6 @@ const it: Translations = {
     modelPlaceholder: 'Modello di interesse (opzionale)',
     messagePlaceholder: 'Qualche parola sui tuoi piani in acqua…',
     orCall: 'oppure chiamaci direttamente',
-    fallbackContact: 'info@herev.com',
   },
   network: {
     eyebrow: 'LA NOSTRA RETE',

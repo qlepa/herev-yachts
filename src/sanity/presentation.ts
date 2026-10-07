@@ -4,6 +4,11 @@ import { defineDocuments, defineLocations, type PresentationPluginOptions } from
 // these pages on the document and opens the right document for a URL.
 export const resolve: PresentationPluginOptions['resolve'] = {
   locations: {
+    siteSettings: {
+      message: 'Używane na wszystkich stronach',
+      tone: 'caution',
+      locations: [{ title: 'Strona główna', href: '/en/' }],
+    },
     uiStrings: defineLocations({
       select: { language: 'language' },
       resolve: (doc) => ({

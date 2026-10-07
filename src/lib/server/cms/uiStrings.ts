@@ -3,12 +3,12 @@ import { getTranslations, type Translations } from '../../i18n-strings';
 import {
   isGroup,
   toFieldName,
-  uiStringsId,
   UI_STRINGS_SPEC,
   type GroupSpec,
   type LeafSpec,
   type UiStrings,
 } from '../../../sanity/uiStringsSpec';
+import { uiStringsId } from '../../../sanity/documentIds';
 import { loadQuery } from './client';
 
 type SpecFields = Record<string, string | LeafSpec | GroupSpec<unknown>>;

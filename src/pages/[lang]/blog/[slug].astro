@@ -56,7 +56,7 @@ const bodyHtml = toHTML(post.body as never, {
 });
 
 // Head tags never carry stega markers (invisible, but they end up in tab titles and shares).
-const pageTitle = stegaClean(post.seo?.title ?? `${post.title} — Herev`);
+const pageTitle = stegaClean(post.seo?.title ?? `${post.title} ${Astro.locals.siteSettings.titleSuffix}`);
 const pageDescription = stegaClean(post.seo?.description ?? post.excerpt);
 
 const coverImage = post.image

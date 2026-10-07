@@ -19,7 +19,7 @@ const { lang } = Astro.params as { lang: Locale };
 if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
 const t = await loadTranslations(lang, Astro);
 
-const pageTitle = t.servicesPage.hero.heading + ' — Herev';
+const pageTitle = t.servicesPage.hero.heading + ' ' + Astro.locals.siteSettings.titleSuffix;
 const pageDescription = t.servicesPage.hero.subtext;
 ---
 
@@ -54,7 +54,8 @@ const pageDescription = t.servicesPage.hero.subtext;
       image={leadPic}
       imageAlt="Private yacht viewing"
       orCallLabel={t.lead.orCall}
-      fallbackContact={t.lead.fallbackContact}
+      fallbackContact={Astro.locals.siteSettings.email}
+      callNumber={Astro.locals.siteSettings.phone}
       namePlaceholder={t.lead.namePlaceholder}
       contactPlaceholder={t.lead.contactPlaceholder}
       modelPlaceholder={t.lead.modelPlaceholder}

@@ -10,11 +10,11 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Stan
 
-- **Bieżący krok:** 9.2 — Studio po polsku i teksty interfejsu w CMS zrobione;
-  zostały Ustawienia (kontakt, dopisek do tytułu, obrazek do udostępnień,
-  profile social)
-- **Następna akcja:** Ustawienia; Tomasz: filtr webhooka
-  `_type in ["post", "uiStrings"]`
+- **Bieżący krok:** 9.2 — kod zrobiony (2026-10-07); do zamknięcia: test
+  w Studio na `herev-cms.vercel.app` (Tomasz)
+- **Następna akcja:** Tomasz: filtr webhooka
+  `_type in ["post", "uiStrings", "siteSettings"]`; przegląd Studio
+  (Ustawienia → Kontakt i SEO, Teksty interfejsu); potem krok 9.3
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
@@ -186,13 +186,19 @@ Kod:
       liczniki znaków + podgląd wyniku Google), wideo (link Vimeo/YouTube;
       link do pliku Vimeo dla tła — walidacja rozpoznaje rodzaj linku
       i podpowiada, skąd go skopiować)
-- [ ] Struktura menu Studio jak w „Mapie Studio”; singletony bez usuwania
-      i duplikowania (zrobione: Blog wg języka, Ustawienia → Odbiorcy
-      powiadomień; reszta dochodzi z kolejnymi typami)
-- [ ] Ustawienia: nawigacja, stopka (+ linki do stron tekstowych), kontakt,
-      sufiks tytułu (dziś mieszane „— Herev” i „| Herev”), domyślny opis
-      i obrazek do udostępnień (dziś brak `/og.jpg`), profile social
-      (`sameAs` w JSON-LD)
+- [x] Struktura menu Studio jak w „Mapie Studio”; singletony bez usuwania
+      i duplikowania (Blog wg języka; Ustawienia → Kontakt i SEO, Teksty
+      interfejsu, Odbiorcy powiadomień; Strony / Jachty / Marki dochodzą
+      z typami w 9.3–9.5)
+- [x] Ustawienia („Kontakt i SEO”, `siteSettings`): e-mail (zastępuje
+      `lead.fallbackContact`), telefon (pokazuje „lub zadzwoń” pod
+      formularzem), dopisek do tytułu (ujednolicony na „— Herev”: zmieniło
+      się 20 stron jachtów marki z „| Herev”), obrazek do udostępnień
+      (puste = bez `og:image`; wcześniej wskazywał nieistniejący `/og.jpg`),
+      profile social (`sameAs`). Czytane w `src/middleware.ts` →
+      `Astro.locals.siteSettings`. Etykiety menu i stopki są w Tekstach
+      interfejsu; linki do stron tekstowych w stopce → 9.3 (razem z typem).
+      Domyślny opis — niepotrzebny: każda strona ma własny
 - [x] Teksty interfejsu — dokument na język: przyciski, formularze, filtry,
       mapa, etykiety specyfikacji, kategorie, regiony, aria-labele; walidacja
       placeholderów (`{name}`, `{brand}`, `{n}`, `{b}`, `{country}`).
@@ -218,7 +224,7 @@ Kod:
       numerowana, linki względne. Dataset `development` → potem `production`
 - [x] Skrypt migracji `src/lib/i18n-strings.ts` → Sanity (idempotentny,
       stałe `_id`; najpierw `development`, potem `production`):
-      `scripts/migrate-ui-strings.ts` (+ test: każdy tekst przechodzi przez
+      `scripts/migrate-settings.ts` (+ test: każdy tekst przechodzi przez
       kształt dokumentu, placeholdery zgodne we wszystkich językach).
       Uruchomiony na obu datasetach 2026-10-07
 - [x] Skrypt porównania HTML `dist/` przed i po migracji: `scripts/compare-dist.ts`
@@ -229,9 +235,8 @@ Kod:
       (decyzja Tomasza 2026-10-07 — podgląd tekstów interfejsu wszędzie);
       strona sprawdza swój adres listą z `getStaticPaths`
       (`src/lib/staticPaths.ts`) → nieistniejący = 404
-- [ ] Presentation: lokalizacje dla dokumentów ustawień („używane na
-      wszystkich stronach”) — teksty interfejsu zrobione, Ustawienia razem
-      z dokumentem
+- [x] Presentation: lokalizacje dla dokumentów ustawień („używane na
+      wszystkich stronach”)
 
 Podział `i18n-strings.ts` (do doprecyzowania przy implementacji):
 - **Teksty interfejsu:** `nav`, `footer`, `categories`, etykiety `stock`,
@@ -346,12 +351,13 @@ Odhaczać przy migracji. Lista z przeglądu komponentów, stron i wysp.
       (`SiteHeader`, `LeadModule`, `GuideCapture`, `YachtLeadModule`,
       `YachtFilter`, strony network)
 - [ ] Liczby na stronie głównej: `5`, `17`, `1`, `30+`, `60+`
-- [ ] Sufiksy tytułów „— Herev” / „| Herev” (niespójne) → jedno ustawienie
+- [x] Sufiksy tytułów „— Herev” / „| Herev” (niespójne) → jedno ustawienie
 - [ ] Nazwy marek: `brandDisplayMap` w 7 plikach + lista w stopce
       + `knowsAbout` w `Layout` + `public/llms.txt`
 - [ ] Podpisany URL Vimeo w hero strony głównej + pobieranie posterów
       przez oEmbed (strona główna, strona jachtu)
-- [ ] Brak `/og.jpg` (domyślny obrazek do udostępnień)
+- [x] Brak `/og.jpg` (domyślny obrazek do udostępnień) — pole w Kontakt
+      i SEO; obrazek do wgrania przed startem (`docs/launch-checklist.md`)
 - [ ] Stopka: „LEGAL · PRIVACY · COOKIES” jako zwykły tekst
 
 Poza zakresem CMS, do odnotowania: brak `/favicon.ico`; domena
@@ -496,3 +502,10 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   roboczym na stronie głównej, jachtu i kraju; bez cookie — opublikowana.
   Pola wielojęzyczne (plugin) przeniesione do 9.3. Atrybuty: 335 / 2 000.
   **Ręcznie:** filtr webhooka → `_type in ["post", "uiStrings"]`.
+- **2026-10-07** — Krok 9.2: Ustawienia „Kontakt i SEO” (`siteSettings`),
+  wspólne stałe ID dokumentów `src/sanity/documentIds.ts`, skrypt migracji
+  przemianowany na `scripts/migrate-settings.ts` (teksty + ustawienia;
+  uruchomiony na obu datasetach). Porównanie buildów: poza usuniętym
+  martwym `og:image` różnią się tylko tytuły 20 stron jachtów marki
+  („| Herev” → „— Herev”). Wypełnione ustawienia (telefon, obrazek, profile)
+  sprawdzone na podglądzie roboczym.

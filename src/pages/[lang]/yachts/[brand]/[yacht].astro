@@ -161,7 +161,7 @@ const recommendedCards = await Promise.all(
 
 // --- SEO -------------------------------------------------------------------
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/yachts/${brand}/${yachtSlug}/` }));
-const seoTitle       = data.seo?.title       ?? `${fullName} — Herev`;
+const seoTitle       = data.seo?.title       ?? `${fullName} ${Astro.locals.siteSettings.titleSuffix}`;
 const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${data.lengthM}m.`;
 ---
 
@@ -320,7 +320,7 @@ const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${
       ctaLabel={tp.sendEnquiry}
       image={leadImage}
       imageAlt={`${data.name} yacht`}
-      fallbackContact={t.lead.fallbackContact}
+      fallbackContact={Astro.locals.siteSettings.email}
       orCallLabel={t.lead.orCall}
       namePlaceholder={t.lead.namePlaceholder}
       emailPlaceholder={tp.emailPlaceholder}

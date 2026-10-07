@@ -70,7 +70,7 @@ const keyNumbers = [
 
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/available-now/${slug}/` }));
 
-const seoTitle       = data.seo?.title       ?? `${fullName} ${data.year} — Herev`;
+const seoTitle       = data.seo?.title       ?? `${fullName} ${data.year} ${Astro.locals.siteSettings.titleSuffix}`;
 const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${priceLabel} ${taxLabel}.`;
 ---
 
@@ -171,7 +171,7 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
       ctaLabel={t.yachtPage.sendEnquiry}
       image={leadImage}
       imageAlt={`${fullName} yacht`}
-      fallbackContact={t.lead.fallbackContact}
+      fallbackContact={Astro.locals.siteSettings.email}
       orCallLabel={t.lead.orCall}
       namePlaceholder={t.lead.namePlaceholder}
       emailPlaceholder={t.yachtPage.emailPlaceholder}

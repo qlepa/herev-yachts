@@ -8,7 +8,7 @@ interface Props {
   title?: string;
   description?: string;
   lang?: string;
-  /** Absolute URL for OG image. Falls back to /og.jpg. */
+  /** Absolute URL for OG image. Falls back to the share image from the CMS settings (none if unset). */
   image?: string;
   /** true for 404, /admin and any other non-indexable pages. */
   noindex?: boolean;
@@ -53,7 +53,8 @@ const indexingEnabled = import.meta.env.PUBLIC_INDEXING_ENABLED === 'true';
 const shouldNoindex = noindex || !indexingEnabled;
 
 const canonicalUrl = Astro.url.href;
-const ogImage = image ?? `${siteOrigin}/og.jpg`;
+const settings = Astro.locals.siteSettings;
+const ogImage = image ?? settings.ogImageUrl;
 
 // Auto-generate alternates when no explicit prop passed.
 // Normalise relative hrefs from existing pages to absolute.
@@ -80,7 +81,7 @@ const organizationNode = {
   url: siteOrigin,
   logo: `${siteOrigin}/favicon-512.png`,
   knowsAbout: ['Galeon', 'Parker', 'Saxdor', 'De Antonio', 'Chris-Craft', 'luxury yachts', 'motorboat dealership'],
-  sameAs: [] as string[], // TODO: add LinkedIn, social profiles, Wikidata
+  sameAs: settings.socialProfiles,
 };
 
 const websiteNode = {
@@ -145,7 +146,7 @@ const ldJson = JSON.stringify({ '@context': 'https://schema.org', '@graph': ldGr
     <meta property="og:title" content={title} />
     {description && <meta property="og:description" content={description} />}
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={ogImage} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
     <meta property="og:locale" content={lang} />
     {ogLocaleAlternates.map((l) => (
       <meta property="og:locale:alternate" content={l} />
@@ -155,7 +156,7 @@ const ldJson = JSON.stringify({ '@context': 'https://schema.org', '@graph': ldGr
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     {description && <meta name="twitter:description" content={description} />}
-    <meta name="twitter:image" content={ogImage} />
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
 
     <!-- hreflang -->
     {computedAlternates.map((a) => (

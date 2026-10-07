@@ -92,7 +92,7 @@ const localBusinessSchemas = pageLocations.map((loc) => ({
   url: `https://herev.com/${lang}/network/${country}/`,
 }));
 
-const pageTitle = `${countryName} — ${np.hero.heading} — Herev`;
+const pageTitle = `${countryName} — ${np.hero.heading} ${Astro.locals.siteSettings.titleSuffix}`;
 const pageDescription = `Official Herev dealer network in ${countryName}. ${locationCount} authorised location${locationCount !== 1 ? 's' : ''}.`;
 ---
 

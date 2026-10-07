@@ -5,5 +5,7 @@ declare namespace App {
      * always false on prerendered pages (the whole production build).
      */
     draftMode?: boolean;
+    /** "Kontakt i SEO" from Sanity. Set by `src/middleware.ts` for every site page (`/[lang]/…`). */
+    siteSettings: import('./lib/server/cms/settings').SiteSettings;
   }
 }

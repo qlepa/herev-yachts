@@ -62,7 +62,7 @@ const alternates = LOCALES.map((l) => ({
   href: `/${l}/yachts/${brand}/`,
 }));
 
-const pageTitle       = `${brandDisplay} — ${t.brandPage.fleetHeading} | Herev`;
+const pageTitle       = `${brandDisplay} — ${t.brandPage.fleetHeading} ${Astro.locals.siteSettings.titleSuffix}`;
 const pageDescription = t.brandPage.fleetSubheading;
 ---
 
@@ -170,7 +170,8 @@ const pageDescription = t.brandPage.fleetSubheading;
       image={leadPic}
       imageAlt="Yacht cockpit interior"
       orCallLabel={t.lead.orCall}
-      fallbackContact={t.lead.fallbackContact}
+      fallbackContact={Astro.locals.siteSettings.email}
+      callNumber={Astro.locals.siteSettings.phone}
       namePlaceholder={t.lead.namePlaceholder}
       contactPlaceholder={t.lead.contactPlaceholder}
       modelPlaceholder={t.lead.modelPlaceholder}

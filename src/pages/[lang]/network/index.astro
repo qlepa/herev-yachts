@@ -85,7 +85,7 @@ const byCountry = countryCodes
   .sort((a, b) => b.count - a.count);
 
 const alternates = LOCALES.map((l) => ({ lang: l, href: `https://herev.com/${l}/network/` }));
-const pageTitle = `${np.hero.heading} — Herev`;
+const pageTitle = `${np.hero.heading} ${Astro.locals.siteSettings.titleSuffix}`;
 const pageDescription = np.hero.subtext;
 ---
 

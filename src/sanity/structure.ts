@@ -1,9 +1,6 @@
 import type { StructureBuilder } from 'sanity/structure';
 import { LANGUAGES } from './languages';
-import { uiStringsId } from './uiStringsSpec';
-
-/** Fixed IDs of single-instance documents. `private.*` IDs are hidden from the public API. */
-export const NOTIFICATION_RECIPIENTS_ID = 'private.notificationRecipients';
+import { NOTIFICATION_RECIPIENTS_ID, SITE_SETTINGS_ID, uiStringsId } from './documentIds';
 
 export function structure(S: StructureBuilder) {
   return S.list()
@@ -40,6 +37,10 @@ export function structure(S: StructureBuilder) {
           S.list()
             .title('Ustawienia')
             .items([
+              S.listItem()
+                .title('Kontakt i SEO')
+                .id(SITE_SETTINGS_ID)
+                .child(S.document().schemaType('siteSettings').documentId(SITE_SETTINGS_ID)),
               S.listItem()
                 .title('Teksty interfejsu')
                 .id('uiStrings')

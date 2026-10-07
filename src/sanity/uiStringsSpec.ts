@@ -35,9 +35,6 @@ export type UiStrings = {
   networkPage: Pick<Translations['networkPage'], 'stats' | 'regions' | 'explorer' | 'countryPage'>;
 };
 
-/** Fixed document ID per language. */
-export const uiStringsId = (language: string) => `uiStrings-${language}`;
-
 /** Placeholders the site replaces with real values. */
 export const PLACEHOLDERS = {
   '{name}': 'nazwa modelu',

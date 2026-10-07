@@ -8,7 +8,7 @@ import { structure } from './src/sanity/structure';
 import { resolve } from './src/sanity/presentation';
 import { LANGUAGES } from './src/sanity/languages';
 
-const SINGLETON_TYPES = new Set(['uiStrings', 'notificationRecipients']);
+const SINGLETON_TYPES = new Set(['siteSettings', 'uiStrings', 'notificationRecipients']);
 
 export default defineConfig({
   name: 'default',

@@ -51,7 +51,7 @@ Kroki ręczne (jednorazowo):
 4. **Vercel (projekt produkcyjny) → Settings → Git → Deploy Hooks:** hook
    dla brancha produkcyjnego; skopiować URL.
 5. **Sanity → API → Webhooks:** URL = Deploy Hook, trigger: Create / Update /
-   Delete, filtr `_type in ["post", "uiStrings"]` (w kolejnych krokach rozszerzany
+   Delete, filtr `_type in ["post", "uiStrings", "siteSettings"]` (w kolejnych krokach rozszerzany
    o nowe typy treści; nigdy `notificationRecipients`), „Trigger on drafts” wyłączone.
 6. **Vercel → Settings → Notifications:** e-mail przy nieudanym deploymencie
    (oba projekty).
@@ -154,7 +154,14 @@ i w każdej z nich ustaw "Translation of" na wersję EN. Treść do skopiowania:
 - SEO description: `Una guida ponderata per scegliere il tuo primo yacht. Lunghezza, categoria e ciò che cinque dei migliori costruttori al mondo raccomandano davvero.`
 - Content: pełny tekst w historii gita (`src/content/blog/it/come-scegliere-il-tuo-primo-yacht.md` sprzed usunięcia).
 
-## Teksty interfejsu (krok 9.2)
+## Ustawienia (krok 9.2)
+
+**Kontakt i SEO** (`siteSettings`, jeden dokument): e-mail i telefon pod
+formularzami, dopisek do tytułu stron, domyślny obrazek do udostępnień,
+profile social (`sameAs`). Czyta go `src/middleware.ts` dla każdej strony
+(`Astro.locals.siteSettings`). Stałe ID dokumentów: `src/sanity/documentIds.ts`.
+
+### Teksty interfejsu
 
 Przyciski, etykiety, menu, filtry, komunikaty formularzy — jeden dokument
 `uiStrings` na język (`uiStrings-en`, `uiStrings-pl`, …), w Studio:
@@ -163,11 +170,12 @@ Ustawienia → Teksty interfejsu. Lista pól, polskie opisy i placeholdery
 `loadTranslations` (`src/lib/server/cms/uiStrings.ts`); brak dokumentu albo
 pusty tekst w opublikowanej wersji = błąd buildu.
 
-Migracja z kodu (tworzy brakujące dokumenty, istniejących nie rusza;
+Migracja (teksty z kodu + Kontakt i SEO z dotychczasowymi wartościami;
+tworzy brakujące dokumenty, istniejących nie rusza;
 `--replace` nadpisuje wersją z kodu):
 
 ```bash
-npx sanity exec scripts/migrate-ui-strings.ts --with-user-token -- --dataset development
+npx sanity exec scripts/migrate-settings.ts --with-user-token -- --dataset development
 ```
 
 Sprawdzenie, że migracja nic nie zmieniła na stronie — dwa buildy

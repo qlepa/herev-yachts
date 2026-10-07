@@ -37,7 +37,7 @@ const brandCards = await Promise.all(
   })),
 );
 
-const pageTitle = t.brandsPage.heading + ' — Herev';
+const pageTitle = t.brandsPage.heading + ' ' + Astro.locals.siteSettings.titleSuffix;
 const pageDescription = t.brandsPage.subheading;
 ---
 

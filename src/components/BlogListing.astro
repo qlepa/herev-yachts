@@ -28,7 +28,7 @@ const posts = pagePosts.map((post) => ({
 const pageHref = (n: number) => (n === 1 ? `/${lang}/blog/` : `/${lang}/blog/page/${n}/`);
 const p = t.blogPage.pagination;
 const pageTitle =
-  page === 1 ? `${t.blogPage.heading} — Herev` : `${t.blogPage.heading} — ${p.page} ${page} — Herev`;
+  page === 1 ? `${t.blogPage.heading} ${Astro.locals.siteSettings.titleSuffix}` : `${t.blogPage.heading} — ${p.page} ${page} ${Astro.locals.siteSettings.titleSuffix}`;
 ---
 
 <Layout

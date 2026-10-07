@@ -20,7 +20,7 @@ const t = await loadTranslations(lang, Astro);
 
 const units = await toStockCards(await getStockEntries(lang), lang, t);
 
-const pageTitle = t.stock.heading + ' — Herev';
+const pageTitle = t.stock.heading + ' ' + Astro.locals.siteSettings.titleSuffix;
 const pageDescription = t.stock.subheading;
 ---
 
