@@ -1,6 +1,6 @@
 # Import bloga z yachts24.eu — raport
 
-Wygenerowane przez `scripts/import-yachts24-blog.ts` (dataset `development`,
+Wygenerowane przez `scripts/import-yachts24-blog.ts` (dataset `production`,
 2026-10-07). Posty: 137, zdjęcia: 408.
 
 Do ręcznego uzupełnienia w Studio (wideo i osadzenia Wix nie dają się

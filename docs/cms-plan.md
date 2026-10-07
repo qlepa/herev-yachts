@@ -193,7 +193,7 @@ Kod:
 - [x] Dataset `development` (`sanity dataset create development
       --visibility public`, 2026-10-07); dane: `sanity dataset export` /
       `import`
-- [ ] Migracja bloga z yachts24.eu (zastępuje dawny plan migracji
+- [x] Migracja bloga z yachts24.eu (zastępuje dawny plan migracji
       4 przykładowych artykułów z gita): `scripts/import-yachts24-blog.ts`
       (`npx sanity exec … --with-user-token -- --dataset <name>`), konwerter
       `scripts/yachts24/convert.ts` z testami. Lista z
@@ -369,6 +369,8 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
 | Data | Dataset | Atrybuty | Dokumenty |
 |---|---|---|---|
 | 2026-10-07 | production | 122 / 2 000 | 17 |
+| 2026-10-07 | production (po imporcie bloga yachts24) | 129 / 2 000 | 470 |
+| 2026-10-07 | development (po imporcie bloga yachts24) | 125 / 2 000 | 459 |
 
 ## Ryzyka
 
@@ -445,3 +447,10 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   usunięte pole `draft` (schemat + zapytania), usunięte nieużywane klucze
   i18n (HTML stron poza blogiem bez zmian). Nowy zakres bloga: wszystkie
   posty z yachts24.eu (137, EN, Wix) zamiast 4 przykładowych z gita.
+- **2026-10-07** — Blog z yachts24.eu zaimportowany: 137 postów EN
+  + 313 zdjęć do `development` i `production` (webhook wyłączony na czas
+  importu, żeby nie odpalić 137 buildów). Raport rzeczy do ręcznego
+  uzupełnienia: `docs/yachts24-import-report.md` (wideo z Wix/YouTube,
+  osadzenia HTML, 7 postów bez kategorii). Lista bloga ma paginację
+  (12 na stronę). Atrybuty: 129 / 2 000. Decyzja o duplikatach z
+  yachts24.eu — `docs/launch-checklist.md` §5.
