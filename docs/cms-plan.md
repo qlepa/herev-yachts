@@ -137,14 +137,14 @@ Kod:
 - [x] `docs/sanity-setup.md`: runbook „CMS i podgląd (krok 9.1)”
 
 Ręcznie (Tomasz):
-- [ ] Vercel: nowy projekt `herev-cms` z tego repo; env: `SANITY_PREVIEW=true`,
+- [x] Vercel: nowy projekt `herev-cms` z tego repo; env: `SANITY_PREVIEW=true`,
       `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`, `SANITY_API_READ_TOKEN`
 - [ ] DNS: `cms.herev.com` → projekt `herev-cms` (czeka na domenę klienta;
       do tego czasu `herev-cms.vercel.app` + tymczasowa reguła w `vercel.json`)
-- [ ] Sanity → API → CORS origins: `https://cms.herev.com` (Allow credentials)
+- [x] Sanity → API → CORS origins: `https://cms.herev.com` (Allow credentials) — tymczasowo `https://herev-cms.vercel.app`
       + `http://localhost:4321`
-- [ ] Vercel (projekt produkcyjny): Deploy Hook dla brancha produkcyjnego
-- [ ] Sanity → API → Webhooks: URL = Deploy Hook; filtr GROQ na typy treści
+- [x] Vercel (projekt produkcyjny): Deploy Hook dla brancha produkcyjnego
+- [x] Sanity → API → Webhooks: URL = Deploy Hook; filtr GROQ na typy treści
       (bez `notificationRecipients`)
 - [ ] Vercel: powiadomienia o nieudanym buildzie na Twój e-mail
 
@@ -154,7 +154,8 @@ Kryteria wyjścia:
 - [ ] Klik w tekst na podglądzie otwiera właściwe pole (Chrome i Safari)
 - [ ] „Opublikuj” → produkcja zaktualizowana automatycznie
 - [ ] Bez cookie `cms.herev.com` pokazuje tylko opublikowaną treść; `noindex`
-- [ ] Build produkcyjny bez Studio i kodu podglądu (sprawdzone w `.vercel/output`)
+- [x] Build produkcyjny bez Studio i kodu podglądu (sprawdzone w `dist/` i na
+      `herev-yachts.vercel.app`: `/admin` → 307 na CMS)
 - [ ] `pnpm build`, `pnpm typecheck`, `pnpm test` zielone; Lighthouse mobile
       bez regresji
 
