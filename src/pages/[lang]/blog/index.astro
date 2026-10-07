@@ -5,7 +5,7 @@ import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
-import { listBlogPosts } from '../../../lib/server/sanity';
+import { listBlogPosts } from '../../../lib/server/cms/blog';
 import { urlForImage, srcsetForImage } from '../../../lib/sanityImage';
 
 export function getStaticPaths() {
@@ -13,9 +13,11 @@ export function getStaticPaths() {
 }
 
 const { lang } = Astro.params as { lang: Locale };
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!LOCALES.includes(lang)) return new Response(null, { status: 404 });
 const t = getTranslations(lang);
 
-const allPosts = await listBlogPosts(lang);
+const allPosts = await listBlogPosts(lang, Astro.locals.draftMode === true);
 
 const posts = allPosts.map((post) => ({
   ...post,

@@ -4,32 +4,30 @@ import Layout from '../../../layouts/Layout.astro';
 import SiteHeader from '../../../components/SiteHeader.astro';
 import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
-import { type Locale } from '../../../lib/i18n';
+import { stegaClean } from '@sanity/client/stega';
+import { LOCALES, type Locale } from '../../../lib/i18n';
 import { getTranslations } from '../../../lib/i18n-strings';
-import { listAllBlogPosts, translationGroupId, type BlogPost } from '../../../lib/server/sanity';
+import { getBlogPost, listBlogPostParams } from '../../../lib/server/cms/blog';
 import { urlForImage, srcsetForImage, imageDimensions } from '../../../lib/sanityImage';
 
 export async function getStaticPaths() {
-  const posts = await listAllBlogPosts();
-  return posts.map((post) => {
-    const groupId = translationGroupId(post);
-    const related = posts.filter((p) => translationGroupId(p) === groupId);
-    const alternates = related.map((p) => ({
-      lang: p.locale,
-      href: `/${p.locale}/blog/${p.slug}/`,
-    }));
-    return {
-      params: { lang: post.locale, slug: post.slug },
-      props: { post, alternates },
-    };
-  });
+  return (await listBlogPostParams()).map((params) => ({ params }));
 }
 
+// Data is loaded from params, not getStaticPaths props: on the CMS deployment
+// this page renders on demand (drafts) and getStaticPaths does not run there.
 const { lang, slug } = Astro.params as { lang: Locale; slug: string };
-const { post, alternates } = Astro.props as {
-  post: BlogPost;
-  alternates: Array<{ lang: string; href: string }>;
-};
+const post = LOCALES.includes(lang)
+  ? await getBlogPost(lang, slug, Astro.locals.draftMode === true)
+  : null;
+if (!post) {
+  if (Astro.isPrerendered) throw new Error(`Blog post ${lang}/${slug} listed but not found`);
+  return new Response(null, { status: 404 });
+}
+const alternates = post.translations.map((p) => ({
+  lang: p.locale,
+  href: `/${p.locale}/blog/${p.slug}/`,
+}));
 const t = getTranslations(lang);
 
 function escapeAttr(value: string): string {
@@ -54,8 +52,9 @@ const bodyHtml = toHTML(post.body as never, {
   },
 });
 
-const pageTitle = post.seo?.title ?? `${post.title} — Herev`;
-const pageDescription = post.seo?.description ?? post.excerpt;
+// Head tags never carry stega markers (invisible, but they end up in tab titles and shares).
+const pageTitle = stegaClean(post.seo?.title ?? `${post.title} — Herev`);
+const pageDescription = stegaClean(post.seo?.description ?? post.excerpt);
 
 const coverImage = post.image
   ? {
@@ -79,7 +78,7 @@ const coverImage = post.image
   dateModified={post.updatedAt}
   breadcrumbs={[
     { position: 1, name: 'Blog', item: `/${lang}/blog/` },
-    { position: 2, name: post.title, item: `/${lang}/blog/${slug}/` },
+    { position: 2, name: stegaClean(post.title), item: `/${lang}/blog/${slug}/` },
   ]}
 >
   <SiteHeader lang={lang} variant="ink" currentPath={`/${lang}/blog/${slug}/`} nav={t.nav} alternates={alternates} />

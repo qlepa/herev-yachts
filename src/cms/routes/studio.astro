@@ -1,5 +1,9 @@
 ---
-import StudioApp from '../islands/StudioApp';
+import StudioApp from '../../islands/StudioApp';
+
+// One HTML shell for every Studio URL (/admin, /admin/structure/…); the
+// Studio routes itself in the browser.
+export const prerender = false;
 ---
 
 <!doctype html>

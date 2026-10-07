@@ -1,8 +1,10 @@
 import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
+import { presentationTool } from 'sanity/presentation';
 import { visionTool } from '@sanity/vision';
 import { schemaTypes } from './src/sanity/schemaTypes';
 import { structure } from './src/sanity/structure';
+import { resolve } from './src/sanity/presentation';
 
 const SINGLETON_TYPES = new Set(['notificationRecipients']);
 
@@ -14,7 +16,21 @@ export default defineConfig({
   dataset: 'production',
   basePath: '/admin',
 
-  plugins: [structureTool({ structure }), visionTool()],
+  plugins: [
+    structureTool({ structure }),
+    presentationTool({
+      title: 'Podgląd',
+      resolve,
+      previewUrl: {
+        initial: '/en/blog/',
+        previewMode: {
+          enable: '/api/draft-mode/enable',
+          disable: '/api/draft-mode/disable',
+        },
+      },
+    }),
+    visionTool(),
+  ],
 
   schema: {
     types: schemaTypes,

@@ -4,7 +4,8 @@ Zakres (Krok 4): blog (en/pl/es/it) + singleton `notificationRecipients`.
 Reszta treści (jachty/marki/dealerzy) zostaje w `src/content/` — patrz
 `docs/agency_handover.md`.
 
-Project ID: `9djarxf8`, dataset: `production` (prywatny).
+Project ID: `9djarxf8`, dataset: `production` (publiczny od wygaśnięcia
+triala Growth — co to oznacza: decyzja D13 w `docs/cms-plan.md`).
 
 ## Setup — status
 
@@ -19,9 +20,52 @@ Project ID: `9djarxf8`, dataset: `production` (prywatny).
       (świadomie bez `notificationRecipients` — ten dokument czyta endpoint
       leadowy w locie, edycja nie powinna odpalać rebuilda)
 
+## CMS i podgląd (krok 9.1) — `cms.herev.com`
+
+Studio i podgląd wersji roboczych działają na osobnym projekcie Vercel
+z tego samego repo. Flaga `SANITY_PREVIEW=true` włącza adapter Vercel,
+Studio (`/admin`), endpointy `/api/draft-mode/enable|disable` i renderowanie
+stron z treścią z CMS na żądanie (`src/cms/integration.ts`). Produkcja
+(`herev.com`) jest budowana bez flagi: czysto statyczna, bez Studio;
+`herev.com/admin` przekierowuje na `cms.herev.com/admin` (`vercel.json`).
+
+Kroki ręczne (jednorazowo):
+
+1. **Vercel → Add New → Project** → to samo repo, nazwa `herev-cms`.
+   Environment Variables: `SANITY_PREVIEW=true`,
+   `PUBLIC_SANITY_PROJECT_ID=9djarxf8`, `PUBLIC_SANITY_DATASET=production`,
+   `SANITY_API_READ_TOKEN` (ten sam token co produkcja), `PUBLIC_MAPBOX_TOKEN`.
+   **Nie** ustawiać `PUBLIC_INDEXING_ENABLED` — CMS ma zawsze `noindex`.
+2. **Domena:** `herev-cms` → Settings → Domains → `cms.herev.com`; w DNS
+   rekord CNAME `cms` → `cname.vercel-dns.com`.
+3. **Sanity → manage → API → CORS origins:** `https://cms.herev.com`
+   i `http://localhost:4321`, oba z „Allow credentials”.
+4. **Vercel (projekt produkcyjny) → Settings → Git → Deploy Hooks:** hook
+   dla brancha produkcyjnego; skopiować URL.
+5. **Sanity → API → Webhooks:** URL = Deploy Hook, trigger: Create / Update /
+   Delete, filtr `_type == "post"` (w kolejnych krokach rozszerzany o nowe
+   typy treści; nigdy `notificationRecipients`), „Trigger on drafts” wyłączone.
+6. **Vercel → Settings → Notifications:** e-mail przy nieudanym deploymencie
+   (oba projekty).
+
+Jak to działa: w Studio zakładka **Podgląd** (Presentation tool) otwiera
+stronę w ramce. Studio zapisuje w datasecie jednorazowy sekret i woła
+`/api/draft-mode/enable`; endpoint sprawdza sekret i ustawia cookie
+`herev-draft-mode` (httpOnly, wartość = HMAC z tokena odczytu — nie da się
+jej podrobić). Z cookie strony bloga czytają wersje robocze i oznaczają teksty
+niewidocznymi znacznikami (stega), więc klik w tekst otwiera pole. Każda
+zmiana w Studio przeładowuje podgląd. Bez cookie `cms.herev.com` pokazuje
+tylko opublikowaną treść.
+
+Lokalnie: `SANITY_PREVIEW=true pnpm dev` → `http://localhost:4321/admin`.
+`SANITY_PREVIEW=true pnpm build` na Windows kończy się błędem `EPERM symlink`
+w ostatnim kroku adaptera (brak uprawnień do symlinków bez trybu dewelopera) —
+ograniczenie lokalne; kompilacja Astro przechodzi przed tym krokiem, a build
+na Vercelu (Linux) jest pełny.
+
 ## Dla edytora treści (jak dodać/edytować post)
 
-1. Wejdź na `/admin`, zaloguj się kontem Sanity
+1. Wejdź na `https://cms.herev.com/admin`, zaloguj się kontem Sanity
 2. **Blog posts** → **Create** → uzupełnij pola:
    - Title, Slug (generuje się automatycznie z tytułu, także dla polskich znaków)
    - Language

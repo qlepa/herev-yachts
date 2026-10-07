@@ -118,8 +118,14 @@ i porównywarki w 5 językach. Seed danych demo: jachty per brand,
 lokalizacje świat (realne showroomy z publicznych stron brandów,
 jeśli dane produkcyjne nie dotarły) — na preview deploy, nie prod.
 
+## Krok 9 — cała treść w CMS (Sanity) + podgląd przed publikacją
+
+Plan, decyzje, podkroki 9.1–9.6 i postęp: **`docs/cms-plan.md`**
+(tracker — czytać na początku każdej sesji nad CMS-em).
+
 ## Poza MVP — nie implementuj, nie przygotowuj
 
 Konfigurator, newsletter, pełnotekstowa wyszukiwarka
 z podpowiedziami, automatyczny routing regionalny leadów, blog w 3.
-języku, preview mode Sanity.
+języku. (Preview mode Sanity przeniesiony do kroku 9 — decyzja
+2026-10-07.)
