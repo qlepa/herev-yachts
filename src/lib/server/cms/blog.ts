@@ -56,7 +56,7 @@ export function cleanSummary<T extends BlogPostSummary>(post: T): T {
 
 export async function listBlogPosts(locale: Locale, draftMode: boolean): Promise<BlogPostSummary[]> {
   const posts = await loadQuery<BlogPostSummary[]>(
-    `*[_type == "post" && locale == $locale && draft != true] | order(publishedAt desc) {${SUMMARY_FIELDS}}`,
+    `*[_type == "post" && locale == $locale] | order(publishedAt desc) {${SUMMARY_FIELDS}}`,
     { locale },
     draftMode,
   );
@@ -65,7 +65,7 @@ export async function listBlogPosts(locale: Locale, draftMode: boolean): Promise
 
 /** Route params of every published post — for getStaticPaths in the production build. */
 export async function listBlogPostParams(): Promise<Array<{ lang: Locale; slug: string }>> {
-  return client.fetch(`*[_type == "post" && draft != true] { "lang": locale, "slug": slug.current }`);
+  return client.fetch(`*[_type == "post"] { "lang": locale, "slug": slug.current }`);
 }
 
 export async function getBlogPost(
@@ -74,11 +74,11 @@ export async function getBlogPost(
   draftMode: boolean,
 ): Promise<BlogPost | null> {
   const post = await loadQuery<BlogPost | null>(
-    `*[_type == "post" && locale == $locale && slug.current == $slug && draft != true][0] {
+    `*[_type == "post" && locale == $locale && slug.current == $slug][0] {
       ${SUMMARY_FIELDS},
       body,
       seo,
-      "translations": *[_type == "post" && draft != true
+      "translations": *[_type == "post"
         && coalesce(translationOf._ref, _id) == coalesce(^.translationOf._ref, ^._id)] {
         locale,
         "slug": slug.current

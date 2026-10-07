@@ -89,13 +89,6 @@ export const postType = defineType({
       type: 'string',
     }),
     defineField({
-      name: 'draft',
-      title: 'Draft',
-      description: 'Draft posts are excluded from the site build.',
-      type: 'boolean',
-      initialValue: false,
-    }),
-    defineField({
       name: 'image',
       title: 'Cover image',
       type: 'image',

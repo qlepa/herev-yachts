@@ -45,14 +45,12 @@ export interface NavStrings {
   network: string;
   blog: string;
   enquire: string;
-  call: string;
 }
 
 export interface Translations {
   meta: { title: string; description: string };
   nav: NavStrings;
   hero: {
-    eyebrow: string;
     heading: string;
     subtext: string;
     cta1: string;
@@ -65,10 +63,6 @@ export interface Translations {
     statLabels: { ateliers: string; years: string; relationship: string };
   };
   fleet: {
-    eyebrow: string;
-    heading: string;
-    subheading: string;
-    viewAll: string;
     enquire: string;
   };
   categories: Record<CategoryKey, string>;
@@ -115,11 +109,8 @@ export interface Translations {
     eyebrow: string;
     heading: string;
     body: string;
-    locations: string;
-    brands: string;
     countries: string;
     berths: string;
-    years: string;
     models: string;
     linkLabel: string;
     imageCaption: string;
@@ -231,7 +222,7 @@ export interface Translations {
     stats: { brands: string; dealers: string; countries: string; continents: string };
     regions: Record<RegionKey, string>;
     explorer: DirectoryStrings;
-    directory: { eyebrow: string; heading: string; viewAll: string };
+    directory: { eyebrow: string; heading: string };
     brandsStrip: { title: string };
     cta: { eyebrow: string; heading: string; subtext: string; ctaLabel: string };
     countryPage: {
@@ -260,10 +251,8 @@ const en: Translations = {
     network: 'Our Network',
     blog: 'Blog',
     enquire: 'Enquire',
-    call: 'Call',
   },
   hero: {
-    eyebrow: 'INDEPENDENT YACHT BUYER ADVISORY',
     heading: 'Helping you find the perfect yacht.',
     subtext:
       'Independent advice for yacht buyers, from first consideration to final acquisition.',
@@ -277,11 +266,6 @@ const en: Translations = {
     statLabels: { ateliers: 'ATELIERS', years: 'YEARS', relationship: 'RELATIONSHIP' },
   },
   fleet: {
-    eyebrow: 'FEATURED FLEET · MMXXVI',
-    heading: 'A short, deliberate selection.',
-    subheading:
-      'Five builders. One standard. Every vessel chosen because nothing else performs its role as well.',
-    viewAll: 'VIEW ALL MODELS →',
     enquire: 'Enquire →',
   },
   stock: {
@@ -367,11 +351,8 @@ const en: Translations = {
     eyebrow: 'OUR NETWORK',
     heading: 'Authorised presence across key sailing waters.',
     body: 'Our showrooms are positioned where yachts are used, not just sold. Each location is an authorised point of service for the marques it carries.',
-    locations: 'LOCATIONS',
-    brands: 'BRANDS',
     countries: 'COUNTRIES',
     berths: 'BERTHS',
-    years: 'YEARS',
     models: 'MODELS',
     linkLabel: 'VIEW FULL NETWORK →',
     imageCaption: 'WARSAW · GDYNIA · PALMA',
@@ -604,7 +585,6 @@ const en: Translations = {
     directory: {
       eyebrow: 'DIRECTORY',
       heading: 'Browse the network by country',
-      viewAll: 'VIEW ALL COUNTRIES →',
     },
     brandsStrip: { title: 'OUR BRANDS' },
     cta: {
@@ -639,10 +619,8 @@ const pl: Translations = {
     network: 'Nasza Sieć',
     blog: 'Blog',
     enquire: 'Zapytaj',
-    call: 'Zadzwoń',
   },
   hero: {
-    eyebrow: 'NIEZALEŻNE DORADZTWO DLA KUPUJĄCYCH JACHTY',
     heading: 'Pomagamy znaleźć idealny jacht.',
     subtext:
       'Niezależne doradztwo dla kupujących jachty — od pierwszej myśli do finalizacji zakupu.',
@@ -656,11 +634,6 @@ const pl: Translations = {
     statLabels: { ateliers: 'ATELIER', years: 'LAT', relationship: 'RELACJA' },
   },
   fleet: {
-    eyebrow: 'WYBRANA FLOTA · MMXXVI',
-    heading: 'Krótka, przemyślana selekcja.',
-    subheading:
-      'Pięciu producentów. Jeden standard. Każda jednostka wybrana dlatego, że nic innego nie spełnia swojej roli równie dobrze.',
-    viewAll: 'WSZYSTKIE MODELE →',
     enquire: 'Zapytaj →',
   },
   stock: {
@@ -746,11 +719,8 @@ const pl: Translations = {
     eyebrow: 'NASZA SIEĆ',
     heading: 'Autoryzowana obecność na kluczowych akwenach.',
     body: 'Nasze salony są tam, gdzie jachty są użytkowane, nie tylko sprzedawane. Każda lokalizacja to autoryzowany punkt serwisowy dla marek, które reprezentuje.',
-    locations: 'SALONY',
-    brands: 'MARKI',
     countries: 'KRAJE',
     berths: 'MIEJSCA CUMOWANIA',
-    years: 'LAT',
     models: 'MODELI',
     linkLabel: 'PEŁNA SIEĆ →',
     imageCaption: 'WARSZAWA · GDYNIA · PALMA',
@@ -983,7 +953,6 @@ const pl: Translations = {
     directory: {
       eyebrow: 'KATALOG',
       heading: 'Przeglądaj sieć według kraju',
-      viewAll: 'WSZYSTKIE KRAJE →',
     },
     brandsStrip: { title: 'NASZE MARKI' },
     cta: {
@@ -1018,10 +987,8 @@ const es: Translations = {
     network: 'Nuestra Red',
     blog: 'Blog',
     enquire: 'Consultar',
-    call: 'Llamar',
   },
   hero: {
-    eyebrow: 'ASESORÍA INDEPENDIENTE PARA COMPRADORES DE YATES',
     heading: 'Te ayudamos a encontrar el yate perfecto.',
     subtext:
       'Asesoramiento independiente para compradores de yates, desde la primera idea hasta la adquisición final.',
@@ -1035,11 +1002,6 @@ const es: Translations = {
     statLabels: { ateliers: 'ATELIERS', years: 'AÑOS', relationship: 'RELACIÓN' },
   },
   fleet: {
-    eyebrow: 'FLOTA DESTACADA · MMXXVI',
-    heading: 'Una selección breve y deliberada.',
-    subheading:
-      'Cinco constructores. Un estándar. Cada embarcación elegida porque nada más cumple su función igual de bien.',
-    viewAll: 'VER TODOS LOS MODELOS →',
     enquire: 'Consultar →',
   },
   stock: {
@@ -1125,11 +1087,8 @@ const es: Translations = {
     eyebrow: 'NUESTRA RED',
     heading: 'Presencia autorizada en aguas de navegación clave.',
     body: 'Nuestros concesionarios están donde se usan los yates, no solo donde se venden. Cada ubicación es un punto de servicio autorizado para las marcas que representa.',
-    locations: 'UBICACIONES',
-    brands: 'MARCAS',
     countries: 'PAÍSES',
     berths: 'AMARRES',
-    years: 'AÑOS',
     models: 'MODELOS',
     linkLabel: 'VER RED COMPLETA →',
     imageCaption: 'VARSOVIA · GDYNIA · PALMA',
@@ -1362,7 +1321,6 @@ const es: Translations = {
     directory: {
       eyebrow: 'DIRECTORIO',
       heading: 'Explora la red por país',
-      viewAll: 'VER TODOS LOS PAÍSES →',
     },
     brandsStrip: { title: 'NUESTRAS MARCAS' },
     cta: {
@@ -1397,10 +1355,8 @@ const it: Translations = {
     network: 'La Nostra Rete',
     blog: 'Blog',
     enquire: 'Richiedi',
-    call: 'Chiama',
   },
   hero: {
-    eyebrow: 'CONSULENZA INDIPENDENTE PER ACQUIRENTI DI YACHT',
     heading: 'Ti aiutiamo a trovare lo yacht perfetto.',
     subtext:
       "Consulenza indipendente per acquirenti di yacht, dalla prima valutazione all'acquisto finale.",
@@ -1414,11 +1370,6 @@ const it: Translations = {
     statLabels: { ateliers: 'ATELIER', years: 'ANNI', relationship: 'RELAZIONE' },
   },
   fleet: {
-    eyebrow: 'FLOTTA IN EVIDENZA · MMXXVI',
-    heading: 'Una selezione breve e deliberata.',
-    subheading:
-      'Cinque costruttori. Uno standard. Ogni imbarcazione scelta perché nient\'altro svolge il suo ruolo altrettanto bene.',
-    viewAll: 'TUTTI I MODELLI →',
     enquire: 'Richiedi →',
   },
   stock: {
@@ -1504,11 +1455,8 @@ const it: Translations = {
     eyebrow: 'LA NOSTRA RETE',
     heading: 'Presenza autorizzata nelle principali acque di navigazione.',
     body: 'I nostri showroom si trovano dove gli yacht vengono utilizzati, non solo venduti. Ogni sede è un punto di assistenza autorizzato per i marchi che rappresenta.',
-    locations: 'SEDI',
-    brands: 'MARCHI',
     countries: 'PAESI',
     berths: 'ORMEGGI',
-    years: 'ANNI',
     models: 'MODELLI',
     linkLabel: 'VEDI RETE COMPLETA →',
     imageCaption: 'VARSAVIA · DANZICA · PALMA',
@@ -1741,7 +1689,6 @@ const it: Translations = {
     directory: {
       eyebrow: 'CATALOGO',
       heading: 'Esplora la rete per paese',
-      viewAll: 'VEDI TUTTI I PAESI →',
     },
     brandsStrip: { title: 'I NOSTRI MARCHI' },
     cta: {

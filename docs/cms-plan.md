@@ -11,8 +11,8 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 ## Stan
 
 - **Bieżący krok:** 9.2 — nierozpoczęty (9.1 zamknięty 2026-10-07)
-- **Następna akcja:** decyzje z „Do potwierdzenia” dotyczące 9.2 (posty
-  testowe, pole `draft`, nieużywane klucze i18n), potem kod 9.2
+- **Następna akcja:** odpowiedzi na pytania o blog z yachts24.eu (sekcja
+  „Do potwierdzenia”), potem kod 9.2
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
@@ -43,16 +43,21 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
       i uprzedzenia klienta.
 - [ ] Krok 5 backlogu: `output: 'static'` + adapter (endpointy z
       `prerender = false`) zamiast `output: 'server'` — strony zostają statyczne.
-- [ ] Usunięcie pola `draft` z posta — dubluje natywne wersje robocze Sanity
-      i myli edytora (krok 9.2).
+- [x] Usunięcie pola `draft` z posta — **tak** (2026-10-07, zrobione)
 - [ ] `public/700 SKY-20260725T204625Z-1-001/` (41 zdjęć + PDF klienta,
       nieużywane, a publicznie dostępne) — wgrać do CMS jako jacht czy usunąć?
-- [ ] Klucze i18n, których nic nie wyświetla: `t.hero.eyebrow`, `t.fleet.*`,
-      `t.nav.call`, `t.network.locations|brands|years`,
-      `t.networkPage.directory.viewAll`, `t.lead.orCall`. Domyślnie nie
-      migrujemy — chyba że mają wrócić na stronę.
-- [ ] Usunąć z Sanity 2 testowe posty: `new-herev-cms-post` (EN)
-      i `pierwszy-polski-post-as` (PL)?
+- [x] Nieużywane klucze i18n — **usunąć** (2026-10-07, zrobione): `nav.call`,
+      `hero.eyebrow`, `fleet.eyebrow|heading|subheading|viewAll`,
+      `network.locations|brands|years`, `networkPage.directory.viewAll`.
+      Zostają: `fleet.enquire` (używany) i `lead.orCall` (renderowany przez
+      `LeadModule`, gdy dostanie numer telefonu — źródłem będzie „Kontakt”
+      w Ustawieniach, 9.2)
+- [x] Testowe posty — **usunąć wszystkie** (2026-10-07, zrobione; w Sanity
+      0 postów)
+- [ ] Blog z yachts24.eu (137 postów EN, Wix) — przenieść wszystkie
+      (decyzja 2026-10-07). Otwarte: własność treści, los starej strony
+      (przekierowania/canonical), wersje PL/ES/IT, posty promujące usługi
+      Yachts24, mapowanie kategorii
 
 ## Architektura
 
@@ -186,10 +191,12 @@ Kod:
       Free (dokument nie był jeszcze opublikowany, więc bez migracji danych)
 - [ ] Dataset `development` (`sanity dataset create development
       --visibility public`); dane: `sanity dataset export` / `import`
-- [ ] Migracja 4 artykułów bloga z historii gita
-      (`git show eee6057^:src/content/blog/<locale>/<slug>.md`, EN/PL/ES/IT)
-      skryptem: markdown → Portable Text, `translationOf` → wersja EN.
-      Zastępuje ręczną „Fazę C” z kroku 4 (nigdy niewykonaną)
+- [ ] Migracja bloga z yachts24.eu (zastępuje dawny plan migracji
+      4 przykładowych artykułów z gita): skrypt
+      `scripts/import-yachts24-blog` — lista z
+      `yachts24.eu/blog-posts-sitemap.xml`, metadane z JSON-LD posta, treść
+      Wix Ricos → Portable Text, obrazy → zasoby Sanity, stałe `_id`
+      (idempotentny), najpierw dataset `development`
 - [ ] Skrypt migracji `src/lib/i18n-strings.ts` → Sanity (idempotentny,
       stałe `_id`; najpierw `development`, potem `production`)
 - [ ] Skrypt porównania tekstu HTML `dist/` przed i po migracji
@@ -427,3 +434,8 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   Sanity–Vercel dodała CORS bez „Allow credentials” — trzeba było dodać
   wpis ponownie z zaznaczoną opcją. Lista przed startem:
   `docs/launch-checklist.md`.
+- **2026-10-07** — Decyzje do 9.2: usunięte 2 testowe posty (Sanity CLI,
+  konto Tomasza; w datasecie 0 postów — produkcja przebudowana webhookiem),
+  usunięte pole `draft` (schemat + zapytania), usunięte nieużywane klucze
+  i18n (HTML stron poza blogiem bez zmian). Nowy zakres bloga: wszystkie
+  posty z yachts24.eu (137, EN, Wix) zamiast 4 przykładowych z gita.
