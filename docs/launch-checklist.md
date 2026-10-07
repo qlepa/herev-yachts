@@ -49,6 +49,8 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       Growth); usunąć zbędne konta
 - [ ] Plan Growth (warunki: „Limity planu Free” w `docs/cms-plan.md`);
       po przejściu rozważyć dataset prywatny
+- [ ] Nowy Deploy Hook w Vercelu (stary URL był wklejany w rozmowy) →
+      podmienić URL w webhooku Sanity, stary hook usunąć
 - [ ] Webhook → Deploy Hook: filtr obejmuje wszystkie typy treści z CMS
       (bez `notificationRecipients`); test publikacji end-to-end
 - [ ] Prawdziwe adresy w odbiorcach leadów dopiero, gdy dokument jest pod
