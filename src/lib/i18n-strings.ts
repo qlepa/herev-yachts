@@ -1,3 +1,10 @@
+/**
+ * Site texts per language. The UI texts listed in src/sanity/uiStringsSpec.ts
+ * are edited in Sanity and override the values below
+ * (src/lib/server/cms/uiStrings.ts) — their copies here are only the source
+ * of scripts/migrate-ui-strings.ts and go away in CMS step 9.6. Page content
+ * (section headings and paragraphs) is still edited here until step 9.3.
+ */
 import type { Locale } from './i18n';
 import type { CategoryKey } from '../content.config';
 import type { GalleryCategory } from './yacht-enums';

@@ -10,10 +10,11 @@ import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import { LOCALES, type Locale } from '../../../lib/i18n';
 import { BRAND_KEYS } from '../../../content.config';
 import type { BrandKey, CategoryKey } from '../../../content.config';
-import { getTranslations } from '../../../lib/i18n-strings';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getBrandHero, getYachtHero } from '../../../lib/images';
 import { metresToFeet } from '../../../lib/format';
 import leadPic from '../../../assets/site/lead-image.avif';
+import { staticPathProps } from '../../../lib/staticPaths';
 
 export async function getStaticPaths() {
   const paths = [];
@@ -26,7 +27,9 @@ export async function getStaticPaths() {
 }
 
 const { lang, brand } = Astro.params as { lang: Locale; brand: BrandKey };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 
 const brandDisplayMap: Record<BrandKey, string> = {
   galeon:       'GALEON',

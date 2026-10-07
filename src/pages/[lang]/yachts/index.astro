@@ -8,15 +8,18 @@ import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import YachtFilter from '../../../islands/YachtFilter';
 import { getLocalePaths, type Locale } from '../../../lib/i18n';
 import type { BrandKey, CategoryKey } from '../../../content.config';
-import { getTranslations } from '../../../lib/i18n-strings';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getYachtHero } from '../../../lib/images';
+import { staticPathProps } from '../../../lib/staticPaths';
 
 export function getStaticPaths() {
   return getLocalePaths();
 }
 
 const { lang } = Astro.params as { lang: Locale };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 
 const brandDisplayMap: Record<BrandKey, string> = {
   galeon:        'GALEON',

@@ -51,8 +51,8 @@ Kroki ręczne (jednorazowo):
 4. **Vercel (projekt produkcyjny) → Settings → Git → Deploy Hooks:** hook
    dla brancha produkcyjnego; skopiować URL.
 5. **Sanity → API → Webhooks:** URL = Deploy Hook, trigger: Create / Update /
-   Delete, filtr `_type == "post"` (w kolejnych krokach rozszerzany o nowe
-   typy treści; nigdy `notificationRecipients`), „Trigger on drafts” wyłączone.
+   Delete, filtr `_type in ["post", "uiStrings"]` (w kolejnych krokach rozszerzany
+   o nowe typy treści; nigdy `notificationRecipients`), „Trigger on drafts” wyłączone.
 6. **Vercel → Settings → Notifications:** e-mail przy nieudanym deploymencie
    (oba projekty).
 
@@ -60,7 +60,7 @@ Jak to działa: w Studio zakładka **Podgląd** (Presentation tool) otwiera
 stronę w ramce. Studio zapisuje w datasecie jednorazowy sekret i woła
 `/api/draft-mode/enable`; endpoint sprawdza sekret i ustawia cookie
 `herev-draft-mode` (httpOnly, wartość = HMAC z tokena odczytu — nie da się
-jej podrobić). Z cookie strony bloga czytają wersje robocze i oznaczają teksty
+jej podrobić). Z cookie strony czytają wersje robocze i oznaczają teksty
 niewidocznymi znacznikami (stega), więc klik w tekst otwiera pole. Każda
 zmiana w Studio przeładowuje podgląd. Bez cookie `cms.herev.com` pokazuje
 tylko opublikowaną treść.
@@ -153,3 +153,27 @@ i w każdej z nich ustaw "Translation of" na wersję EN. Treść do skopiowania:
 - SEO title: `Come scegliere il tuo primo yacht — Herev`
 - SEO description: `Una guida ponderata per scegliere il tuo primo yacht. Lunghezza, categoria e ciò che cinque dei migliori costruttori al mondo raccomandano davvero.`
 - Content: pełny tekst w historii gita (`src/content/blog/it/come-scegliere-il-tuo-primo-yacht.md` sprzed usunięcia).
+
+## Teksty interfejsu (krok 9.2)
+
+Przyciski, etykiety, menu, filtry, komunikaty formularzy — jeden dokument
+`uiStrings` na język (`uiStrings-en`, `uiStrings-pl`, …), w Studio:
+Ustawienia → Teksty interfejsu. Lista pól, polskie opisy i placeholdery
+(`{name}`, `{n}` …): `src/sanity/uiStringsSpec.ts`. Strony czytają je przez
+`loadTranslations` (`src/lib/server/cms/uiStrings.ts`); brak dokumentu albo
+pusty tekst w opublikowanej wersji = błąd buildu.
+
+Migracja z kodu (tworzy brakujące dokumenty, istniejących nie rusza;
+`--replace` nadpisuje wersją z kodu):
+
+```bash
+npx sanity exec scripts/migrate-ui-strings.ts --with-user-token -- --dataset development
+```
+
+Sprawdzenie, że migracja nic nie zmieniła na stronie — dwa buildy
+produkcyjne (przed i po) i porównanie HTML:
+
+```bash
+SANITY_PREVIEW=false npx astro build --outDir .cache/afterdist
+node scripts/compare-dist.ts <dist-przed> .cache/afterdist
+```

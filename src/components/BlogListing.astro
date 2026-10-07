@@ -4,21 +4,21 @@ import SiteHeader from './SiteHeader.astro';
 import SiteFooter from './SiteFooter.astro';
 import SectionLabel from './ui/SectionLabel.astro';
 import { type Locale } from '../lib/i18n';
-import { getTranslations } from '../lib/i18n-strings';
+import type { Translations } from '../lib/i18n-strings';
 import type { BlogPostSummary } from '../lib/server/cms/blog';
 import { urlForImage, srcsetForImage } from '../lib/sanityImage';
 
 // One page of the blog listing — shared by /[lang]/blog/ and /[lang]/blog/page/[page]/.
 interface Props {
   lang: Locale;
+  t: Translations;
   page: number;
   totalPages: number;
   posts: BlogPostSummary[];
   alternates: Array<{ lang: string; href: string }>;
 }
 
-const { lang, page, totalPages, posts: pagePosts, alternates } = Astro.props;
-const t = getTranslations(lang);
+const { lang, t, page, totalPages, posts: pagePosts, alternates } = Astro.props;
 
 const posts = pagePosts.map((post) => ({
   ...post,

@@ -2,6 +2,7 @@
 import BlogListing from '../../../../components/BlogListing.astro';
 import { LOCALES, type Locale } from '../../../../lib/i18n';
 import { blogPageCounts, listBlogPage } from '../../../../lib/server/cms/blog';
+import { loadTranslations } from '../../../../lib/server/cms/uiStrings';
 
 // Listing pages 2…N; page 1 is /[lang]/blog/.
 export async function getStaticPaths() {
@@ -31,6 +32,7 @@ const alternates = LOCALES.filter((l) => counts[l] >= page).map((l) => ({
   lang: l,
   href: `/${l}/blog/page/${page}/`,
 }));
+const t = await loadTranslations(lang, Astro);
 ---
 
-<BlogListing lang={lang} page={page} totalPages={totalPages} posts={posts} alternates={alternates} />
+<BlogListing lang={lang} t={t} page={page} totalPages={totalPages} posts={posts} alternates={alternates} />

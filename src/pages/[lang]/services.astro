@@ -6,15 +6,18 @@ import PageHero from '../../components/sections/PageHero.astro';
 import AdvisoryGrid from '../../components/sections/AdvisoryGrid.astro';
 import LeadModule from '../../components/sections/LeadModule.astro';
 import { getLocalePaths, type Locale } from '../../lib/i18n';
-import { getTranslations } from '../../lib/i18n-strings';
+import { loadTranslations } from '../../lib/server/cms/uiStrings';
 import leadPic from '../../assets/site/lead-image.avif';
+import { staticPathProps } from '../../lib/staticPaths';
 
 export function getStaticPaths() {
   return getLocalePaths();
 }
 
 const { lang } = Astro.params as { lang: Locale };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 
 const pageTitle = t.servicesPage.hero.heading + ' — Herev';
 const pageDescription = t.servicesPage.hero.subtext;

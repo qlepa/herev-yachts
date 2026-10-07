@@ -6,15 +6,18 @@ import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import BrandCard from '../../../components/sections/BrandCard.astro';
 import { getLocalePaths, type Locale } from '../../../lib/i18n';
-import { getTranslations } from '../../../lib/i18n-strings';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getBrandHero } from '../../../lib/images';
+import { staticPathProps } from '../../../lib/staticPaths';
 
 export function getStaticPaths() {
   return getLocalePaths();
 }
 
 const { lang } = Astro.params as { lang: Locale };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 
 const brandEntries = await getCollection(
   'brands',

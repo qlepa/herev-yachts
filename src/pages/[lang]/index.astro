@@ -14,20 +14,23 @@ import LeadModule from '../../components/sections/LeadModule.astro';
 import NetworkTeaser from '../../components/sections/NetworkTeaser.astro';
 import MobileCta from '../../components/ui/MobileCta.astro';
 import { getLocalePaths, type Locale } from '../../lib/i18n';
-import { getTranslations } from '../../lib/i18n-strings';
+import { loadTranslations } from '../../lib/server/cms/uiStrings';
 import { getYachtHero, getBrandHero } from '../../lib/images';
 import { getStockEntries, toStockCards } from '../../lib/stock';
 import locations from '../../data/locations.json';
 import homepageHero from '../../assets/site/homepage-hero.jpeg';
 import marinaPic from '../../assets/site/cannes-marina.avif';
 import leadPic from '../../assets/site/lead-image.avif';
+import { staticPathProps } from '../../lib/staticPaths';
 
 export function getStaticPaths() {
   return getLocalePaths();
 }
 
 const { lang } = Astro.params as { lang: Locale };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 
 const brandDisplayMap: Record<string, string> = {
   galeon:       'GALEON',

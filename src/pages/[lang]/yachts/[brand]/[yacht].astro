@@ -20,7 +20,7 @@ import YachtLeadModule from '../../../../components/sections/YachtLeadModule.ast
 import MobileCta from '../../../../components/ui/MobileCta.astro';
 import { LOCALES, type Locale } from '../../../../lib/i18n';
 import type { BrandKey, CategoryKey } from '../../../../content.config';
-import { getTranslations } from '../../../../lib/i18n-strings';
+import { loadTranslations } from '../../../../lib/server/cms/uiStrings';
 import {
   getYachtHero,
   getYachtGallery,
@@ -32,6 +32,7 @@ import {
 import { parseVideoUrl } from '../../../../lib/video';
 import { metresToFeet } from '../../../../lib/format';
 import leadPic from '../../../../assets/site/lead-image.avif';
+import { staticPathProps } from '../../../../lib/staticPaths';
 
 export async function getStaticPaths() {
   const allYachts = await getCollection('yachts', (e) => !e.data.draft);
@@ -46,7 +47,9 @@ export async function getStaticPaths() {
 }
 
 const { lang, brand, yacht: yachtSlug } = Astro.params as { lang: Locale; brand: string; yacht: string };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 const tp = t.yachtPage;
 
 const brandDisplayMap: Record<BrandKey, string> = {

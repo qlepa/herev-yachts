@@ -9,10 +9,11 @@ import Btn from '../../../components/ui/Btn.astro';
 import NetworkDirectory from '../../../islands/NetworkDirectory';
 import type { NetworkLocation } from '../../../islands/NetworkDirectory';
 import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
-import { getTranslations } from '../../../lib/i18n-strings';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { REGION_KEYS, regionOf } from '../../../lib/regions';
 import rawLocations from '../../../data/locations.json';
 import heroPic from '../../../assets/site/cannes-marina.avif';
+import { staticPathProps } from '../../../lib/staticPaths';
 
 export function getStaticPaths() {
   return getLocalePaths();
@@ -25,7 +26,9 @@ type LocationEntry = {
 };
 
 const { lang } = Astro.params as { lang: Locale };
-const t = getTranslations(lang);
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
 const np = t.networkPage;
 
 function getDisplayName(locale: string, code: string): string {

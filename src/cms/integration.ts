@@ -1,11 +1,11 @@
 import type { AstroIntegration } from 'astro';
 
-/** Pages whose content comes from Sanity — rendered per request on the CMS deployment. */
-const CMS_PAGES = new Set([
-  'src/pages/[lang]/blog/index.astro',
-  'src/pages/[lang]/blog/[slug].astro',
-  'src/pages/[lang]/blog/page/[page].astro',
-]);
+/**
+ * Every localized page shows CMS content (at least the UI texts), so on the
+ * CMS deployment they all render per request — drafts show up without a
+ * rebuild. Each page validates its own URL (`staticPathProps`).
+ */
+const isCmsPage = (component: string) => component.startsWith('src/pages/[lang]/');
 
 /**
  * CMS mode (`SANITY_PREVIEW=true`, the cms.herev.com deployment): adds the
@@ -28,7 +28,7 @@ export function cmsPreview(): AstroIntegration {
         injectScript('page', `import '/src/cms/visual-editing.ts';`);
       },
       'astro:route:setup': ({ route }) => {
-        if (CMS_PAGES.has(route.component)) route.prerender = false;
+        if (isCmsPage(route.component)) route.prerender = false;
       },
     },
   };

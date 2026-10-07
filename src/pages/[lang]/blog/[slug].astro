@@ -6,7 +6,7 @@ import SiteFooter from '../../../components/SiteFooter.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
 import { stegaClean } from '@sanity/client/stega';
 import { LOCALES, type Locale } from '../../../lib/i18n';
-import { getTranslations } from '../../../lib/i18n-strings';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getBlogPost, listBlogPostParams } from '../../../lib/server/cms/blog';
 import { urlForImage, srcsetForImage, imageDimensions } from '../../../lib/sanityImage';
 
@@ -28,7 +28,7 @@ const alternates = post.translations.map((p) => ({
   lang: p.locale,
   href: `/${p.locale}/blog/${p.slug}/`,
 }));
-const t = getTranslations(lang);
+const t = await loadTranslations(lang, Astro);
 
 function escapeAttr(value: string): string {
   return value

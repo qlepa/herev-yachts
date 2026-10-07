@@ -10,9 +10,11 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Stan
 
-- **Bieżący krok:** 9.2 — część 1 (Studio po polsku) zrobiona; część 2
-  (Ustawienia + teksty interfejsu w CMS) czeka na decyzje
-- **Następna akcja:** decyzje do części 2 9.2, potem kod
+- **Bieżący krok:** 9.2 — Studio po polsku i teksty interfejsu w CMS zrobione;
+  zostały Ustawienia (kontakt, dopisek do tytułu, obrazek do udostępnień,
+  profile social)
+- **Następna akcja:** Ustawienia; Tomasz: filtr webhooka
+  `_type in ["post", "uiStrings"]`
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
@@ -67,8 +69,9 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
   (`perspective: 'published'`, `useCdn: false`). Webhook Sanity → Deploy
   Hook → rebuild.
 - **CMS (`cms.herev.com`):** drugi projekt Vercel na tym samym repo,
-  `SANITY_PREVIEW=true` → adapter + strony z treścią CMS renderowane na
-  żądanie (hook `astro:route:setup`), reszta prerenderowana. Studio pod
+  `SANITY_PREVIEW=true` → adapter + wszystkie strony `[lang]/…` renderowane
+  na żądanie (hook `astro:route:setup`; adres sprawdzany listą z
+  `getStaticPaths`). Studio pod
   `/admin` z Presentation tool. Tryb roboczy: handshake
   `@sanity/preview-url-secret` → cookie `herev-draft-mode` (HMAC z tokena)
   → strony renderują wersje robocze ze stega
@@ -123,7 +126,7 @@ Kod:
       Dziennik — odstępstwa od planu)
 - [x] Integracja „tryb CMS” (`src/cms/integration.ts`): Studio
       (`/admin/[...path]`), `/api/draft-mode/enable|disable`, skrypt mostka,
-      strony z listy `CMS_PAGES` renderowane na żądanie;
+      strony z listy `CMS_PAGES` renderowane na żądanie (od 9.2: wszystkie);
       `src/pages/admin.astro` → `src/cms/routes/studio.astro`
 - [x] `src/lib/server/cms/`: `client.ts` (`loadQuery`, `useCdn: false`,
       `published` / `drafts` + stega), `draftMode.ts` (cookie HMAC),
@@ -172,8 +175,10 @@ Kod:
 - [x] Studio po polsku: `@sanity/locale-pl-pl`; polskie tytuły i opisy pól
       z przykładami (post, SEO, odbiorcy); post w zakładkach Treść /
       Szczegóły / SEO; nowy wpis z listy języka ma ten język i dzisiejszą datę
-- [ ] Pola wielojęzyczne (`sanity-plugin-internationalized-array`) + filtr
-      języka (`@sanity/language-filter`)
+- [ ] ~~Pola wielojęzyczne (`sanity-plugin-internationalized-array`) + filtr
+      języka (`@sanity/language-filter`)~~ → przeniesione do 9.3: w 9.2 nic
+      ich nie potrzebuje (teksty interfejsu to dokument na język, Ustawienia
+      nie mają tekstów zależnych od języka); dojdą razem ze stronami
 - [ ] Wspólne typy (zrobione: `seo` z licznikami znaków i podglądem wyniku
       Google; ostrzeżenie o za małym zdjęciu `recommendMinWidth` — ostrzeżenie,
       nie blokada, bo 20 okładek z yachts24 ma < 1200 px): zdjęcie (alt, hotspot, walidacja min. wymiarów
@@ -188,9 +193,13 @@ Kod:
       sufiks tytułu (dziś mieszane „— Herev” i „| Herev”), domyślny opis
       i obrazek do udostępnień (dziś brak `/og.jpg`), profile social
       (`sameAs` w JSON-LD)
-- [ ] Teksty interfejsu — dokument na język: przyciski, formularze, filtry,
+- [x] Teksty interfejsu — dokument na język: przyciski, formularze, filtry,
       mapa, etykiety specyfikacji, kategorie, regiony, aria-labele; walidacja
-      placeholderów (`{name}`, `{brand}`, `{n}`, `{b}`, `{country}`)
+      placeholderów (`{name}`, `{brand}`, `{n}`, `{b}`, `{country}`).
+      Typ `uiStrings` generowany ze specyfikacji `src/sanity/uiStringsSpec.ts`
+      (pola, polskie nazwy, zakładki, placeholdery); ID `uiStrings-<język>`.
+      Teksty zaszyte poza `i18n-strings.ts` (np. „MAP UNAVAILABLE”, alty,
+      aria-labele w komponentach) — dalej w inwentaryzacji niżej
 - [x] `notificationRecipients` pod prywatnym ID
       `private.notificationRecipients` — niewidoczny bez tokena także na
       Free (dokument nie był jeszcze opublikowany, więc bez migracji danych)
@@ -207,13 +216,22 @@ Kod:
       `docs/yachts24-import-report.md`. Schemat posta: `categories` (lista
       zamiast `category`), `author`, `modifiedAt`, podpis zdjęcia, lista
       numerowana, linki względne. Dataset `development` → potem `production`
-- [ ] Skrypt migracji `src/lib/i18n-strings.ts` → Sanity (idempotentny,
-      stałe `_id`; najpierw `development`, potem `production`)
-- [ ] Skrypt porównania tekstu HTML `dist/` przed i po migracji
-- [ ] Strony czytają teksty interfejsu z CMS (kształt `Translations`
-      zachowany → minimalne zmiany w stronach)
+- [x] Skrypt migracji `src/lib/i18n-strings.ts` → Sanity (idempotentny,
+      stałe `_id`; najpierw `development`, potem `production`):
+      `scripts/migrate-ui-strings.ts` (+ test: każdy tekst przechodzi przez
+      kształt dokumentu, placeholdery zgodne we wszystkich językach).
+      Uruchomiony na obu datasetach 2026-10-07
+- [x] Skrypt porównania HTML `dist/` przed i po migracji: `scripts/compare-dist.ts`
+- [x] Strony czytają teksty interfejsu z CMS (kształt `Translations`
+      zachowany → minimalne zmiany w stronach): `loadTranslations(lang, Astro)`;
+      w buildzie jedno zapytanie na język (memoizacja), na CMS przy każdym
+      żądaniu. Na CMS wszystkie strony `[lang]/…` renderowane na żądanie
+      (decyzja Tomasza 2026-10-07 — podgląd tekstów interfejsu wszędzie);
+      strona sprawdza swój adres listą z `getStaticPaths`
+      (`src/lib/staticPaths.ts`) → nieistniejący = 404
 - [ ] Presentation: lokalizacje dla dokumentów ustawień („używane na
-      wszystkich stronach”)
+      wszystkich stronach”) — teksty interfejsu zrobione, Ustawienia razem
+      z dokumentem
 
 Podział `i18n-strings.ts` (do doprecyzowania przy implementacji):
 - **Teksty interfejsu:** `nav`, `footer`, `categories`, etykiety `stock`,
@@ -225,9 +243,10 @@ Podział `i18n-strings.ts` (do doprecyzowania przy implementacji):
   `networkPage.hero|directory|brandsStrip|cta`, `notFound`.
 
 Kryteria wyjścia:
-- [ ] Tekst HTML `dist/` przed i po: bez różnic (poza celowymi poprawkami
-      tekstów, które były tylko po angielsku)
-- [ ] Liczba atrybutów wpisana do tabeli w „Limitach planu Free”
+- [x] Tekst HTML `dist/` przed i po: bez różnic (poza celowymi poprawkami
+      tekstów, które były tylko po angielsku) — teksty interfejsu: 357 stron,
+      0 różnic (2026-10-07)
+- [x] Liczba atrybutów wpisana do tabeli w „Limitach planu Free”
 
 ### Krok 9.3 — Strony
 
@@ -375,6 +394,8 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
 | 2026-10-07 | production | 122 / 2 000 | 17 |
 | 2026-10-07 | production (po imporcie bloga yachts24) | 129 / 2 000 | 470 |
 | 2026-10-07 | development (po imporcie bloga yachts24) | 125 / 2 000 | 459 |
+| 2026-10-07 | production (po tekstach interfejsu) | 335 / 2 000 | 468 |
+| 2026-10-07 | development (po tekstach interfejsu) | 331 / 2 000 | 463 |
 
 ## Ryzyka
 
@@ -466,3 +487,12 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   (w żadnym datasecie nie było jeszcze takiego dokumentu — nic do
   migracji). Walidacja wszystkich dokumentów w `development`: 0 błędów,
   30 ostrzeżeń o małych zdjęciach z yachts24.
+- **2026-10-07** — Krok 9.2: teksty interfejsu w Sanity. Na CMS wszystkie
+  strony renderowane na żądanie (wybór Tomasza: podgląd zmian tekstów na
+  każdej stronie), każda sprawdza swój adres listą z `getStaticPaths`.
+  Migracja do `development` i `production`; porównanie buildów (dataset
+  `development`): 357 stron, 0 różnic. Build bez dokumentu `uiStrings-*`
+  kończy się błędem (sprawdzone). Wersja robocza tekstu widoczna w trybie
+  roboczym na stronie głównej, jachtu i kraju; bez cookie — opublikowana.
+  Pola wielojęzyczne (plugin) przeniesione do 9.3. Atrybuty: 335 / 2 000.
+  **Ręcznie:** filtr webhooka → `_type in ["post", "uiStrings"]`.

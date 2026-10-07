@@ -2,6 +2,7 @@
 import BlogListing from '../../../components/BlogListing.astro';
 import { getLocalePaths, LOCALES, type Locale } from '../../../lib/i18n';
 import { listBlogPage } from '../../../lib/server/cms/blog';
+import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 
 export function getStaticPaths() {
   return getLocalePaths();
@@ -14,6 +15,7 @@ if (!LOCALES.includes(lang)) return new Response(null, { status: 404 });
 const { posts, totalPages } = await listBlogPage(lang, 1, Astro.locals.draftMode === true);
 // The first listing page exists in every language (empty = "coming soon").
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/blog/` }));
+const t = await loadTranslations(lang, Astro);
 ---
 
-<BlogListing lang={lang} page={1} totalPages={totalPages} posts={posts} alternates={alternates} />
+<BlogListing lang={lang} t={t} page={1} totalPages={totalPages} posts={posts} alternates={alternates} />

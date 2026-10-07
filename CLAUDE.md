@@ -28,7 +28,8 @@ content team), `docs/design-handoff/` (visual reference, read-only).
 - **App:** Astro (static output) + React islands, TypeScript strict
 - **Styling:** Tailwind v4, tokens in `@theme` (`src/styles/global.css`)
 - **Content:** content collections (Zod) + `src/data/locations.json`
-- **CMS:** Sanity — blog (en/pl/es/it) + notificationRecipients singleton;
+- **CMS:** Sanity — blog (en/pl/es/it), UI texts (`uiStrings`, one doc per
+  language, read via `loadTranslations`) + notificationRecipients singleton;
   Studio + draft preview only on the CMS deployment (`cms.herev.com`,
   `SANITY_PREVIEW=true` → `src/cms/integration.ts`); production build
   has no Studio and reads published content only
