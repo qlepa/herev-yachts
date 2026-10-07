@@ -30,3 +30,13 @@ describe('cleanSummary', () => {
     expect(clean.title).toBe(post.title);
   });
 });
+
+describe('pageCount', () => {
+  test('12 posts per page, never fewer than one page', async () => {
+    const { pageCount } = await import('./blog');
+    expect(pageCount(0)).toBe(1);
+    expect(pageCount(12)).toBe(1);
+    expect(pageCount(13)).toBe(2);
+    expect(pageCount(137)).toBe(12);
+  });
+});

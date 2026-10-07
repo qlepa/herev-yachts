@@ -216,6 +216,7 @@ export interface Translations {
     publishedLabel: string;
     backToBlog: string;
     comingSoon: string;
+    pagination: { label: string; newer: string; older: string; page: string };
   };
   networkPage: {
     hero: { breadcrumbHome: string; eyebrow: string; heading: string; subtext: string };
@@ -531,6 +532,7 @@ const en: Translations = {
     publishedLabel: 'PUBLISHED',
     backToBlog: '← Back to journal',
     comingSoon: 'New articles coming soon.',
+    pagination: { label: 'Journal pages', newer: '← Newer', older: 'Older →', page: 'Page' },
   },
   networkPage: {
     hero: {
@@ -899,6 +901,7 @@ const pl: Translations = {
     publishedLabel: 'OPUBLIKOWANO',
     backToBlog: '← Wróć do dziennika',
     comingSoon: 'Nowe artykuły wkrótce.',
+    pagination: { label: 'Strony dziennika', newer: '← Nowsze', older: 'Starsze →', page: 'Strona' },
   },
   networkPage: {
     hero: {
@@ -1267,6 +1270,7 @@ const es: Translations = {
     publishedLabel: 'PUBLICADO',
     backToBlog: '← Volver al diario',
     comingSoon: 'Nuevos artículos próximamente.',
+    pagination: { label: 'Páginas del diario', newer: '← Más recientes', older: 'Anteriores →', page: 'Página' },
   },
   networkPage: {
     hero: {
@@ -1635,6 +1639,7 @@ const it: Translations = {
     publishedLabel: 'PUBBLICATO',
     backToBlog: '← Torna al giornale',
     comingSoon: 'Nuovi articoli in arrivo.',
+    pagination: { label: 'Pagine del giornale', newer: '← Più recenti', older: 'Meno recenti →', page: 'Pagina' },
   },
   networkPage: {
     hero: {

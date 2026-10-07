@@ -1,0 +1,36 @@
+---
+import BlogListing from '../../../../components/BlogListing.astro';
+import { LOCALES, type Locale } from '../../../../lib/i18n';
+import { blogPageCounts, listBlogPage } from '../../../../lib/server/cms/blog';
+
+// Listing pages 2…N; page 1 is /[lang]/blog/.
+export async function getStaticPaths() {
+  const counts = await blogPageCounts(false);
+  return LOCALES.flatMap((lang) =>
+    Array.from({ length: counts[lang] - 1 }, (_, i) => ({ params: { lang, page: String(i + 2) } })),
+  );
+}
+
+const { lang, page: pageParam } = Astro.params as { lang: Locale; page: string };
+const page = Number(pageParam);
+const draftMode = Astro.locals.draftMode === true;
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!LOCALES.includes(lang) || !/^\d+$/.test(pageParam) || page < 2) {
+  return new Response(null, { status: 404 });
+}
+
+const { posts, totalPages } = await listBlogPage(lang, page, draftMode);
+if (page > totalPages) {
+  if (Astro.isPrerendered) throw new Error(`Blog listing ${lang} page ${page} listed but empty`);
+  return new Response(null, { status: 404 });
+}
+
+// hreflang only to languages that have this many listing pages.
+const counts = await blogPageCounts(draftMode);
+const alternates = LOCALES.filter((l) => counts[l] >= page).map((l) => ({
+  lang: l,
+  href: `/${l}/blog/page/${page}/`,
+}));
+---
+
+<BlogListing lang={lang} page={page} totalPages={totalPages} posts={posts} alternates={alternates} />

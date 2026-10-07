@@ -4,6 +4,7 @@ import type { AstroIntegration } from 'astro';
 const CMS_PAGES = new Set([
   'src/pages/[lang]/blog/index.astro',
   'src/pages/[lang]/blog/[slug].astro',
+  'src/pages/[lang]/blog/page/[page].astro',
 ]);
 
 /**

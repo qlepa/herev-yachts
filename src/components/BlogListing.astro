@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from './SiteHeader.astro';
+import SiteFooter from './SiteFooter.astro';
+import SectionLabel from './ui/SectionLabel.astro';
+import { type Locale } from '../lib/i18n';
+import { getTranslations } from '../lib/i18n-strings';
+import type { BlogPostSummary } from '../lib/server/cms/blog';
+import { urlForImage, srcsetForImage } from '../lib/sanityImage';
+
+// One page of the blog listing — shared by /[lang]/blog/ and /[lang]/blog/page/[page]/.
+interface Props {
+  lang: Locale;
+  page: number;
+  totalPages: number;
+  posts: BlogPostSummary[];
+  alternates: Array<{ lang: string; href: string }>;
+}
+
+const { lang, page, totalPages, posts: pagePosts, alternates } = Astro.props;
+const t = getTranslations(lang);
+
+const posts = pagePosts.map((post) => ({
+  ...post,
+  href: `/${lang}/blog/${post.slug}/`,
+}));
+
+const pageHref = (n: number) => (n === 1 ? `/${lang}/blog/` : `/${lang}/blog/page/${n}/`);
+const p = t.blogPage.pagination;
+const pageTitle =
+  page === 1 ? `${t.blogPage.heading} — Herev` : `${t.blogPage.heading} — ${p.page} ${page} — Herev`;
+---
+
+<Layout
+  lang={lang}
+  title={pageTitle}
+  description={t.blogPage.subheading}
+  alternates={alternates}
+>
+  <SiteHeader lang={lang} variant="ink" currentPath={pageHref(page)} nav={t.nav} />
+
+  <main>
+    <section class="py-section bg-paper">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+
+        <SectionLabel text={t.blogPage.eyebrow} class="mb-4" />
+        <h1
+          class="font-display text-h1 text-ink mb-4 max-w-[640px]"
+          style="font-weight: 400; letter-spacing: var(--tracking-tight);"
+        >
+          {t.blogPage.heading}
+        </h1>
+        <p class="text-body text-[var(--color-ink-70)] leading-relaxed max-w-[520px] mb-14">
+          {t.blogPage.subheading}
+        </p>
+
+        {posts.length === 0 ? (
+          <p class="text-body text-[var(--color-ink-55)]">{t.blogPage.comingSoon}</p>
+        ) : (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {posts.map((post) => (
+              <a
+                href={post.href}
+                class="group block border border-[var(--color-line)] hover:border-[var(--color-ink)] transition-colors duration-200 bg-white overflow-hidden"
+              >
+                {post.image && (
+                  <img
+                    src={urlForImage(post.image).width(768).auto('format').url()}
+                    srcset={srcsetForImage(post.image)}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    alt={post.image.alt ?? ''}
+                    loading="lazy"
+                    class="w-full aspect-[3/2] object-cover"
+                  />
+                )}
+                <div class="p-8">
+                  {post.category && (
+                    <p class="text-label font-body tracking-[var(--tracking-label)] text-teal mb-4 uppercase">
+                      {post.category}
+                    </p>
+                  )}
+                  <h2
+                    class="font-display text-h3 text-ink mb-3 group-hover:text-teal transition-colors duration-200"
+                    style="font-weight: 400; letter-spacing: var(--tracking-tight); line-height: 1.15;"
+                  >
+                    {post.title}
+                  </h2>
+                  <p class="text-sm text-[var(--color-ink-70)] leading-relaxed mb-6">
+                    {post.excerpt}
+                  </p>
+                  <div class="flex items-end justify-between gap-4">
+                    <span class="text-label text-[var(--color-ink-55)] tracking-[var(--tracking-label)] uppercase">
+                      {new Date(post.publishedAt).toLocaleDateString(lang, {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                    <span class="text-sm text-teal shrink-0">{t.blogPage.readMore}</span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+
+        {totalPages > 1 && (
+          <nav
+            aria-label={p.label}
+            class="mt-16 flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-label tracking-[var(--tracking-label)] uppercase"
+          >
+            {page > 1 ? (
+              <a href={pageHref(page - 1)} rel="prev" class="text-teal hover:text-ink transition-colors duration-200">{p.newer}</a>
+            ) : (
+              <span class="text-[var(--color-ink-55)] opacity-40" aria-hidden="true">{p.newer}</span>
+            )}
+            <ol class="flex flex-wrap items-center gap-2">
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <li>
+                  {n === page ? (
+                    <span aria-current="page" class="inline-flex min-w-9 h-9 items-center justify-center border border-[var(--color-ink)] text-ink">{n}</span>
+                  ) : (
+                    <a
+                      href={pageHref(n)}
+                      aria-label={`${p.page} ${n}`}
+                      class="inline-flex min-w-9 h-9 items-center justify-center border border-[var(--color-line)] text-[var(--color-ink-70)] hover:border-[var(--color-ink)] hover:text-ink transition-colors duration-200"
+                    >
+                      {n}
+                    </a>
+                  )}
+                </li>
+              ))}
+            </ol>
+            {page < totalPages ? (
+              <a href={pageHref(page + 1)} rel="next" class="text-teal hover:text-ink transition-colors duration-200">{p.older}</a>
+            ) : (
+              <span class="text-[var(--color-ink-55)] opacity-40" aria-hidden="true">{p.older}</span>
+            )}
+          </nav>
+        )}
+
+      </div>
+    </section>
+  </main>
+
+  <SiteFooter lang={lang} t={t.footer} />
+</Layout>

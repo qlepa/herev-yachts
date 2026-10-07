@@ -58,13 +58,49 @@ export function cleanSummary<T extends BlogPostSummary>(post: T): T {
   };
 }
 
-export async function listBlogPosts(locale: Locale, draftMode: boolean): Promise<BlogPostSummary[]> {
-  const posts = await loadQuery<BlogPostSummary[]>(
-    `*[_type == "post" && locale == $locale] | order(publishedAt desc) {${SUMMARY_FIELDS}}`,
-    { locale },
+export const POSTS_PER_PAGE = 12;
+
+/** Listing pages for `total` posts — always at least one (the empty "coming soon" page). */
+export function pageCount(total: number): number {
+  return Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
+}
+
+/** One page of the blog listing, newest first. Pages are 1-based. */
+export async function listBlogPage(
+  locale: Locale,
+  page: number,
+  draftMode: boolean,
+): Promise<{ posts: BlogPostSummary[]; totalPages: number }> {
+  const start = (page - 1) * POSTS_PER_PAGE;
+  const result = await loadQuery<{ posts: BlogPostSummary[]; total: number }>(
+    `{
+      "posts": *[_type == "post" && locale == $locale] | order(publishedAt desc, _id asc) [$start...$end] {${SUMMARY_FIELDS}},
+      "total": count(*[_type == "post" && locale == $locale])
+    }`,
+    { locale, start, end: start + POSTS_PER_PAGE },
     draftMode,
   );
-  return posts.map(cleanSummary);
+  return { posts: result.posts.map(cleanSummary), totalPages: pageCount(result.total) };
+}
+
+/** Number of listing pages in each language. */
+export async function blogPageCounts(draftMode: boolean): Promise<Record<Locale, number>> {
+  const totals = await loadQuery<Record<Locale, number>>(
+    `{
+      "en": count(*[_type == "post" && locale == "en"]),
+      "pl": count(*[_type == "post" && locale == "pl"]),
+      "es": count(*[_type == "post" && locale == "es"]),
+      "it": count(*[_type == "post" && locale == "it"])
+    }`,
+    {},
+    draftMode,
+  );
+  return {
+    en: pageCount(totals.en),
+    pl: pageCount(totals.pl),
+    es: pageCount(totals.es),
+    it: pageCount(totals.it),
+  };
 }
 
 /** Route params of every published post — for getStaticPaths in the production build. */
