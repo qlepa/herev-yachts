@@ -5,6 +5,7 @@ of showrooms, leads routed to dealers via Pipedrive. Product
 priorities: SEO, premium visual quality, media performance.
 
 Details on demand: `docs/backlog-mvp.md` (work plan),
+`docs/launch-checklist.md` (everything to do before go-live — append new items there),
 `docs/cms-plan.md` (CMS migration plan + progress tracker — read first
 when working on the CMS), `docs/kontrakt-api-lead.md` (lead endpoint contract),
 `docs/kontrakt-locations.md` (locations data contract),

@@ -272,6 +272,10 @@ Kryteria wyjścia:
 
 ### Krok 9.6 — Wykończenie i przekazanie
 
+- [ ] Jeśli ktoś poza Tomaszem dostaje dostęp do Vercela: w `herev-cms`
+      zastąpić `SANITY_API_READ_TOKEN` z integracji Sanity–Vercel własnym
+      tokenem Viewer oznaczonym jako Sensitive (zmiennych integracji nie da
+      się tak oznaczyć) i unieważnić token integracji
 - [ ] Przejście na Growth (warunki niżej) → dataset prywatny, rola Editor
       dla osoby od treści
 - [ ] Status publikacji w Studio („Aktualizuję stronę… → Gotowe”; endpoint
