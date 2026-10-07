@@ -13,6 +13,16 @@ function slugify(input: string): string {
     .slice(0, 96);
 }
 
+/** Blog categories (carried over from the yachts24.eu blog). */
+export const POST_CATEGORIES = [
+  'Yachts',
+  'Yacht broker',
+  'Yacht registration',
+  'Sailing news',
+  'Cruising',
+  'Poland',
+] as const;
+
 export const postType = defineType({
   name: 'post',
   title: 'Blog post',
@@ -77,16 +87,29 @@ export const postType = defineType({
       validation: (Rule) => Rule.required().max(200),
     }),
     defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'string',
+    }),
+    defineField({
       name: 'publishedAt',
       title: 'Published at',
       type: 'date',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'category',
-      title: 'Category',
-      description: 'Free text, e.g. "BUYING GUIDE".',
-      type: 'string',
+      name: 'modifiedAt',
+      title: 'Last updated',
+      description: 'Set when the article content was meaningfully updated. Empty = date of the last save.',
+      type: 'date',
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Categories',
+      description: 'The first one is shown on the blog listing and above the title.',
+      type: 'array',
+      of: [defineArrayMember({ type: 'string' })],
+      options: { list: [...POST_CATEGORIES] },
     }),
     defineField({
       name: 'image',
@@ -122,7 +145,10 @@ export const postType = defineType({
             { title: 'H3', value: 'h3' },
             { title: 'Quote', value: 'blockquote' },
           ],
-          lists: [{ title: 'Bullet', value: 'bullet' }],
+          lists: [
+            { title: 'Bullet', value: 'bullet' },
+            { title: 'Numbered', value: 'number' },
+          ],
           marks: {
             decorators: [
               { title: 'Bold', value: 'strong' },
@@ -133,7 +159,16 @@ export const postType = defineType({
                 name: 'link',
                 type: 'object',
                 title: 'Link',
-                fields: [{ name: 'href', type: 'url', title: 'URL' }],
+                fields: [
+                  {
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    description: 'Full address (https://…) or a page on this site, e.g. /en/blog/…/',
+                    validation: (Rule) =>
+                      Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
+                  },
+                ],
               },
             ],
           },
@@ -148,6 +183,11 @@ export const postType = defineType({
               title: 'Alt text',
               type: 'string',
               validation: (Rule) => Rule.required(),
+            }),
+            defineField({
+              name: 'caption',
+              title: 'Caption',
+              type: 'string',
             }),
           ],
         }),

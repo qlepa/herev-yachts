@@ -46,7 +46,10 @@ const bodyHtml = toHTML(post.body as never, {
         const src = urlForImage(value).width(1200).auto('format').url();
         const srcset = srcsetForImage(value);
         const alt = escapeAttr(value.alt ?? '');
-        return `<img src="${src}" srcset="${srcset}" sizes="(min-width: 1024px) 720px, 100vw" width="${dims.width}" height="${dims.height}" alt="${alt}" loading="lazy" />`;
+        const img = `<img src="${src}" srcset="${srcset}" sizes="(min-width: 1024px) 720px, 100vw" width="${dims.width}" height="${dims.height}" alt="${alt}" loading="lazy" />`;
+        return value.caption
+          ? `<figure>${img}<figcaption>${escapeAttr(value.caption)}</figcaption></figure>`
+          : img;
       },
     },
   },
@@ -118,6 +121,7 @@ const coverImage = post.image
               month: 'long',
               day: 'numeric',
             })}
+            {post.author && <> · {post.author}</>}
           </p>
 
         </div>

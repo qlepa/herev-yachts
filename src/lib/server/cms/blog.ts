@@ -11,8 +11,11 @@ export interface BlogPostSummary {
   title: string;
   excerpt: string;
   publishedAt: string;
+  /** Last meaningful content update: the editor-set date, else the last save. */
   updatedAt: string;
+  /** First (primary) category. */
   category?: string;
+  author?: string;
   locale: Locale;
   /** _id of the English version this post is a translation of. Undefined for the English version itself. */
   translationOf?: string;
@@ -32,8 +35,9 @@ const SUMMARY_FIELDS = `
   title,
   excerpt,
   publishedAt,
-  "updatedAt": _updatedAt,
-  category,
+  "updatedAt": coalesce(modifiedAt, _updatedAt),
+  "category": categories[0],
+  author,
   locale,
   "translationOf": translationOf._ref,
   image`;

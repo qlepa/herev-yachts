@@ -63,6 +63,10 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       albo wklejone gdziekolwiek → nowe wartości w Vercelu / GitHubie, stare
       unieważnione (Sanity, Resend, Pipedrive, Turnstile — co istnieje
       w danym momencie)
+- [ ] CI (`.github/workflows/ci.yml`): `PUBLIC_SANITY_PROJECT_ID`
+      i `PUBLIC_SANITY_DATASET` są wpisane na sztywno (tymczasowo, bo
+      brakowało secretów) → przenieść do GitHub Secrets i wrócić do
+      `${{ secrets.… }}`
 - [ ] Skan historii gita na sekrety (np. `gitleaks detect`) — przed
       udostępnieniem repo komukolwiek
 - [ ] Mapbox: token `pk.` z ograniczeniem URL tylko do `https://herev.com`
@@ -73,6 +77,22 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       Network)
 
 ## 5. Treść i jakość
+
+- [ ] **Blog przeniesiony z yachts24.eu (137 postów) — decyzja przed
+      `PUBLIC_INDEXING_ENABLED=true`.** Te same teksty są na yachts24.eu,
+      więc po otwarciu indeksowania Google zobaczy duplikaty. Do wyboru:
+      (a) yachts24.eu przekierowuje 301 `/post/<slug>` →
+      `https://herev.com/en/blog/<slug>/` (slugi zachowane 1:1),
+      (b) yachts24.eu dostaje `<link rel="canonical">` na nowe adresy,
+      (c) teksty na Herev zostają przepisane / podmienione na nowe,
+      (d) posty z yachts24 usunięte z Herev przed startem. Dotyczy też
+      postów promujących usługi Yachts24 (rejestracja jachtów,
+      „Why register your yacht with yachts24.eu”, życzenia świąteczne)
+- [ ] Raport importu `docs/yachts24-import-report.md`: wideo i osadzenia,
+      których nie dało się przenieść automatycznie — uzupełnione w Studio
+      albo świadomie pominięte
+- [ ] Linki w treści postów do yachts24.eu, które nie są postami (strony
+      usług, formularze) — sprawdzone i podmienione na Herev albo usunięte
 
 - [ ] `public/700 SKY-…/` (zdjęcia + PDF klienta, publicznie dostępne) —
       usunięte albo przeniesione do CMS (decyzja w `docs/cms-plan.md`)

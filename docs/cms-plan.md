@@ -54,10 +54,11 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
       w Ustawieniach, 9.2)
 - [x] Testowe posty — **usunąć wszystkie** (2026-10-07, zrobione; w Sanity
       0 postów)
-- [ ] Blog z yachts24.eu (137 postów EN, Wix) — przenieść wszystkie
-      (decyzja 2026-10-07). Otwarte: własność treści, los starej strony
-      (przekierowania/canonical), wersje PL/ES/IT, posty promujące usługi
-      Yachts24, mapowanie kategorii
+- [x] Blog z yachts24.eu (137 postów EN, Wix) — **przenieść wszystkie**,
+      tylko EN na start, kategorie z Wix, oryginalni autorzy i daty (nowe
+      pola) (decyzja 2026-10-07). Los yachts24.eu i duplikatów treści —
+      decyzja przed startem: `docs/launch-checklist.md` §5. Do czasu startu
+      cała strona ma `noindex`
 
 ## Architektura
 
@@ -189,14 +190,19 @@ Kod:
 - [ ] `notificationRecipients` pod prywatnym ID
       `private.notificationRecipients` — niewidoczny bez tokena także na
       Free (dokument nie był jeszcze opublikowany, więc bez migracji danych)
-- [ ] Dataset `development` (`sanity dataset create development
-      --visibility public`); dane: `sanity dataset export` / `import`
+- [x] Dataset `development` (`sanity dataset create development
+      --visibility public`, 2026-10-07); dane: `sanity dataset export` /
+      `import`
 - [ ] Migracja bloga z yachts24.eu (zastępuje dawny plan migracji
-      4 przykładowych artykułów z gita): skrypt
-      `scripts/import-yachts24-blog` — lista z
-      `yachts24.eu/blog-posts-sitemap.xml`, metadane z JSON-LD posta, treść
-      Wix Ricos → Portable Text, obrazy → zasoby Sanity, stałe `_id`
-      (idempotentny), najpierw dataset `development`
+      4 przykładowych artykułów z gita): `scripts/import-yachts24-blog.ts`
+      (`npx sanity exec … --with-user-token -- --dataset <name>`), konwerter
+      `scripts/yachts24/convert.ts` z testami. Lista z
+      `yachts24.eu/blog-posts-sitemap.xml`, metadane z JSON-LD, treść HTML
+      Wix → Portable Text, obrazy → zasoby Sanity, `_id` =
+      `yachts24-<slug>` (idempotentny), raport
+      `docs/yachts24-import-report.md`. Schemat posta: `categories` (lista
+      zamiast `category`), `author`, `modifiedAt`, podpis zdjęcia, lista
+      numerowana, linki względne. Dataset `development` → potem `production`
 - [ ] Skrypt migracji `src/lib/i18n-strings.ts` → Sanity (idempotentny,
       stałe `_id`; najpierw `development`, potem `production`)
 - [ ] Skrypt porównania tekstu HTML `dist/` przed i po migracji
