@@ -38,8 +38,14 @@ Kroki ręczne (jednorazowo):
    **Nie** ustawiać `PUBLIC_INDEXING_ENABLED` — CMS ma zawsze `noindex`.
 2. **Domena:** `herev-cms` → Settings → Domains → `cms.herev.com`; w DNS
    rekord CNAME `cms` → `cname.vercel-dns.com`.
+   **Do czasu domeny klienta:** CMS działa pod `https://herev-cms.vercel.app`
+   (produkcja pod `https://herev-yachts.vercel.app`); `vercel.json` ma
+   tymczasową regułę `herev-yachts.vercel.app/admin` →
+   `herev-cms.vercel.app/admin` — po podpięciu domen usunąć ją
+   i wykonać ten punkt.
 3. **Sanity → manage → API → CORS origins:** `https://cms.herev.com`
-   i `http://localhost:4321`, oba z „Allow credentials”.
+   (tymczasowo `https://herev-cms.vercel.app`) i `http://localhost:4321`,
+   wszystkie z „Allow credentials”.
 4. **Vercel (projekt produkcyjny) → Settings → Git → Deploy Hooks:** hook
    dla brancha produkcyjnego; skopiować URL.
 5. **Sanity → API → Webhooks:** URL = Deploy Hook, trigger: Create / Update /

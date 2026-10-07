@@ -3,6 +3,7 @@
     { "source": "/", "destination": "/en/", "permanent": true },
 
     { "source": "/admin/:path*", "has": [{ "type": "host", "value": "herev.com" }], "destination": "https://cms.herev.com/admin/:path*", "permanent": false },
+    { "source": "/admin/:path*", "has": [{ "type": "host", "value": "herev-yachts.vercel.app" }], "destination": "https://herev-cms.vercel.app/admin/:path*", "permanent": false },
 
     { "source": "/:lang(en|pl|es|it)/admin", "destination": "/admin", "permanent": false },
     { "source": "/:lang(en|pl|es|it)/admin/:path*", "destination": "/admin/:path*", "permanent": false },

@@ -139,7 +139,8 @@ Kod:
 Ręcznie (Tomasz):
 - [ ] Vercel: nowy projekt `herev-cms` z tego repo; env: `SANITY_PREVIEW=true`,
       `PUBLIC_SANITY_PROJECT_ID`, `PUBLIC_SANITY_DATASET`, `SANITY_API_READ_TOKEN`
-- [ ] DNS: `cms.herev.com` → projekt `herev-cms`
+- [ ] DNS: `cms.herev.com` → projekt `herev-cms` (czeka na domenę klienta;
+      do tego czasu `herev-cms.vercel.app` + tymczasowa reguła w `vercel.json`)
 - [ ] Sanity → API → CORS origins: `https://cms.herev.com` (Allow credentials)
       + `http://localhost:4321`
 - [ ] Vercel (projekt produkcyjny): Deploy Hook dla brancha produkcyjnego
