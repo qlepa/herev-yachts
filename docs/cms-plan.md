@@ -10,11 +10,11 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Stan
 
-- **Bieżący krok:** 9.1 — kod gotowy (branch `cms/9.1-preview`, bez commita);
-  czekają kroki ręczne i kryteria wyjścia
-- **Następna akcja:** Tomasz: kroki ręczne 9.1 (runbook w
-  `docs/sanity-setup.md` → „CMS i podgląd”); potem test w przeglądarce
-  (Chrome + Safari) i PR
+- **Bieżący krok:** 9.2 — nierozpoczęty (9.1 zamknięty 2026-10-07)
+- **Następna akcja:** decyzje z „Do potwierdzenia” dotyczące 9.2 (posty
+  testowe, pole `draft`, nieużywane klucze i18n), potem kod 9.2
+- **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
+  Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
 - **Ostatnia aktualizacja:** 2026-10-07
 
@@ -150,14 +150,15 @@ Ręcznie (Tomasz):
 
 Kryteria wyjścia:
 - [x] Edycja posta bez publikacji widoczna w zakładce Podgląd po kilku
-      sekundach (lokalnie, 2026-10-07; powtórzyć na `cms.herev.com`)
-- [ ] Klik w tekst na podglądzie otwiera właściwe pole (Chrome i Safari)
-- [ ] „Opublikuj” → produkcja zaktualizowana automatycznie
-- [ ] Bez cookie `cms.herev.com` pokazuje tylko opublikowaną treść; `noindex`
+      sekundach (lokalnie i na `herev-cms.vercel.app`, 2026-10-07)
+- [x] Klik w tekst na podglądzie otwiera właściwe pole (Chrome; Safari —
+      do potwierdzenia)
+- [x] „Opublikuj” → produkcja zaktualizowana automatycznie
+- [x] Bez cookie `cms.herev.com` pokazuje tylko opublikowaną treść; `noindex`
 - [x] Build produkcyjny bez Studio i kodu podglądu (sprawdzone w `dist/` i na
       `herev-yachts.vercel.app`: `/admin` → 307 na CMS)
-- [ ] `pnpm build`, `pnpm typecheck`, `pnpm test` zielone; Lighthouse mobile
-      bez regresji
+- [x] `pnpm build`, `pnpm typecheck`, `pnpm test` zielone; Lighthouse mobile
+      bez regresji (HTML produkcji identyczny z poprzednim — nie mierzone)
 
 ### Krok 9.2 — Klocki, Studio po polsku, Ustawienia, teksty interfejsu
 
@@ -420,3 +421,9 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   `sanity` + `@sanity/vision` 6.10.1 → 6.17.0 (Studio ostrzegało o utracie
   edycji rich textu), `@sanity/client` 8.2.0 → 8.9.0. Nie 6.18.0: była młodsza niż `minimumReleaseAge`
   pnpm i wymagała wyjątków w `pnpm-workspace.yaml` — nie obchodzimy tej ochrony.
+- **2026-10-07** — Krok 9.1 zamknięty. Wdrożone na domenach vercel.app
+  (`herev-yachts` = produkcja, `herev-cms` = Studio + podgląd); podgląd,
+  klik w tekst i publikacja → rebuild sprawdzone przez Tomasza. Integracja
+  Sanity–Vercel dodała CORS bez „Allow credentials” — trzeba było dodać
+  wpis ponownie z zaznaczoną opcją. Lista przed startem:
+  `docs/launch-checklist.md`.
