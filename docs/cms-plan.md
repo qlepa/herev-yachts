@@ -12,9 +12,9 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 - **Bieżący krok:** 9.2 — kod zrobiony (2026-10-07); do zamknięcia: test
   w Studio na `herev-cms.vercel.app` (Tomasz)
-- **Następna akcja:** Tomasz: filtr webhooka
-  `_type in ["post", "uiStrings", "siteSettings"]`; przegląd Studio
-  (Ustawienia → Kontakt i SEO, Teksty interfejsu); potem krok 9.3
+- **Następna akcja:** przegląd Studio (Ustawienia → Kontakt i SEO, Teksty
+  interfejsu); decyzje o łodziach (adres sprzedanej, „cena na zapytanie”,
+  nowa marka, kolejność 9.3 vs 9.4–9.5); potem kolejny krok
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
@@ -509,3 +509,6 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   martwym `og:image` różnią się tylko tytuły 20 stron jachtów marki
   („| Herev” → „— Herev”). Wypełnione ustawienia (telefon, obrazek, profile)
   sprawdzone na podglądzie roboczym.
+- **2026-10-07** — Wdrożone na vercel.app (produkcja + CMS sprawdzone). Filtr
+  webhooka zmieniony przez Tomasza na `_type in ["post", "uiStrings",
+  "siteSettings"]`.
