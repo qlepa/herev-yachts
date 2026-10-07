@@ -1,4 +1,7 @@
 import { defineArrayMember, defineField, defineType } from 'sanity';
+import { withCharCount } from '../components/CharCountInput';
+import { LANGUAGES } from '../languages';
+import { ALT_FIELD_DESCRIPTION, ALT_REQUIRED, recommendMinWidth } from './image';
 
 const POLISH_DIACRITICS: Record<string, string> = {
   ą: 'a', ć: 'c', ę: 'e', ł: 'l', ń: 'n', ó: 'o', ś: 's', ź: 'z', ż: 'z',
@@ -25,134 +28,93 @@ export const POST_CATEGORIES = [
 
 export const postType = defineType({
   name: 'post',
-  title: 'Blog post',
+  title: 'Wpis na blogu',
   type: 'document',
+  groups: [
+    { name: 'content', title: 'Treść', default: true },
+    { name: 'details', title: 'Szczegóły' },
+    { name: 'seo', title: 'SEO' },
+  ],
   fields: [
     defineField({
       name: 'title',
+      title: 'Tytuł',
       type: 'string',
-      validation: (Rule) => Rule.required(),
+      group: 'content',
+      validation: (Rule) => Rule.required().error('Wpisz tytuł'),
     }),
     defineField({
       name: 'slug',
+      title: 'Adres strony',
+      description:
+        'Końcówka adresu: /en/blog/adres-strony/. Kliknij „Generate”, aby utworzyć go z tytułu. Nie zmieniaj po publikacji — stare linki przestaną działać.',
       type: 'slug',
+      group: 'content',
       options: {
         source: 'title',
         maxLength: 96,
         slugify: (input: string) => slugify(input),
       },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'locale',
-      title: 'Language',
-      type: 'string',
-      options: {
-        list: [
-          { title: 'English', value: 'en' },
-          { title: 'Polski', value: 'pl' },
-          { title: 'Español', value: 'es' },
-          { title: 'Italiano', value: 'it' },
-        ],
-        layout: 'radio',
-      },
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'translationOf',
-      title: 'Translation of',
-      description:
-        'The English version of this article — links them for hreflang. Leave empty for the English version itself.',
-      type: 'reference',
-      to: [{ type: 'post' }],
-      options: {
-        filter: 'locale == "en"',
-      },
-      hidden: ({ parent }) => (parent as { locale?: string } | undefined)?.locale === 'en',
-      validation: (Rule) =>
-        Rule.custom((value, context) => {
-          const locale = (context.parent as { locale?: string } | undefined)?.locale;
-          if (locale && locale !== 'en' && !value) {
-            return 'Required for non-English posts — link to the English version';
-          }
-          return true;
-        }),
+      validation: (Rule) => Rule.required().error('Uzupełnij adres strony (przycisk „Generate”)'),
     }),
     defineField({
       name: 'excerpt',
-      title: 'Excerpt',
-      description: 'Shown on the blog listing cards and used as the meta description fallback. Max 200 characters.',
+      title: 'Zajawka',
+      description:
+        'Krótki opis na kafelku na liście bloga. Jest też opisem w Google, jeśli w zakładce SEO nie wpiszesz innego.',
       type: 'text',
       rows: 3,
-      validation: (Rule) => Rule.required().max(200),
-    }),
-    defineField({
-      name: 'author',
-      title: 'Author',
-      type: 'string',
-    }),
-    defineField({
-      name: 'publishedAt',
-      title: 'Published at',
-      type: 'date',
-      validation: (Rule) => Rule.required(),
-    }),
-    defineField({
-      name: 'modifiedAt',
-      title: 'Last updated',
-      description: 'Set when the article content was meaningfully updated. Empty = date of the last save.',
-      type: 'date',
-    }),
-    defineField({
-      name: 'categories',
-      title: 'Categories',
-      description: 'The first one is shown on the blog listing and above the title.',
-      type: 'array',
-      of: [defineArrayMember({ type: 'string' })],
-      options: { list: [...POST_CATEGORIES] },
+      group: 'content',
+      components: { input: withCharCount(200) },
+      validation: (Rule) => [
+        Rule.required().error('Wpisz zajawkę'),
+        Rule.max(200).error('Maksymalnie 200 znaków'),
+      ],
     }),
     defineField({
       name: 'image',
-      title: 'Cover image',
+      title: 'Zdjęcie główne',
+      description: 'Na liście bloga i na górze wpisu. Najlepiej poziome, co najmniej 1200 px szerokości.',
       type: 'image',
+      group: 'content',
       options: { hotspot: true },
+      validation: recommendMinWidth(1200),
       fields: [
         defineField({
           name: 'alt',
-          title: 'Alt text',
+          title: 'Opis zdjęcia (alt)',
+          description: ALT_FIELD_DESCRIPTION,
           type: 'string',
           validation: (Rule) =>
             Rule.custom((alt, context) => {
               const image = context.parent as { asset?: unknown } | undefined;
-              if (image?.asset && !alt) {
-                return 'Alt text is required when a cover image is set';
-              }
-              return true;
+              return image?.asset && !alt ? ALT_REQUIRED : true;
             }),
         }),
       ],
     }),
     defineField({
       name: 'body',
-      title: 'Content',
+      title: 'Treść',
       type: 'array',
+      group: 'content',
       of: [
         defineArrayMember({
           type: 'block',
           styles: [
-            { title: 'Normal', value: 'normal' },
-            { title: 'H2', value: 'h2' },
-            { title: 'H3', value: 'h3' },
-            { title: 'Quote', value: 'blockquote' },
+            { title: 'Akapit', value: 'normal' },
+            { title: 'Nagłówek', value: 'h2' },
+            { title: 'Podtytuł', value: 'h3' },
+            { title: 'Cytat', value: 'blockquote' },
           ],
           lists: [
-            { title: 'Bullet', value: 'bullet' },
-            { title: 'Numbered', value: 'number' },
+            { title: 'Wypunktowanie', value: 'bullet' },
+            { title: 'Numerowanie', value: 'number' },
           ],
           marks: {
             decorators: [
-              { title: 'Bold', value: 'strong' },
-              { title: 'Italic', value: 'em' },
+              { title: 'Pogrubienie', value: 'strong' },
+              { title: 'Kursywa', value: 'em' },
             ],
             annotations: [
               {
@@ -163,10 +125,12 @@ export const postType = defineType({
                   {
                     name: 'href',
                     type: 'url',
-                    title: 'URL',
-                    description: 'Full address (https://…) or a page on this site, e.g. /en/blog/…/',
+                    title: 'Adres',
+                    description: 'Pełny adres (https://…) albo strona w tym serwisie, np. /en/blog/…/',
                     validation: (Rule) =>
-                      Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
+                      Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }).error(
+                        'Nieprawidłowy adres — zacznij od https://, / albo mailto:',
+                      ),
                   },
                 ],
               },
@@ -175,18 +139,21 @@ export const postType = defineType({
         }),
         defineArrayMember({
           type: 'image',
-          title: 'Image',
+          title: 'Zdjęcie',
           options: { hotspot: true },
+          validation: recommendMinWidth(800),
           fields: [
             defineField({
               name: 'alt',
-              title: 'Alt text',
+              title: 'Opis zdjęcia (alt)',
+              description: ALT_FIELD_DESCRIPTION,
               type: 'string',
-              validation: (Rule) => Rule.required(),
+              validation: (Rule) => Rule.required().error(ALT_REQUIRED),
             }),
             defineField({
               name: 'caption',
-              title: 'Caption',
+              title: 'Podpis',
+              description: 'Opcjonalny, widoczny pod zdjęciem.',
               type: 'string',
             }),
           ],
@@ -194,15 +161,77 @@ export const postType = defineType({
       ],
     }),
     defineField({
+      name: 'locale',
+      title: 'Język',
+      type: 'string',
+      group: 'details',
+      options: { list: LANGUAGES, layout: 'radio' },
+      validation: (Rule) => Rule.required().error('Wybierz język'),
+    }),
+    defineField({
+      name: 'translationOf',
+      title: 'Wersja angielska',
+      description:
+        'Ten sam artykuł po angielsku — łączy wersje językowe, żeby Google pokazywał właściwy język. Puste tylko dla wpisu po angielsku.',
+      type: 'reference',
+      group: 'details',
+      to: [{ type: 'post' }],
+      options: {
+        filter: 'locale == "en"',
+      },
+      hidden: ({ parent }) => (parent as { locale?: string } | undefined)?.locale === 'en',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const locale = (context.parent as { locale?: string } | undefined)?.locale;
+          if (locale && locale !== 'en' && !value) {
+            return 'Wskaż angielską wersję tego artykułu';
+          }
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'author',
+      title: 'Autor',
+      description: 'Widoczny pod tytułem. Puste = bez autora.',
+      type: 'string',
+      group: 'details',
+    }),
+    defineField({
+      name: 'publishedAt',
+      title: 'Data publikacji',
+      description: 'Widoczna pod tytułem; decyduje o kolejności na liście bloga (najnowsze pierwsze).',
+      type: 'date',
+      group: 'details',
+      validation: (Rule) => Rule.required().error('Wybierz datę publikacji'),
+    }),
+    defineField({
+      name: 'modifiedAt',
+      title: 'Data aktualizacji',
+      description: 'Wpisz, gdy treść artykułu istotnie się zmieniła. Puste = data ostatniego zapisu.',
+      type: 'date',
+      group: 'details',
+    }),
+    defineField({
+      name: 'categories',
+      title: 'Kategorie',
+      description: 'Pierwsza wybrana jest widoczna na liście bloga i nad tytułem.',
+      type: 'array',
+      group: 'details',
+      of: [defineArrayMember({ type: 'string' })],
+      options: { list: [...POST_CATEGORIES] },
+    }),
+    defineField({
       name: 'seo',
       title: 'SEO',
+      description: 'Jak wpis wygląda w wynikach Google. Puste pola = tytuł i zajawka wpisu.',
       type: 'seo',
+      group: 'seo',
     }),
   ],
   preview: {
-    select: { title: 'title', locale: 'locale', media: 'image' },
-    prepare({ title, locale, media }) {
-      return { title, subtitle: locale, media };
+    select: { title: 'title', locale: 'locale', publishedAt: 'publishedAt', media: 'image' },
+    prepare({ title, locale, publishedAt, media }) {
+      return { title, subtitle: [locale?.toUpperCase(), publishedAt].filter(Boolean).join(' · '), media };
     },
   },
 });

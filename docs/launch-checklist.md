@@ -53,8 +53,8 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       podmienić URL w webhooku Sanity, stary hook usunąć
 - [ ] Webhook → Deploy Hook: filtr obejmuje wszystkie typy treści z CMS
       (bez `notificationRecipients`); test publikacji end-to-end
-- [ ] Prawdziwe adresy w odbiorcach leadów dopiero, gdy dokument jest pod
-      `private.notificationRecipients` (krok 9.2)
+- [ ] Odbiorcy leadów: prawdziwe adresy wpisane (dokument jest pod
+      `private.notificationRecipients` od kroku 9.2 — niewidoczny bez tokena)
 - [ ] Usunięte treści testowe (posty testowe, przykładowe dokumenty)
 
 ## 4. Klucze i integracje

@@ -10,7 +10,7 @@ export const resolve: PresentationPluginOptions['resolve'] = {
         locations:
           doc?.slug && doc.locale
             ? [
-                { title: doc.title || 'Post', href: `/${doc.locale}/blog/${doc.slug}/` },
+                { title: doc.title || 'Wpis', href: `/${doc.locale}/blog/${doc.slug}/` },
                 { title: 'Blog', href: `/${doc.locale}/blog/` },
               ]
             : [],

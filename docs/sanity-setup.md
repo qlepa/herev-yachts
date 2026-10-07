@@ -1,6 +1,8 @@
 # Sanity CMS — setup i obsługa
 
-Zakres (Krok 4): blog (en/pl/es/it) + singleton `notificationRecipients`.
+Zakres (Krok 4): blog (en/pl/es/it) + singleton `notificationRecipients`
+(dokument o stałym ID `private.notificationRecipients` — kropka w ID
+ukrywa go przed zapytaniami bez tokena, także na planie Free).
 Reszta treści (jachty/marki/dealerzy) zostaje w `src/content/` — patrz
 `docs/agency_handover.md`.
 

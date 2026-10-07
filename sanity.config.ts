@@ -2,9 +2,11 @@ import { defineConfig } from 'sanity';
 import { structureTool } from 'sanity/structure';
 import { presentationTool } from 'sanity/presentation';
 import { visionTool } from '@sanity/vision';
+import { plPLLocale } from '@sanity/locale-pl-pl';
 import { schemaTypes } from './src/sanity/schemaTypes';
 import { structure } from './src/sanity/structure';
 import { resolve } from './src/sanity/presentation';
+import { LANGUAGES } from './src/sanity/languages';
 
 const SINGLETON_TYPES = new Set(['notificationRecipients']);
 
@@ -17,7 +19,7 @@ export default defineConfig({
   basePath: '/admin',
 
   plugins: [
-    structureTool({ structure }),
+    structureTool({ title: 'Treść', structure }),
     presentationTool({
       title: 'Podgląd',
       resolve,
@@ -30,10 +32,21 @@ export default defineConfig({
       },
     }),
     visionTool(),
+    plPLLocale(),
   ],
 
   schema: {
     types: schemaTypes,
+    // A new post is created in the language it is added from, dated today.
+    templates: (prev) => [
+      ...prev.filter((template) => template.schemaType !== 'post'),
+      ...LANGUAGES.map(({ value, title }) => ({
+        id: `post-${value}`,
+        title: `Wpis na blogu — ${title}`,
+        schemaType: 'post',
+        value: () => ({ locale: value, publishedAt: new Date().toISOString().slice(0, 10) }),
+      })),
+    ],
   },
 
   document: {

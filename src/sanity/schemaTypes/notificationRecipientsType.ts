@@ -2,18 +2,19 @@ import { defineField, defineType } from 'sanity';
 
 export const notificationRecipientsType = defineType({
   name: 'notificationRecipients',
-  title: 'Notification recipients',
+  title: 'Odbiorcy powiadomień',
   type: 'document',
   fields: [
     defineField({
       name: 'emails',
-      title: 'Emails',
-      description: 'Every address on this list receives a Resend notification for each new lead.',
+      title: 'Adresy e-mail',
+      description:
+        'Każdy adres z listy dostaje e-mail o każdym nowym zapytaniu ze strony. Ten dokument nie jest widoczny publicznie.',
       type: 'array',
       of: [
         {
           type: 'string',
-          validation: (Rule) => Rule.email(),
+          validation: (Rule) => Rule.email().error('Nieprawidłowy adres e-mail'),
         },
       ],
     }),
@@ -22,8 +23,8 @@ export const notificationRecipientsType = defineType({
     select: { emails: 'emails' },
     prepare({ emails }) {
       return {
-        title: 'Notification recipients',
-        subtitle: Array.isArray(emails) ? `${emails.length} address(es)` : 'No addresses',
+        title: 'Odbiorcy powiadomień',
+        subtitle: Array.isArray(emails) ? `Adresów: ${emails.length}` : 'Brak adresów',
       };
     },
   },

@@ -10,9 +10,9 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Stan
 
-- **Bieżący krok:** 9.2 — nierozpoczęty (9.1 zamknięty 2026-10-07)
-- **Następna akcja:** odpowiedzi na pytania o blog z yachts24.eu (sekcja
-  „Do potwierdzenia”), potem kod 9.2
+- **Bieżący krok:** 9.2 — część 1 (Studio po polsku) zrobiona; część 2
+  (Ustawienia + teksty interfejsu w CMS) czeka na decyzje
+- **Następna akcja:** decyzje do części 2 9.2, potem kod
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
@@ -169,17 +169,21 @@ Kryteria wyjścia:
 ### Krok 9.2 — Klocki, Studio po polsku, Ustawienia, teksty interfejsu
 
 Kod:
-- [ ] Studio po polsku: `@sanity/locale-pl-pl`; polskie tytuły i opisy pól
-      z przykładami
+- [x] Studio po polsku: `@sanity/locale-pl-pl`; polskie tytuły i opisy pól
+      z przykładami (post, SEO, odbiorcy); post w zakładkach Treść /
+      Szczegóły / SEO; nowy wpis z listy języka ma ten język i dzisiejszą datę
 - [ ] Pola wielojęzyczne (`sanity-plugin-internationalized-array`) + filtr
       języka (`@sanity/language-filter`)
-- [ ] Wspólne typy: zdjęcie (alt, hotspot, walidacja min. wymiarów
+- [ ] Wspólne typy (zrobione: `seo` z licznikami znaków i podglądem wyniku
+      Google; ostrzeżenie o za małym zdjęciu `recommendMinWidth` — ostrzeżenie,
+      nie blokada, bo 20 okładek z yachts24 ma < 1200 px): zdjęcie (alt, hotspot, walidacja min. wymiarów
       z czytelnym komunikatem), `seo` (tytuł ≤ 60, opis ≤ 160, obrazek OG;
       liczniki znaków + podgląd wyniku Google), wideo (link Vimeo/YouTube;
       link do pliku Vimeo dla tła — walidacja rozpoznaje rodzaj linku
       i podpowiada, skąd go skopiować)
 - [ ] Struktura menu Studio jak w „Mapie Studio”; singletony bez usuwania
-      i duplikowania
+      i duplikowania (zrobione: Blog wg języka, Ustawienia → Odbiorcy
+      powiadomień; reszta dochodzi z kolejnymi typami)
 - [ ] Ustawienia: nawigacja, stopka (+ linki do stron tekstowych), kontakt,
       sufiks tytułu (dziś mieszane „— Herev” i „| Herev”), domyślny opis
       i obrazek do udostępnień (dziś brak `/og.jpg`), profile social
@@ -187,7 +191,7 @@ Kod:
 - [ ] Teksty interfejsu — dokument na język: przyciski, formularze, filtry,
       mapa, etykiety specyfikacji, kategorie, regiony, aria-labele; walidacja
       placeholderów (`{name}`, `{brand}`, `{n}`, `{b}`, `{country}`)
-- [ ] `notificationRecipients` pod prywatnym ID
+- [x] `notificationRecipients` pod prywatnym ID
       `private.notificationRecipients` — niewidoczny bez tokena także na
       Free (dokument nie był jeszcze opublikowany, więc bez migracji danych)
 - [x] Dataset `development` (`sanity dataset create development
@@ -353,9 +357,9 @@ Content Releases są tylko w Enterprise — niepotrzebne: wersje robocze
 Przejść na Growth, gdy zajdzie którykolwiek warunek:
 - [ ] osoba od treści klienta dostaje dostęp (rola Editor zamiast
       Administratora, który może np. skasować dataset)
-- [ ] do `notificationRecipients` mają trafić prawdziwe adresy, zanim
-      zadanie „prywatne ID” z 9.2 jest zrobione (do tego czasu dokument
-      byłby publiczny)
+- [x] ~~do `notificationRecipients` mają trafić prawdziwe adresy, zanim
+      zadanie „prywatne ID” z 9.2 jest zrobione~~ — nieaktualne, dokument
+      jest pod `private.notificationRecipients` od 2026-10-07
 - [ ] liczba atrybutów przekracza ~1 800
 - [ ] start produkcyjny
 
@@ -454,3 +458,11 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   osadzenia HTML, 7 postów bez kategorii). Lista bloga ma paginację
   (12 na stronę). Atrybuty: 129 / 2 000. Decyzja o duplikatach z
   yachts24.eu — `docs/launch-checklist.md` §5.
+- **2026-10-07** — Krok 9.2, część 1: Studio po polsku (`@sanity/locale-pl-pl`
+  — nowa zależność, tłumaczenie interfejsu Studio), polskie pola posta
+  z opisami i komunikatami walidacji, zakładki w poście, Blog wg języka
+  w menu, licznik znaków + podgląd Google w SEO, ostrzeżenia o małych
+  zdjęciach. Odbiorcy powiadomień pod `private.notificationRecipients`
+  (w żadnym datasecie nie było jeszcze takiego dokumentu — nic do
+  migracji). Walidacja wszystkich dokumentów w `development`: 0 błędów,
+  30 ostrzeżeń o małych zdjęciach z yachts24.
