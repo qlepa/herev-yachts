@@ -1,6 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import CmsImage from '../ui/CmsImage.astro';
+import type { CmsImageData } from '../../lib/sanityImage';
 import SectionLabel from '../ui/SectionLabel.astro';
 import TextLink from '../ui/TextLink.astro';
 
@@ -14,7 +15,7 @@ interface Props {
   heading: string;
   body: string;
   stats: Stat[];
-  image: ImageMetadata;
+  image: ImageMetadata | CmsImageData;
   imageAlt: string;
   imageCaption: string;
   linkLabel: string;
@@ -61,7 +62,7 @@ const { eyebrow, heading, body, stats, image, imageAlt, imageCaption, linkLabel,
 
       <!-- Image -->
       <div class="relative overflow-hidden" style="aspect-ratio: 16/10;">
-        <Image
+        <CmsImage
           src={image}
           alt={imageAlt}
           widths={[600, 1000]}

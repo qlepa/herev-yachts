@@ -99,6 +99,11 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
 
 - [ ] `public/700 SKY-…/` (zdjęcia + PDF klienta, publicznie dostępne) —
       usunięte albo przeniesione do CMS (decyzja w `docs/cms-plan.md`)
+- [ ] **Polityka prywatności i polityka cookies od klienta** (we wszystkich
+      językach startu) — wpisane w Studio jako „Strona tekstowa”
+      i opublikowane; link w stopce pojawia się dopiero po publikacji.
+      Bez nich zgoda w formularzu leada odwołuje się do polityki, której
+      nie ma na stronie (RODO)
 - [ ] Lighthouse mobile ≥ 95: strona główna, marka, jacht
 - [ ] Formularz leada w 4 językach: dociera do Pipedrive i na e-maile;
       awaria integracji nie gubi leada

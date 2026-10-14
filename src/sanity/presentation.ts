@@ -1,9 +1,13 @@
 import { defineDocuments, defineLocations, type PresentationPluginOptions } from 'sanity/presentation';
+import { LANGUAGES } from './languages';
 
 // Where each document appears on the site — the Presentation tool lists
 // these pages on the document and opens the right document for a URL.
 export const resolve: PresentationPluginOptions['resolve'] = {
   locations: {
+    homePage: {
+      locations: LANGUAGES.map(({ value, title }) => ({ title: `Strona główna — ${title}`, href: `/${value}/` })),
+    },
     siteSettings: {
       message: 'Używane na wszystkich stronach',
       tone: 'caution',
@@ -37,6 +41,7 @@ export const resolve: PresentationPluginOptions['resolve'] = {
     }),
   },
   mainDocuments: defineDocuments([
+    { route: '/:lang', type: 'homePage' },
     {
       route: '/:lang/blog/:slug',
       filter: '_type == "post" && locale == $lang && slug.current == $slug',

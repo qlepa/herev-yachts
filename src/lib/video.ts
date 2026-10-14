@@ -46,3 +46,26 @@ export function parseVideoUrl(url: string): VideoEmbed | null {
 
   return null;
 }
+
+/**
+ * Background video (autoplay, muted loop) needs a direct link to the video
+ * file, which Vimeo gives on paid plans. Returns what is wrong with `url`
+ * in words an editor can act on (Polish — shown in the Studio), or null.
+ */
+export function backgroundVideoProblem(url: string): string | null {
+  let u: URL;
+  try {
+    u = new URL(url);
+  } catch {
+    return 'To nie jest link — wklej pełny adres zaczynający się od https://';
+  }
+  const host = u.hostname.replace(/^www\./, '');
+  if (host === 'player.vimeo.com' && /^\/(progressive_redirect|external)\//.test(u.pathname)) return null;
+  if (host === 'vimeo.com' || host === 'player.vimeo.com') {
+    return 'To link do strony filmu, a potrzebny jest link do pliku. W Vimeo otwórz film → zakładka „Distribution” → „Video file links” → skopiuj link do wersji 1080p.';
+  }
+  if (parseVideoUrl(url)) {
+    return 'YouTube nie udostępnia linków do plików — wgraj film na Vimeo i wklej link do pliku.';
+  }
+  return 'Nieobsługiwany link — wklej link do pliku z Vimeo (player.vimeo.com/progressive_redirect/… lub player.vimeo.com/external/…).';
+}

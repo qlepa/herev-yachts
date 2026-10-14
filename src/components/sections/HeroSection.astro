@@ -1,6 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import CmsImage from '../ui/CmsImage.astro';
+import type { CmsImageData } from '../../lib/sanityImage';
 import Btn from '../ui/Btn.astro';
 import SectionLabel from '../ui/SectionLabel.astro';
 
@@ -16,7 +17,7 @@ interface Props {
   /** Optional third CTA (yacht page: brochure download). Opens in a new tab. */
   cta3Label?: string;
   cta3Href?: string;
-  image: ImageMetadata;
+  image: ImageMetadata | CmsImageData;
   imageAlt: string;
   videoSrc?: string;
   posterSrc?: string;
@@ -46,7 +47,7 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
       </video>
     ) : (
       <Fragment>
-        <Image
+        <CmsImage
           src={image}
           alt={imageAlt}
           widths={[800, 1200, 1920]}
@@ -109,7 +110,7 @@ const { eyebrow, heading, subtext, specLine, cta1Label, cta1Href, cta2Label, cta
   <section class="relative overflow-hidden" style="height: clamp(440px, 60vh, 660px);">
 
     <!-- Background image (LCP + poster fallback) -->
-    <Image
+    <CmsImage
       src={image}
       alt={imageAlt}
       widths={[800, 1200, 1920]}

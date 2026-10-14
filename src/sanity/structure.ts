@@ -1,11 +1,25 @@
 import type { StructureBuilder } from 'sanity/structure';
 import { LANGUAGES } from './languages';
-import { NOTIFICATION_RECIPIENTS_ID, SITE_SETTINGS_ID, uiStringsId } from './documentIds';
+import { HOME_PAGE_ID, NOTIFICATION_RECIPIENTS_ID, SITE_SETTINGS_ID, uiStringsId } from './documentIds';
 
 export function structure(S: StructureBuilder) {
   return S.list()
     .title('Treść')
     .items([
+      S.listItem()
+        .title('Strony')
+        .id('pages')
+        .child(
+          S.list()
+            .title('Strony')
+            .items([
+              S.listItem()
+                .title('Strona główna')
+                .id(HOME_PAGE_ID)
+                .child(S.document().schemaType('homePage').documentId(HOME_PAGE_ID)),
+            ]),
+        ),
+      S.divider(),
       S.listItem()
         .title('Blog')
         .id('blog')

@@ -10,15 +10,13 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Stan
 
-- **Bieżący krok:** 9.2 — kod zrobiony (2026-10-07); do zamknięcia: test
-  w Studio na `herev-cms.vercel.app` (Tomasz)
-- **Następna akcja:** przegląd Studio (Ustawienia → Kontakt i SEO, Teksty
-  interfejsu); decyzje o łodziach (adres sprzedanej, „cena na zapytanie”,
-  nowa marka, kolejność 9.3 vs 9.4–9.5); potem kolejny krok
+- **Bieżący krok:** 9.3a — kod zrobiony (2026-10-14); do zamknięcia: filtr
+  webhooka + test Strony głównej w Studio (Tomasz)
+- **Następna akcja:** 9.3b (pozostałe strony)
 - **Otwarte z 9.1:** domena `cms.herev.com` (czeka na klienta), powiadomienia
   Vercela o nieudanym buildzie, test podglądu w Safari
 - **Blokery:** brak
-- **Ostatnia aktualizacja:** 2026-10-07
+- **Ostatnia aktualizacja:** 2026-10-14
 
 ## Decyzje
 
@@ -37,6 +35,10 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 | D11 | Obrazy: na produkcji przez astro:assets (pobierane z Sanity przy buildzie), w podglądzie prosto z CDN Sanity | 2026-10-07 | Zasada DoD „images via astro:assets” zostaje; transfer obrazów idzie z Vercela, nie z limitu Sanity |
 | D12 | Poza CMS: dealerzy (`src/content/dealers`) i `src/data/locations.json` | 2026-10-07 | To dane (Pipedrive, import CSV), nie treść. Teksty strony Network idą do CMS |
 | D13 | Prywatność na Free: opublikowana treść jest publiczna w API (i tak jest na stronie); prywatne są wersje robocze i dokumenty z kropką w `_id` | 2026-10-07 | `notificationRecipients` → `private.notificationRecipients` (krok 9.2). Pliki (zdjęcia, PDF) są publiczne po URL-u na każdym planie (prywatne pliki = płatny Media Library) — do CMS nie trafia nic poufnego. Treść tajna do premiery = nieopublikowana wersja robocza (podgląd ją pokazuje) |
+| D14 | Sprzedany egzemplarz: strona zostaje z etykietą „Sprzedany”, bez ceny i formularza, z linkiem do modelu z katalogu | 2026-10-14 | Udostępnione linki działają dalej; zero przekierowań do utrzymania. Dziś `sold: true` ukrywa stronę (404) — zmiana w 9.5 |
+| D15 | Cena egzemplarza opcjonalna; brak ceny = „Cena na zapytanie” | 2026-10-14 | Krok 9.5 |
+| D16 | Marki: 5 stałych dokumentów, nową dodaje programista | 2026-10-14 | Każda marka wymaga opcji w Pipedrive (`pipedriveOptionLabel` znak w znak) — i tak praca poza CMS |
+| D17 | Kolejność: 9.3 → 9.4 → 9.5 | 2026-10-14 | 9.3 buduje `CmsImage`, pola wielojęzyczne i typ wideo potrzebne w 9.4 |
 
 ## Do potwierdzenia
 
@@ -179,7 +181,9 @@ Kod:
       języka (`@sanity/language-filter`)~~ → przeniesione do 9.3: w 9.2 nic
       ich nie potrzebuje (teksty interfejsu to dokument na język, Ustawienia
       nie mają tekstów zależnych od języka); dojdą razem ze stronami
-- [ ] Wspólne typy (zrobione: `seo` z licznikami znaków i podglądem wyniku
+- [ ] ~~Wspólne typy~~ → reszta (zdjęcie z walidacją wymiarów, wideo)
+      przeniesiona do 9.3, gdzie dochodzą pierwsze pola, które ich używają.
+      Plan pierwotny (zrobione: `seo` z licznikami znaków i podglądem wyniku
       Google; ostrzeżenie o za małym zdjęciu `recommendMinWidth` — ostrzeżenie,
       nie blokada, bo 20 okładek z yachts24 ma < 1200 px): zdjęcie (alt, hotspot, walidacja min. wymiarów
       z czytelnym komunikatem), `seo` (tytuł ≤ 60, opis ≤ 160, obrazek OG;
@@ -255,21 +259,74 @@ Kryteria wyjścia:
 
 ### Krok 9.3 — Strony
 
-Kod:
-- [ ] Singletony: Strona główna, Usługi, Marki, Jachty, Dostępne od ręki,
-      Sieć dealerska, Blog, 404 — sekcje w kolejności wyświetlania + SEO
-- [ ] Strona główna: liczby (5 / 17 / 1, 30+ / 60+), zdjęcia sekcji (dziś
-      `src/assets/site/*` i na sztywno hero `galeon-500-fly`
-      i `saxdor-400-gtc`), alty
-- [ ] Hero wideo: link do pliku Vimeo + poster z CMS (zastępuje podpisany
-      URL w kodzie i pobieranie oEmbed)
-- [ ] Strony tekstowe: dokument na język (jak blog: `locale` +
-      `translationOf`), trasa, linki w stopce
-- [ ] Komponent `CmsImage`
-- [ ] Migracja treści stron + zdjęć `src/assets/site/*`
-- [ ] Presentation: lokalizacje + `mainDocuments` dla wszystkich stron
+Podział na trzy PR-y (decyzja Tomasza 2026-10-14): 9.3a fundament + strona
+główna, 9.3b pozostałe strony, 9.3c strony tekstowe.
 
-Kryteria wyjścia:
+**9.3a — fundament + strona główna** (kod zrobiony 2026-10-14)
+- [x] Pola wielojęzyczne: `sanity-plugin-internationalized-array` (pola
+      `internationalizedArrayString|Text|Seo`, wszystkie 4 języki domyślnie)
+      + filtr języka `@sanity/language-filter`; walidacja „uzupełnij
+      wszystkie języki” (`src/sanity/schemaTypes/localized.ts`)
+- [x] Wspólny typ zdjęcia strony `pageImage`: hotspot i kadrowanie, alt
+      w każdym języku, ostrzeżenie < 1200 px
+- [x] Wideo w tle: pole URL z walidacją `backgroundVideoProblem`
+      (`src/lib/video.ts`) — rozpoznaje link do strony Vimeo, YouTube,
+      inne i mówi, skąd wziąć link do pliku. Typ „link do filmu
+      (Vimeo/YouTube)” dojdzie w 9.4 razem z polem wideo jachtu
+- [x] Singleton „Strona główna” (`homePage`): Na górze (teksty, film,
+      zdjęcie/poster), Wprowadzenie (3 liczby), Doradztwo (2 bloki z punktami
+      i zdjęciem), Poradnik, Stocznie (zdjęcie), Hasło, Sieć dealerska
+      (2 liczby; liczba krajów dalej liczona z `locations.json`), SEO
+- [x] Komponent `CmsImage` (`src/components/ui/`): repo → astro:assets jak
+      dotąd; CMS w buildzie → astro:assets ze źródłem z `cdn.sanity.io`
+      (`image.domains`), na CMS → srcset z CDN Sanity; hotspot →
+      `object-position`; w podglądzie `data-sanity` (klik w zdjęcie)
+- [x] Warstwa danych: `src/lib/server/cms/localize.ts` (wybór języka,
+      lista braków), `home.ts` (opublikowana treść niepełna = błąd buildu,
+      szkic = puste pola) + testy
+- [x] Hero: poster z CMS przez astro:assets + film z linku z CMS; usunięte
+      pobieranie oEmbed i podpisany URL z kodu
+- [x] Migracja `scripts/migrate-home-page.ts` (teksty z
+      `i18n-strings.ts`, zdjęcia z `src/assets`, poster = miniatura Vimeo
+      1920 px); uruchomiona na `development` i `production` 2026-10-14.
+      Alty były po angielsku we wszystkich językach — skopiowane 1:1, do
+      przetłumaczenia przez osobę od treści
+- [x] Presentation: lokalizacje strony głównej (4 języki), `mainDocuments`
+      `/:lang`; podgląd startuje od `/en/`
+- Poza 9.3a (zostaje w kodzie do 9.3b, bo wspólne z innymi stronami):
+  teksty formularza na dole (`lead.eyebrow|heading|subtext` — też Usługi
+  i strony marek) i paska „Dostępne od ręki” (`stock.heading|subheading`
+  — też strona listy egzemplarzy); kafelki marek → 9.4
+
+Ręcznie (Tomasz):
+- [ ] Sanity → API → Webhooks: dopisać `"homePage"` do filtra
+      (`_type in ["post", "uiStrings", "siteSettings", "homePage"]`) — bez
+      tego publikacja strony głównej nie przebuduje produkcji
+- [ ] Przegląd w Studio na `herev-cms.vercel.app`: Strony → Strona główna
+
+Kryteria wyjścia 9.3a:
+- [x] Tekst HTML przed i po bez różnic: 357 stron, różnią się tylko
+      4 strony główne — widoczny tekst, tytuł i meta identyczne; zmiana
+      celowa: hero renderuje poster przez astro:assets (wcześniej
+      `<video poster>` z vimeocdn)
+- [ ] Strona główna edytowalna z podglądu (klik w tekst i zdjęcie) —
+      test Tomasza
+- [x] Lighthouse mobile bez regresji (lokalnie, `http-server` bez
+      kompresji: przed 90 / LCP 2,97 s → po 92 / LCP 2,66 s)
+
+**9.3b — pozostałe strony**
+- [ ] Singletony: Usługi, Marki, Jachty, Dostępne od ręki, Sieć dealerska,
+      Blog, 404 — sekcje w kolejności wyświetlania + SEO; wspólne teksty
+      formularza i paska „Dostępne od ręki”
+- [ ] Migracja treści + zdjęć `src/assets/site/*`
+- [ ] Presentation: lokalizacje + `mainDocuments` dla tych stron
+
+**9.3c — strony tekstowe**
+- [ ] Strony tekstowe: dokument na język (jak blog: `locale` +
+      `translationOf`), trasa, linki w stopce tylko do opublikowanych
+      (treści od klienta: `docs/launch-checklist.md` §5)
+
+Kryteria wyjścia 9.3 (całość):
 - [ ] Tekst HTML przed i po bez różnic (poza URL-ami obrazów i celowymi
       poprawkami)
 - [ ] Każda strona edytowalna z podglądu (klik w tekst i zdjęcie)
@@ -304,7 +361,9 @@ Kryteria wyjścia:
 
 Kod:
 - [ ] Egzemplarz: cena + waluta + status podatkowy, stan, motogodziny,
-      lokalizacja, odnośnik do modelu z katalogu, „sprzedany”, zdjęcia,
+      lokalizacja, odnośnik do modelu z katalogu, „sprzedany” (D14: strona
+      zostaje z etykietą, bez ceny i formularza), cena opcjonalna (D15:
+      „Cena na zapytanie”), zdjęcia,
       SEO, „widoczny w językach”
 - [ ] Migracja 3 egzemplarzy × 4 języki + zdjęcia
 - [ ] Strony `/available-now/*` + pasek na stronie głównej
@@ -323,6 +382,8 @@ Kryteria wyjścia:
       dla osoby od treści
 - [ ] Status publikacji w Studio („Aktualizuję stronę… → Gotowe”; endpoint
       na CMS pyta API Vercel, token tylko po stronie serwera)
+- [ ] Ukryć narzędzia „Vision” i „Releases” przed osobą od treści
+      (zbędne, mylą)
 - [ ] Panel „Jak to działa” na starcie Studio; udostępnianie podglądu
 - [ ] Planowanie publikacji (Growth)
 - [ ] Przewodnik `docs/cms-guide.md` (po polsku, ze zrzutami ekranu)
@@ -402,6 +463,8 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
 | 2026-10-07 | development (po imporcie bloga yachts24) | 125 / 2 000 | 459 |
 | 2026-10-07 | production (po tekstach interfejsu) | 335 / 2 000 | 468 |
 | 2026-10-07 | development (po tekstach interfejsu) | 331 / 2 000 | 463 |
+| 2026-10-14 | production (po stronie głównej) | 619 / 2 000 | 475 |
+| 2026-10-14 | development (po stronie głównej) | 611 / 2 000 | 470 |
 
 ## Ryzyka
 
@@ -512,3 +575,20 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
 - **2026-10-07** — Wdrożone na vercel.app (produkcja + CMS sprawdzone). Filtr
   webhooka zmieniony przez Tomasza na `_type in ["post", "uiStrings",
   "siteSettings"]`.
+- **2026-10-14** — Krok 9.2 zamknięty. Przegląd Studio na
+  `herev-cms.vercel.app` przez Tomasza: Kontakt i SEO (walidacja, telefon
+  pod formularzem), Teksty interfejsu (edycja i klik w tekst z Podglądu,
+  walidacja placeholderów), Odbiorcy powiadomień, blog, publikacja →
+  rebuild — działa. Sprawdzone na żywo: produkcja i CMS zwracają
+  `noindex,nofollow` (także wpisy bloga). Wspólne typy zdjęcia i wideo
+  przeniesione do 9.3. Safari dalej niesprawdzone.
+- **2026-10-14** — Krok 9.3a, kod. Pola wielojęzyczne, `pageImage`,
+  `CmsImage`, Strona główna w CMS, migracja na oba datasety. Pierwsze
+  porównanie wykazało 76 różnic: `CmsImage` gubił atrybut scoped styles
+  (`data-astro-cid-*`) zdjęć z repo — np. `hero-kenburns` na stronach
+  jachtów przestałby działać; poprawione (przekazywanie reszty atrybutów).
+  Atrybuty: 335 → 619 po samej stronie głównej (każde pole wielojęzyczne =
+  `_key`/`_type`/`language`/`value`). Przy tym tempie 9.3b–9.5 mogą
+  przekroczyć ~1 800 → Growth wcześniej niż przy starcie. Nowe zależności:
+  `sanity-plugin-internationalized-array` 5.3.4, `@sanity/language-filter`
+  5.0.21 (starsze niż najnowsze przez `minimumReleaseAge`).

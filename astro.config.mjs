@@ -18,6 +18,8 @@ const cmsMode = (process.env.SANITY_PREVIEW ?? dotenv.SANITY_PREVIEW) === 'true'
 export default defineConfig({
   site: 'https://herev.com',
   ...(cmsMode && { adapter: vercel() }),
+  // CMS images are fetched from Sanity at build time and optimised like local ones.
+  image: { domains: ['cdn.sanity.io'] },
   vite: {
     plugins: [tailwindcss()],
     build: {

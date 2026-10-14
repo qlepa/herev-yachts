@@ -15,11 +15,10 @@ import NetworkTeaser from '../../components/sections/NetworkTeaser.astro';
 import MobileCta from '../../components/ui/MobileCta.astro';
 import { getLocalePaths, type Locale } from '../../lib/i18n';
 import { loadTranslations } from '../../lib/server/cms/uiStrings';
-import { getYachtHero, getBrandHero } from '../../lib/images';
+import { loadHomePage } from '../../lib/server/cms/home';
+import { getBrandHero } from '../../lib/images';
 import { getStockEntries, toStockCards } from '../../lib/stock';
 import locations from '../../data/locations.json';
-import homepageHero from '../../assets/site/homepage-hero.jpeg';
-import marinaPic from '../../assets/site/cannes-marina.avif';
 import leadPic from '../../assets/site/lead-image.avif';
 import { staticPathProps } from '../../lib/staticPaths';
 
@@ -31,6 +30,7 @@ const { lang } = Astro.params as { lang: Locale };
 // Rendered on demand on the CMS deployment, where getStaticPaths does not run.
 if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
 const t = await loadTranslations(lang, Astro);
+const home = await loadHomePage(lang, Astro);
 
 const brandDisplayMap: Record<string, string> = {
   galeon:       'GALEON',
@@ -71,28 +71,13 @@ const brandTiles = await Promise.all(
   })),
 );
 
-const advisePic    = await getYachtHero('galeon-500-fly', false);
-const representPic = await getYachtHero('saxdor-400-gtc', false);
-
-let heroPosterSrc: string | undefined;
-try {
-  const oembedRes = await fetch('https://vimeo.com/api/oembed.json?url=https://vimeo.com/1185484138&width=1920');
-  if (oembedRes.ok) {
-    const oembedData = await oembedRes.json() as { thumbnail_url?: string };
-    heroPosterSrc = oembedData.thumbnail_url;
-  }
-} catch {
-  // fall through — HeroSection will use the static image fallback
-}
-
 const networkStats = [
-  { value: String(countryCount), label: t.network.countries },
-  { value: '30+',                label: t.network.berths },
-  { value: '60+',                label: t.network.models },
+  { value: String(countryCount), label: home.network.countriesLabel },
+  ...home.network.stats,
 ];
 ---
 
-<Layout lang={lang} title={t.meta.title} description={t.meta.description}>
+<Layout lang={lang} title={home.seo.title} description={home.seo.description}>
 
   <SiteHeader
     lang={lang}
@@ -105,79 +90,64 @@ const networkStats = [
 
     <HeroSection
       fullscreen
-      image={homepageHero}
-      imageAlt="A Saxdor yacht under way on open water"
-      videoSrc="https://player.vimeo.com/progressive_redirect/playback/1185484138/rendition/1080p/file.mp4%20%281080p%29.mp4?loc=external&oauth2_token_id=1799510047&signature=85041f5fdc32ddad1d3e0c1bfe3c7f45a2ad09386863675518639a098fb22027"
-      posterSrc={heroPosterSrc}
-      heading={t.hero.heading}
-      subtext={t.hero.subtext}
-      cta1Label={t.hero.cta1}
+      image={home.hero.image}
+      imageAlt={home.hero.image.alt}
+      videoSrc={home.hero.video}
+      heading={home.hero.heading}
+      subtext={home.hero.subtext}
+      cta1Label={home.hero.cta1}
       cta1Href="#lead"
-      cta2Label={t.hero.cta2}
+      cta2Label={home.hero.cta2}
       cta2Href={`/${lang}/yachts/`}
     />
 
     <div class="relative z-[1]">
 
     <IntroSection
-      eyebrow={t.intro.eyebrow}
-      heading={t.intro.heading}
-      body={t.intro.body}
-      stats={[
-        { value: '5',  label: t.intro.statLabels.ateliers },
-        { value: '17', label: t.intro.statLabels.years },
-        { value: '1',  label: t.intro.statLabels.relationship },
-      ]}
+      eyebrow={home.intro.eyebrow}
+      heading={home.intro.heading}
+      body={home.intro.body}
+      stats={home.intro.stats}
     />
 
     <AdvisorySplit
-      blocks={[
-        {
-          heading:  t.advisory.advise.heading,
-          bullets:  t.advisory.advise.bullets,
-          image:    advisePic,
-          imageAlt: 'Galeon flybridge yacht under way',
-        },
-        {
-          heading:  t.advisory.represent.heading,
-          bullets:  t.advisory.represent.bullets,
-          image:    representPic,
-          imageAlt: 'Saxdor yacht at speed on open water',
-        },
-      ]}
+      blocks={[home.advisory.advise, home.advisory.represent].map((block) => ({
+        ...block,
+        imageAlt: block.image.alt,
+      }))}
     />
 
     <GuideCapture
-      heading={t.guide.heading}
-      body={t.guide.body}
-      emailPlaceholder={t.guide.emailPlaceholder}
-      ctaLabel={t.guide.cta}
+      heading={home.guide.heading}
+      body={home.guide.body}
+      emailPlaceholder={home.guide.emailPlaceholder}
+      ctaLabel={home.guide.cta}
     />
 
     <ShipyardsSection
-      eyebrow={t.shipyards.eyebrow}
-      heading={t.shipyards.heading}
-      body={t.shipyards.body}
-      image={homepageHero}
-      imageAlt="Yachts running in formation along the coast"
+      eyebrow={home.shipyards.eyebrow}
+      heading={home.shipyards.heading}
+      body={home.shipyards.body}
+      image={home.shipyards.image}
+      imageAlt={home.shipyards.image.alt}
       brands={brandTiles}
     />
 
     <StatementSection
-      headingLine1={t.statement.headingLine1}
-      headingLine2={t.statement.headingLine2}
-      body={t.statement.body}
+      headingLine1={home.statement.headingLine1}
+      headingLine2={home.statement.headingLine2}
+      body={home.statement.body}
     />
 
     <NetworkTeaser
-      eyebrow={t.network.eyebrow}
-      heading={t.network.heading}
-      body={t.network.body}
+      eyebrow={home.network.eyebrow}
+      heading={home.network.heading}
+      body={home.network.body}
       stats={networkStats}
-      image={marinaPic}
-      imageAlt="Marina with yachts at sunset"
-      imageCaption={t.network.imageCaption}
-      linkLabel={t.network.linkLabel}
+      image={home.network.image}
+      imageAlt={home.network.image.alt}
+      imageCaption={home.network.imageCaption}
+      linkLabel={home.network.linkLabel}
       linkHref={`/${lang}/network/`}
     />
 

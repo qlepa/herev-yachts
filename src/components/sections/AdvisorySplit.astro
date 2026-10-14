@@ -1,6 +1,7 @@
 ---
-import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
+import CmsImage from '../ui/CmsImage.astro';
+import type { CmsImageData } from '../../lib/sanityImage';
 
 interface Bullet {
   lead: string;
@@ -10,7 +11,7 @@ interface Bullet {
 interface Block {
   heading: string;
   bullets: Bullet[];
-  image: ImageMetadata | null;
+  image: ImageMetadata | CmsImageData | null;
   imageAlt: string;
 }
 
@@ -28,7 +29,7 @@ const { blocks } = Astro.props;
         <!-- Image -->
         <div class:list={['relative overflow-hidden', i % 2 === 1 && 'md:order-2']} style="aspect-ratio: 4/3;">
           {block.image ? (
-            <Image
+            <CmsImage
               src={block.image}
               alt={block.imageAlt}
               widths={[600, 1000]}

@@ -6,9 +6,10 @@ import { plPLLocale } from '@sanity/locale-pl-pl';
 import { schemaTypes } from './src/sanity/schemaTypes';
 import { structure } from './src/sanity/structure';
 import { resolve } from './src/sanity/presentation';
+import { internationalizedArray } from 'sanity-plugin-internationalized-array';
 import { LANGUAGES } from './src/sanity/languages';
 
-const SINGLETON_TYPES = new Set(['siteSettings', 'uiStrings', 'notificationRecipients']);
+const SINGLETON_TYPES = new Set(['homePage', 'siteSettings', 'uiStrings', 'notificationRecipients']);
 
 export default defineConfig({
   name: 'default',
@@ -24,7 +25,7 @@ export default defineConfig({
       title: 'Podgląd',
       resolve,
       previewUrl: {
-        initial: '/en/blog/',
+        initial: '/en/',
         previewMode: {
           enable: '/api/draft-mode/enable',
           disable: '/api/draft-mode/disable',
@@ -33,6 +34,14 @@ export default defineConfig({
     }),
     visionTool(),
     plPLLocale(),
+    // Multilingual fields of pages: texts per language, images entered once.
+    internationalizedArray({
+      languages: LANGUAGES.map(({ value, title }) => ({ id: value, title })),
+      defaultLanguages: LANGUAGES.map(({ value }) => value),
+      fieldTypes: ['string', 'text', 'seo'],
+      languageDisplay: 'titleOnly',
+      languageFilter: { documentTypes: ['homePage'] },
+    }),
   ],
 
   schema: {
