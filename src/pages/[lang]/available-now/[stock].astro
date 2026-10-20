@@ -68,6 +68,14 @@ const keyNumbers = [
   ...(data.location ? [{ value: data.location, label: t.stock.page.keyNumbers.location }] : []),
 ];
 
+// Catalogue model this unit is built on, when it exists in this language.
+const model = data.modelKey
+  ? (await getCollection('yachts', (e) => e.id.startsWith(`${lang}/`) && !e.data.draft)).find(
+      (e) => e.data.translationKey === data.modelKey,
+    )
+  : undefined;
+const modelHref = model ? `/${lang}/yachts/${model.data.brand}/${model.data.translationKey}/` : undefined;
+
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/available-now/${slug}/` }));
 
 const seoTitle       = data.seo?.title       ?? `${fullName} ${data.year} ${Astro.locals.siteSettings.titleSuffix}`;
@@ -159,8 +167,11 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
     />
 
     <div class="bg-white px-gutter pb-10">
-      <div class="max-w-[1440px] mx-auto">
+      <div class="max-w-[1440px] mx-auto flex flex-wrap gap-x-10 gap-y-3">
         <TextLink href={`/${lang}/available-now/`}>{t.stock.page.backToList}</TextLink>
+        {modelHref && model && (
+          <TextLink href={modelHref}>{t.stock.page.viewModel.replace('{name}', model.data.name)}</TextLink>
+        )}
       </div>
     </div>
 

@@ -143,6 +143,12 @@ Pola opcjonalne: `modelKey` (klucz modelu z katalogu, jeśli istnieje),
 `location` (np. „Palma, ES"), szerokość, zanurzenie, koje, prędkość
 maks., silniki, kategoria, `seo`.
 
+Egzemplarz z `modelKey` **i** `condition: new` pokazuje się dodatkowo
+na stronie tego modelu w katalogu (sekcja „dostępny w tym sezonie”,
+z ceną) — tak trafiają tam nowe łodzie gotowe u producenta. Używane
+(`used`) są tylko na liście „dostępne od ręki”. Bez `modelKey`
+egzemplarz nigdzie nie łączy się z modelem.
+
 Egzemplarz sprzedany: ustaw `sold: true` — znika ze strony, plik
 zostaje. Zdjęcia — te same wymagania co dla jachtów (hero
 obowiązkowe, galeria `gallery-01.jpg`…, bez planów pokładów).

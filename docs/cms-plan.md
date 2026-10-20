@@ -420,6 +420,11 @@ Odhaczać przy migracji. Lista z przeglądu komponentów, stron i wysp.
 - [x] Brak `/og.jpg` (domyślny obrazek do udostępnień) — pole w Kontakt
       i SEO; obrazek do wgrania przed startem (`docs/launch-checklist.md`)
 - [ ] Stopka: „LEGAL · PRIVACY · COOKIES” jako zwykły tekst
+- [ ] Teksty sekcji „egzemplarz od ręki” na stronie modelu i checkboxa
+      opt-in (`stock.modelOffer.*`) oraz link „Zobacz {name} w katalogu”
+      (`stock.page.viewModel`) — w kodzie (2026-10-20), do dodania do
+      `uiStringsSpec` razem z migracją (`migrate-settings` bez
+      `--replace` nie uzupełnia pól w istniejących dokumentach)
 
 Poza zakresem CMS, do odnotowania: brak `/favicon.ico`; domena
 `https://herev.com` wpisana na sztywno w stronach network (alternates,

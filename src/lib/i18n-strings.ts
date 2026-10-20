@@ -95,7 +95,10 @@ export interface Translations {
       enquireHeadingPrefix: string;
       brandLine: string;
       overviewLabel: string;
+      viewModel: string;
     };
+    /** Model page: factory-new units of this model available now (needs modelKey + condition: new). */
+    modelOffer: { eyebrow: string; heading: string; copy: string; viewAll: string; interestCheckbox: string };
   };
   guide: { heading: string; body: string; emailPlaceholder: string; cta: string };
   shipyards: { eyebrow: string; heading: string; body: string };
@@ -294,6 +297,14 @@ const en: Translations = {
       enquireHeadingPrefix: 'Enquire about this',
       brandLine: 'AVAILABLE FOR IMMEDIATE DELIVERY',
       overviewLabel: 'ABOUT THIS UNIT',
+      viewModel: 'See the {name} in the catalogue →',
+    },
+    modelOffer: {
+      eyebrow: 'AVAILABLE THIS SEASON',
+      heading: 'A {name} ready to go.',
+      copy: 'Alongside a build to your own specification, the yard has a {name} finished in a ready configuration — the details may differ slightly, but she can be yours this season rather than next.',
+      viewAll: 'ALL AVAILABLE YACHTS →',
+      interestCheckbox: 'I would also like to hear about units of this model available now',
     },
   },
   categories: {
@@ -662,6 +673,14 @@ const pl: Translations = {
       enquireHeadingPrefix: 'Zapytaj o ten',
       brandLine: 'DOSTĘPNY DO NATYCHMIASTOWEGO ODBIORU',
       overviewLabel: 'O TYM EGZEMPLARZU',
+      viewModel: 'Zobacz {name} w katalogu →',
+    },
+    modelOffer: {
+      eyebrow: 'DOSTĘPNY W TYM SEZONIE',
+      heading: '{name} gotowy do odbioru.',
+      copy: 'Oprócz budowy według Twojej specyfikacji stocznia ma {name} w gotowej konfiguracji — szczegóły mogą się nieco różnić, za to łódź może być Twoja już w tym sezonie, a nie w kolejnym.',
+      viewAll: 'WSZYSTKIE DOSTĘPNE JACHTY →',
+      interestCheckbox: 'Chcę też otrzymać informację o egzemplarzach tego modelu dostępnych od ręki',
     },
   },
   categories: {
@@ -1030,6 +1049,14 @@ const es: Translations = {
       enquireHeadingPrefix: 'Consultar sobre este',
       brandLine: 'DISPONIBLE PARA ENTREGA INMEDIATA',
       overviewLabel: 'SOBRE ESTA UNIDAD',
+      viewModel: 'Ver el {name} en el catálogo →',
+    },
+    modelOffer: {
+      eyebrow: 'DISPONIBLE ESTA TEMPORADA',
+      heading: 'Un {name} listo para zarpar.',
+      copy: 'Además de construirlo según tu especificación, el astillero tiene un {name} terminado en una configuración lista — los detalles pueden variar ligeramente, pero puede ser tuyo esta temporada y no la siguiente.',
+      viewAll: 'TODOS LOS YATES DISPONIBLES →',
+      interestCheckbox: 'También quiero recibir información sobre unidades de este modelo disponibles ahora',
     },
   },
   categories: {
@@ -1398,6 +1425,14 @@ const it: Translations = {
       enquireHeadingPrefix: 'Richiedi informazioni su questo',
       brandLine: 'DISPONIBILE PER CONSEGNA IMMEDIATA',
       overviewLabel: 'SU QUESTA UNITÀ',
+      viewModel: 'Vedi il {name} nel catalogo →',
+    },
+    modelOffer: {
+      eyebrow: 'DISPONIBILE IN QUESTA STAGIONE',
+      heading: 'Un {name} pronto a salpare.',
+      copy: 'Oltre alla costruzione secondo le tue specifiche, il cantiere ha un {name} finito in una configurazione pronta — i dettagli possono differire leggermente, ma può essere tuo in questa stagione anziché nella prossima.',
+      viewAll: 'TUTTI GLI YACHT DISPONIBILI →',
+      interestCheckbox: 'Vorrei ricevere informazioni anche sulle unità di questo modello disponibili subito',
     },
   },
   categories: {

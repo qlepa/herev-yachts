@@ -24,6 +24,16 @@ export async function getStockEntries(lang: Locale) {
   return entries;
 }
 
+/**
+ * Factory-new units of a catalogue model (`modelKey` + `condition: new`).
+ * Used units stay on the "available now" listing only — on a model page
+ * a used boat would read as an alternative, not as the same new model.
+ */
+export async function getNewStockForModel(lang: Locale, modelKey: string) {
+  const entries = await getStockEntries(lang);
+  return entries.filter((e) => e.data.modelKey === modelKey && e.data.condition === 'new');
+}
+
 export async function toStockCards(
   entries: Awaited<ReturnType<typeof getStockEntries>>,
   lang: Locale,

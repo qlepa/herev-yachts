@@ -79,7 +79,11 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
   Pole tekstowe wyszukiwania: dopasowanie po name/brand (placeholder
   funkcjonalny, bez rozbudowy).
 - Formularz leadowy: kontekst brand/jacht pre-filled, Turnstile,
-  walidacja współdzielona z serwerem.
+  walidacja współdzielona z serwerem. Checkbox `stockInterest` (strona
+  modelu, gdy jest nowy egzemplarz) i klucz egzemplarza (strona
+  `available-now/[stock]`) trafiają do dealu — patrz kontrakt.
+  Sekcja „egzemplarz od ręki” na stronie modelu + link zwrotny zrobione
+  statycznie 2026-10-20 (`modelKey` + `condition: new`).
 - /api/lead: docs/kontrakt-api-lead.md (w tym odbiorcy z Sanity
   i wariant leada z porównywarki).
 - Porównywarka: do 3 jachtów, stan w URL (shareable), widok

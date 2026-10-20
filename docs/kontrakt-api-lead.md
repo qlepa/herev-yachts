@@ -19,6 +19,16 @@ Kolejność obowiązkowa:
 6. Awaria Pipedrive nie gubi leada: minimum mail Resend z pełnym
    payloadem + 200 dla klienta + error log.
 
+Egzemplarz od ręki (decyzje Tomasza 2026-10-20):
+
+- Lead ze strony egzemplarza (`available-now/[stock]`) niesie
+  `translationKey` egzemplarza (nie tylko nazwę modelu) -> osobne pole
+  dealu w Pipedrive. Routing: defaultDealer brandu (jak dla modelu);
+  dealer trzymający łódź = poza MVP, wymagałby pola `dealer` w `stock`.
+- Lead ze strony modelu: opcjonalny checkbox `stockInterest` (boolean,
+  niezaznaczony domyślnie, renderowany tylko gdy istnieje nowy egzemplarz
+  tego modelu) -> flaga w dealu. Brak pola = false, nie błąd.
+
 Routing dealera: lead ze strony jachtu/brandu -> defaultDealer brandu;
 lead z porównywarki (jachty mogą być z różnych brandów) -> bez
 przypisania, obsługa ręczna w Pipedrive. Mapowanie dealerId ->

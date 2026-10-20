@@ -19,6 +19,8 @@ interface Props {
   modelValue: string;
   messagePlaceholder: string;
   financingLabel: string;
+  /** Opt-in shown only when a new unit of this model is in stock. */
+  stockInterestLabel?: string;
   privacyLabel: string;
   /** Optional brochure PDF shown next to the submit button. */
   brochureHref?: string;
@@ -40,6 +42,7 @@ const {
   modelValue,
   messagePlaceholder,
   financingLabel,
+  stockInterestLabel,
   privacyLabel,
   brochureHref,
   brochureLabel,
@@ -148,6 +151,16 @@ const inputBase =
           />
           <span class="text-[14px] text-[rgba(236,239,238,.85)]">{financingLabel}</span>
         </label>
+        {stockInterestLabel && (
+          <label class="flex items-center gap-3 mb-3.5 cursor-pointer">
+            <input
+              type="checkbox"
+              name="stockInterest"
+              class="w-[17px] h-[17px] accent-gilt shrink-0"
+            />
+            <span class="text-[14px] text-[rgba(236,239,238,.85)]">{stockInterestLabel}</span>
+          </label>
+        )}
         <label class="flex items-start gap-3 mb-7 cursor-pointer">
           <input
             type="checkbox"

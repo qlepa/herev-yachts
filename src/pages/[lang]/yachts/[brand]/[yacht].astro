@@ -16,6 +16,7 @@ import YachtGallery from '../../../../components/sections/YachtGallery.astro';
 import YachtCompare from '../../../../components/sections/YachtCompare.astro';
 import YachtFinancing from '../../../../components/sections/YachtFinancing.astro';
 import RecommendedYachts from '../../../../components/sections/RecommendedYachts.astro';
+import StockStrip from '../../../../components/sections/StockStrip.astro';
 import YachtLeadModule from '../../../../components/sections/YachtLeadModule.astro';
 import MobileCta from '../../../../components/ui/MobileCta.astro';
 import { LOCALES, type Locale } from '../../../../lib/i18n';
@@ -31,6 +32,7 @@ import {
 } from '../../../../lib/images';
 import { parseVideoUrl } from '../../../../lib/video';
 import { metresToFeet } from '../../../../lib/format';
+import { getNewStockForModel, toStockCards } from '../../../../lib/stock';
 import leadPic from '../../../../assets/site/lead-image.avif';
 import { staticPathProps } from '../../../../lib/staticPaths';
 
@@ -158,6 +160,11 @@ const recommendedCards = await Promise.all(
     href:           `/${lang}/yachts/${y.data.brand}/${y.data.translationKey}/`,
   })),
 );
+
+// --- Factory-new units of this model available now ---------------------------
+// Rendered only when one exists; placed after the full model story so it reads
+// as an extra option, never as a substitute. Prices come with the stock cards.
+const stockCards = await toStockCards(await getNewStockForModel(lang, data.translationKey), lang, t);
 
 // --- SEO -------------------------------------------------------------------
 const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/yachts/${brand}/${yachtSlug}/` }));
@@ -303,6 +310,18 @@ const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${
       ctaLabel={tp.financing.cta}
     />
 
+    <!-- Same model, ready configuration, available this season -->
+    <StockStrip
+      units={stockCards}
+      eyebrow={t.stock.modelOffer.eyebrow}
+      heading={withName(t.stock.modelOffer.heading)}
+      subheading={withName(t.stock.modelOffer.copy)}
+      viewAllLabel={t.stock.modelOffer.viewAll}
+      viewAllHref={`/${lang}/available-now/`}
+      enquireLabel={t.stock.enquire}
+      moreInfoLabel={t.stock.moreInfo}
+    />
+
     <RecommendedYachts
       heading={tp.recommendedHeading}
       eyebrow={tp.recommendedEyebrow}
@@ -328,6 +347,7 @@ const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${
       modelValue={fullName}
       messagePlaceholder={t.lead.messagePlaceholder}
       financingLabel={tp.financingCheckbox}
+      stockInterestLabel={stockCards.length > 0 ? t.stock.modelOffer.interestCheckbox : undefined}
       privacyLabel={tp.privacyCheckbox}
       brochureHref={brochureHref}
       brochureLabel={tp.brochureCta}
