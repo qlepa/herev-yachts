@@ -62,6 +62,13 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
 
 ## 4. Klucze i integracje
 
+- [ ] **Konta do założenia (dziś nie istnieją, stan 2026-10-26):** Cloudflare
+      Turnstile (darmowe; widget z domenami produkcyjnymi), Resend (darmowe
+      do 3 tys./mies.; zweryfikowana domena nadawcy wymaga DNS `herev.com`),
+      Pipedrive (płatne, konto klienta — decyzja klienta). Do demo: klucze
+      testowe Turnstile z `.env.example` + Resend z `onboarding@resend.dev`
+      na adres właściciela konta
+
 - [ ] Przegląd sekretów: wszystko, co było w `.env` na komputerach, w CI
       albo wklejone gdziekolwiek → nowe wartości w Vercelu / GitHubie, stare
       unieważnione (Sanity, Resend, Pipedrive, Turnstile — co istnieje
