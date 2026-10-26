@@ -611,3 +611,8 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   `SANITY_PREVIEW=true`, więc zwykły `pnpm build` buduje wariant CMS —
   produkcję sprawdza się `SANITY_PREVIEW=false pnpm build`. Komunikaty
   formularza (`leadForm`) tylko w kodzie — dopisane do inwentaryzacji.
+  Po południu: szablony HTML maili + potwierdzenie do leada w 4 językach
+  (`src/lib/server/lead/templates.ts`). Teksty potwierdzenia celowo poza
+  `uiStrings` (to nie UI strony) — jeśli klient ma je edytować, osobna
+  pozycja w inwentaryzacji. Integracje skonfigurowane na kontach
+  dewelopera, lead przetestowany end-to-end. Dalej: porównywarka (PR 2).

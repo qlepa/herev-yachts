@@ -62,12 +62,14 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
 
 ## 4. Klucze i integracje
 
-- [ ] **Konta do założenia (dziś nie istnieją, stan 2026-10-26):** Cloudflare
-      Turnstile (darmowe; widget z domenami produkcyjnymi), Resend (darmowe
-      do 3 tys./mies.; zweryfikowana domena nadawcy wymaga DNS `herev.com`),
-      Pipedrive (płatne, konto klienta — decyzja klienta). Do demo: klucze
-      testowe Turnstile z `.env.example` + Resend z `onboarding@resend.dev`
-      na adres właściciela konta
+- [x] **Konta (stan 2026-10-26):** Turnstile, Resend i Pipedrive
+      skonfigurowane na kontach dewelopera, zmienne na Vercelu
+      (`herev-yachts`), testowy lead przeszedł end-to-end
+- [ ] **Przeniesienie integracji na konta klienta przed startem:** widget
+      Turnstile z domenami `herev.com`/`cms.herev.com`, Resend z domeną
+      klienta, Pipedrive = konto klienta (płatne, decyzja klienta) z polami
+      dealu wg `docs/kontrakt-api-lead.md`; po przeniesieniu nowe wartości
+      zmiennych na Vercelu + Redeploy i ponowny test end-to-end
 
 - [ ] Przegląd sekretów: wszystko, co było w `.env` na komputerach, w CI
       albo wklejone gdziekolwiek → nowe wartości w Vercelu / GitHubie, stare

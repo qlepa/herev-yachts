@@ -73,7 +73,11 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 ## Krok 5 — wyspy + endpoint
 
 Postęp: PR 1 (2026-10-26) = adapter + `/api/lead` + wyspa formularza na
-wszystkich stronach. Zostały: porównywarka, `/api/geo` + pasek geo.
+wszystkich stronach; tego samego dnia szablony HTML obu maili +
+potwierdzenie do leada (en/pl/es/it). Konta Turnstile / Resend /
+Pipedrive skonfigurowane (konta dewelopera), testowy lead przeszedł
+end-to-end (deal #2 w Pipedrive, mail powiadomienia). Zostały:
+porównywarka (PR 2), `/api/geo` + pasek geo (PR 3).
 
 - ✅ Adapter @astrojs/vercel włączony na stałe; `output: 'static'` zostaje,
   adapter obsługuje tylko `src/pages/api/*` (`prerender = false`) —
@@ -90,6 +94,11 @@ wszystkich stronach. Zostały: porównywarka, `/api/geo` + pasek geo.
   statycznie 2026-10-20 (`modelKey` + `condition: new`).
 - ✅ /api/lead: docs/kontrakt-api-lead.md (w tym odbiorcy z Sanity
   i wariant leada z porównywarki — endpoint gotowy, UI porównywarki nie).
+  Lead ląduje w Pipedrive jako **Deal** (nie Leads Inbox) — potwierdzone
+  z użytkownikiem 2026-10-26.
+- ✅ Maile: szablony HTML + tekst (`src/lib/server/lead/templates.ts`),
+  potwierdzenie do leada w jego języku, `Reply-To` = dealer. Potwierdzenia
+  na obce adresy działają dopiero po weryfikacji domeny w Resend.
 - Porównywarka: do 3 jachtów, stan w URL (shareable), widok
   zestawienia + textarea zapytania -> ten sam endpoint z listą
   porównywanych jachtów.
