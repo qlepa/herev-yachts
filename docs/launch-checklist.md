@@ -90,7 +90,10 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       sprawdzony w CRM
 - [ ] `LEAD_FROM_EMAIL` (zweryfikowany nadawca Resend) i `LEAD_FALLBACK_EMAIL`
       ustawione na Vercelu
-- [ ] Resend: zweryfikowana domena nadawcy (SPF, DKIM, DMARC)
+- [ ] Resend: zweryfikowana domena nadawcy (SPF, DKIM, DMARC) — bez niej
+      potwierdzenie do leada nie wychodzi (`onboarding@resend.dev` wysyła
+      tylko na adres właściciela konta); po weryfikacji testowy lead z
+      obcym adresem i sprawdzenie, że potwierdzenie dotarło w 4 językach
 - [ ] GA4 + Consent Mode v2: zero żądań do Google przed zgodą (DevTools →
       Network)
 

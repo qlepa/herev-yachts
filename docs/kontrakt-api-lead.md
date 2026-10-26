@@ -89,3 +89,21 @@ Treść wiadomości, telefon i e-mail zawsze idą do notatki dealu. Tytuł
 dealu: `{model} — {imię}`; wariant porównywarki: `Compare: a vs b — {imię}`.
 E-mail z powiadomieniem zawiera status Pipedrive (`deal #id` albo
 `FAILED` z błędem) — awaria CRM jest widoczna dla ludzi.
+
+### E-maile (2026-10-26)
+
+Oba maile wychodzą jako tekst + HTML (`src/lib/server/lead/templates.ts`;
+paleta zinlinowana, wartości hex lustrzane do `@theme`):
+
+- **Powiadomienie wewnętrzne** (po angielsku) do odbiorców z Sanity,
+  `Reply-To` = e-mail leada. Treść jak wyżej.
+- **Potwierdzenie do leada** w języku formularza (en/pl/es/it): „mamy
+  Twoje zapytanie, doradca odezwie się w ciągu jednego dnia roboczego”,
+  nazwa modelu / porównywanych jachtów, echo wiadomości. `Reply-To` =
+  e-mail dealera z kolekcji `dealers`, jeśli jest przypisany. Wysyłane
+  dopiero gdy lead jest bezpieczny (deal albo powiadomienie poszło), tylko
+  gdy podano e-mail. Awaria potwierdzenia = `warn` w logu, odpowiedź
+  dla klienta bez zmian. Teksty potwierdzenia żyją w kodzie, nie w Sanity
+  `uiStrings` (nie są UI strony); ewentualne przeniesienie = osobna decyzja.
+  Do czasu weryfikacji domeny w Resend potwierdzenia na obce adresy są
+  odrzucane przez `onboarding@resend.dev` i lądują w logu jako warn.

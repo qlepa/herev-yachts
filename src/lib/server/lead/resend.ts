@@ -2,6 +2,7 @@ export interface MailMessage {
   to: string[];
   subject: string;
   text: string;
+  html: string;
   replyTo?: string;
 }
 
@@ -23,6 +24,7 @@ export async function sendMail(message: MailMessage, config: ResendConfig): Prom
       to: message.to,
       subject: message.subject,
       text: message.text,
+      html: message.html,
       ...(message.replyTo ? { reply_to: message.replyTo } : {}),
     }),
   });

@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from 'vitest';
-import { formatLeadMail, handleLead, resetDedupe, type LeadDeps } from './handler';
-import type { Lead } from '../../lead';
+import { handleLead, resetDedupe, type LeadDeps } from './handler';
 
 const validBody = {
   lang: 'pl',
@@ -116,7 +115,7 @@ describe('handleLead', () => {
     const second = await handleLead({ ...validBody, email: 'JAN@example.com' }, d);
     expect(second).toEqual({ status: 200, body: { ok: true, duplicate: true } });
     expect(d.createDeal).toHaveBeenCalledTimes(1);
-    expect(d.sendMail).toHaveBeenCalledTimes(1);
+    expect(d.sendMail).toHaveBeenCalledTimes(2); // notification + confirmation, once
   });
 
   test('a lost lead is not remembered as sent — the retry goes through', async () => {
@@ -152,38 +151,34 @@ describe('handleLead', () => {
     expect(mail.text).toContain('manual routing');
   });
 
-  test('phone-only contact from the compact form is accepted', async () => {
+  test('phone-only contact from the compact form is accepted — no confirmation possible', async () => {
     const d = deps();
     const res = await handleLead({ ...validBody, email: undefined, phone: '+48 600 000 000' }, d);
     expect(res.status).toBe(200);
+    expect(d.sendMail).toHaveBeenCalledTimes(1);
     expect((d.sendMail as ReturnType<typeof vi.fn>).mock.calls[0][0].replyTo).toBeUndefined();
   });
-});
 
-describe('formatLeadMail', () => {
-  const lead: Lead = {
-    lang: 'en',
-    source: 'stock',
-    name: 'Ann',
-    email: 'ann@example.com',
-    stockKey: 'galeon-440-fly-2024',
-    model: 'Galeon 440 Fly (2024)',
-    brand: 'galeon',
-    financing: true,
-    stockInterest: false,
-    consent: true,
-    consentText: 'I agree.',
-    utm: { source: 'google', medium: 'cpc', campaign: 'spring' },
-  };
+  test('confirmation goes to the lead in their language, replies routed to the dealer', async () => {
+    const d = deps();
+    await handleLead(validBody, d);
+    const confirmation = (d.sendMail as ReturnType<typeof vi.fn>).mock.calls[1][0];
+    expect(confirmation.to).toEqual(['jan@example.com']);
+    expect(confirmation.replyTo).toBe('info@herev.com');
+    expect(confirmation.subject).toBe('Mamy Twoje zapytanie — Galeon 500 Fly');
+    expect(confirmation.html).toContain('Dzień dobry, Jan,');
+  });
 
-  test('lists every field, the consent wording with timestamp and unmapped Pipedrive values', () => {
-    const { subject, text } = formatLeadMail(lead, dealer, '2026-10-26T10:00:00.000Z', { dealId: 7, unmapped: [['Dealer', 'Herev Marine']] }, undefined);
-    expect(subject).toBe('New enquiry: Galeon 440 Fly (2024) — Ann');
-    expect(text).toContain('Stock unit: galeon-440-fly-2024');
-    expect(text).toContain('Financing: yes');
-    expect(text).toContain('UTM: google / cpc / spring');
-    expect(text).toContain('Not mapped to deal fields: Dealer=Herev Marine');
-    expect(text).toContain('Consent (2026-10-26T10:00:00.000Z): "I agree."');
-    expect(text).toContain('(none)');
+  test('a failed confirmation is only a warning — the lead is already safe', async () => {
+    let calls = 0;
+    const d = deps({
+      sendMail: vi.fn(async () => {
+        if (++calls === 2) throw new Error('Resend 403: not allowed with onboarding@resend.dev');
+      }),
+    });
+    const res = await handleLead(validBody, d);
+    expect(res).toEqual({ status: 200, body: { ok: true } });
+    expect(d.log.warn).toHaveBeenCalledWith(expect.stringContaining('confirmation to jan@example.com failed'));
+    expect(d.log.error).not.toHaveBeenCalled();
   });
 });

@@ -28,6 +28,8 @@ const lead: Lead = {
   message: 'Hola <b>mundo</b>\nsegunda línea',
   brand: 'galeon',
   yachtKey: 'galeon-500-fly',
+  stockKey: undefined,
+  pageUrl: undefined,
   financing: false,
   stockInterest: true,
   consent: true,

@@ -1,5 +1,6 @@
 import { leadSchema, type Lead } from '../../lead';
 import type { Dealer, DealResult } from './pipedrive';
+import { renderConfirmationMail, renderNotificationMail } from './templates';
 
 /**
  * `/api/lead` orchestration (docs/kontrakt-api-lead.md), free of I/O so
@@ -10,7 +11,7 @@ export interface LeadDeps {
   resolveDealer: (brand: string) => Promise<Dealer | undefined>;
   createDeal: (lead: Lead, dealer: Dealer | undefined, consentAt: string) => Promise<DealResult>;
   loadRecipients: () => Promise<string[]>;
-  sendMail: (message: { to: string[]; subject: string; text: string; replyTo?: string }) => Promise<void>;
+  sendMail: (message: { to: string[]; subject: string; text: string; html: string; replyTo?: string }) => Promise<void>;
   /** Used when Sanity has no recipients. */
   fallbackEmail: string | undefined;
   log: Pick<Console, 'error' | 'warn'>;
@@ -97,7 +98,7 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
   } else {
     try {
       await deps.sendMail({
-        ...formatLeadMail(lead, dealer, consentAt, deal, dealError),
+        ...renderNotificationMail(lead, dealer, consentAt, deal, dealError),
         to: recipients,
         replyTo: lead.email,
       });
@@ -112,52 +113,16 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
     deps.log.error(`lead: LOST — neither Pipedrive nor e-mail accepted it. Payload: ${JSON.stringify(lead)}`);
     return { status: 502, body: { ok: false, error: 'delivery' } };
   }
+
+  // 7. Confirmation to the person who enquired — courtesy only, never
+  // affects the outcome. Replies go to the dealer when one is known.
+  if (lead.email) {
+    try {
+      await deps.sendMail({ ...renderConfirmationMail(lead), to: [lead.email], replyTo: dealer?.email });
+    } catch (err) {
+      deps.log.warn(`lead: confirmation to ${lead.email} failed — ${err instanceof Error ? err.message : err}`);
+    }
+  }
   recent.set(key, now());
   return { status: 200, body: { ok: true } };
-}
-
-export function formatLeadMail(
-  lead: Lead,
-  dealer: Dealer | undefined,
-  consentAt: string,
-  deal: DealResult | undefined,
-  dealError: string | undefined,
-): { subject: string; text: string } {
-  const subject = lead.comparedKeys
-    ? `New enquiry (compare): ${lead.comparedKeys.join(' vs ')} — ${lead.name}`
-    : `New enquiry: ${lead.model ?? 'general'} — ${lead.name}`;
-  const row = (label: string, value: string | undefined) => (value ? `${label}: ${value}` : undefined);
-  const utm = [lead.utm?.source, lead.utm?.medium, lead.utm?.campaign].filter(Boolean).join(' / ');
-  const lines = [
-    deal
-      ? `Pipedrive: deal #${deal.dealId} created`
-      : `Pipedrive: FAILED — the lead is NOT in the CRM, enter it manually. (${dealError ?? 'unknown error'})`,
-    deal?.unmapped.length
-      ? `Not mapped to deal fields: ${deal.unmapped.map(([k, v]) => `${k}=${v}`).join('; ')}`
-      : undefined,
-    '',
-    row('Name', lead.name),
-    row('E-mail', lead.email),
-    row('Phone', lead.phone),
-    row('Model', lead.model),
-    row('Compared yachts', lead.comparedKeys?.join(', ')),
-    row('Brand', lead.brand),
-    row(
-      'Dealer',
-      dealer ? `${dealer.name} (${dealer.pipedriveOptionLabel})` : lead.comparedKeys ? 'none — manual routing' : undefined,
-    ),
-    row('Catalogue model', lead.yachtKey),
-    row('Stock unit', lead.stockKey),
-    row('Interested in the unit in stock', lead.stockInterest ? 'yes' : undefined),
-    row('Financing', lead.financing ? 'yes' : undefined),
-    row('Language', lead.lang),
-    row('Page', lead.pageUrl),
-    row('UTM', utm || undefined),
-    '',
-    'Message:',
-    lead.message ?? '(none)',
-    '',
-    `Consent (${consentAt}): "${lead.consentText}"`,
-  ];
-  return { subject, text: lines.filter((l) => l !== undefined).join('\n') };
 }
