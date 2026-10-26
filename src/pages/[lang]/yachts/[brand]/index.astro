@@ -163,19 +163,17 @@ const pageDescription = t.brandPage.fleetSubheading;
     </section>
 
     <LeadModule
+      lang={lang}
+      t={t}
+      source="brand"
+      brand={brand}
       eyebrow={t.lead.eyebrow}
       heading={t.lead.heading}
       subtext={t.lead.subtext}
-      ctaLabel={t.lead.cta}
       image={leadPic}
       imageAlt="Yacht cockpit interior"
-      orCallLabel={t.lead.orCall}
       fallbackContact={Astro.locals.siteSettings.email}
       callNumber={Astro.locals.siteSettings.phone}
-      namePlaceholder={t.lead.namePlaceholder}
-      contactPlaceholder={t.lead.contactPlaceholder}
-      modelPlaceholder={t.lead.modelPlaceholder}
-      messagePlaceholder={t.lead.messagePlaceholder}
     />
 
   </main>

@@ -4,3 +4,6 @@ allowBuilds:
 
 overrides:
   vite: 8.1.5
+
+# Real directories instead of symlinks: the Vercel adapter cannot create symlinks on Windows without Developer Mode (was in .npmrc, which pnpm 11 no longer reads)
+nodeLinker: hoisted

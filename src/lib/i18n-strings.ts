@@ -114,6 +114,15 @@ export interface Translations {
     messagePlaceholder: string;
     orCall: string;
   };
+  /** Enquiry form states and validation (code-only until the forms move to the CMS). */
+  leadForm: {
+    sending: string;
+    successHeading: string;
+    successBody: string;
+    /** Followed by the contact e-mail link. */
+    error: string;
+    errors: { name: string; contact: string; email: string; phone: string; consent: string };
+  };
   network: {
     eyebrow: string;
     heading: string;
@@ -363,6 +372,19 @@ const en: Translations = {
     modelPlaceholder: 'Model of interest (optional)',
     messagePlaceholder: 'A few words about your plans on the water…',
     orCall: 'or call us directly',
+  },
+  leadForm: {
+    sending: 'Sending…',
+    successHeading: 'Thank you — we have your enquiry.',
+    successBody: 'An advisor will come back to you within one working day.',
+    error: 'Something went wrong and the enquiry was not sent. Please try again or write to',
+    errors: {
+      name: 'Please enter your name.',
+      contact: 'Please enter an e-mail address or phone number.',
+      email: 'Please check the e-mail address.',
+      phone: 'Please check the phone number.',
+      consent: 'Please accept the privacy policy to send the enquiry.',
+    },
   },
   network: {
     eyebrow: 'OUR NETWORK',
@@ -740,6 +762,19 @@ const pl: Translations = {
     messagePlaceholder: 'Kilka słów o Twoich planach na wodzie…',
     orCall: 'lub zadzwoń do nas bezpośrednio',
   },
+  leadForm: {
+    sending: 'Wysyłanie…',
+    successHeading: 'Dziękujemy — mamy Twoje zapytanie.',
+    successBody: 'Doradca odezwie się w ciągu jednego dnia roboczego.',
+    error: 'Coś poszło nie tak i zapytanie nie zostało wysłane. Spróbuj ponownie lub napisz na',
+    errors: {
+      name: 'Podaj swoje imię i nazwisko.',
+      contact: 'Podaj adres e-mail lub numer telefonu.',
+      email: 'Sprawdź adres e-mail.',
+      phone: 'Sprawdź numer telefonu.',
+      consent: 'Zaakceptuj politykę prywatności, aby wysłać zapytanie.',
+    },
+  },
   network: {
     eyebrow: 'NASZA SIEĆ',
     heading: 'Autoryzowana obecność na kluczowych akwenach.',
@@ -1116,6 +1151,19 @@ const es: Translations = {
     messagePlaceholder: 'Unas palabras sobre tus planes en el agua…',
     orCall: 'o llámanos directamente',
   },
+  leadForm: {
+    sending: 'Enviando…',
+    successHeading: 'Gracias — hemos recibido su consulta.',
+    successBody: 'Un asesor se pondrá en contacto con usted en el plazo de un día laborable.',
+    error: 'Algo ha fallado y la consulta no se ha enviado. Inténtelo de nuevo o escriba a',
+    errors: {
+      name: 'Introduzca su nombre.',
+      contact: 'Introduzca un correo electrónico o un número de teléfono.',
+      email: 'Compruebe la dirección de correo electrónico.',
+      phone: 'Compruebe el número de teléfono.',
+      consent: 'Acepte la política de privacidad para enviar la consulta.',
+    },
+  },
   network: {
     eyebrow: 'NUESTRA RED',
     heading: 'Presencia autorizada en aguas de navegación clave.',
@@ -1491,6 +1539,19 @@ const it: Translations = {
     modelPlaceholder: 'Modello di interesse (opzionale)',
     messagePlaceholder: 'Qualche parola sui tuoi piani in acqua…',
     orCall: 'oppure chiamaci direttamente',
+  },
+  leadForm: {
+    sending: 'Invio…',
+    successHeading: 'Grazie — abbiamo ricevuto la sua richiesta.',
+    successBody: 'Un consulente la ricontatterà entro un giorno lavorativo.',
+    error: 'Qualcosa è andato storto e la richiesta non è stata inviata. Riprovi o scriva a',
+    errors: {
+      name: 'Inserisca il suo nome.',
+      contact: 'Inserisca un indirizzo e-mail o un numero di telefono.',
+      email: "Controlli l'indirizzo e-mail.",
+      phone: 'Controlli il numero di telefono.',
+      consent: "Accetti l'informativa sulla privacy per inviare la richiesta.",
+    },
   },
   network: {
     eyebrow: 'LA NOSTRA RETE',

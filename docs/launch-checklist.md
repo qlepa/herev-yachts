@@ -74,7 +74,15 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       udostępnieniem repo komukolwiek
 - [ ] Mapbox: token `pk.` z ograniczeniem URL tylko do `https://herev.com`
       i `https://cms.herev.com` (usunąć localhost i `*.vercel.app`)
-- [ ] Turnstile: domeny produkcyjne w konfiguracji widgetu
+- [ ] Turnstile: domeny produkcyjne w konfiguracji widgetu; na Vercelu
+      `PUBLIC_TURNSTILE_SITE_KEY` + `TURNSTILE_SECRET_KEY` (bez sekretu
+      produkcja odrzuca każdy lead z 500)
+- [ ] Pipedrive: `PIPEDRIVE_API_TOKEN` na Vercelu; pola własne dealu
+      założone wg tabeli w `docs/kontrakt-api-lead.md` (nazwy znak w znak,
+      opcje pola `Dealer` = `pipedriveOptionLabel` dealerów); testowy lead
+      sprawdzony w CRM
+- [ ] `LEAD_FROM_EMAIL` (zweryfikowany nadawca Resend) i `LEAD_FALLBACK_EMAIL`
+      ustawione na Vercelu
 - [ ] Resend: zweryfikowana domena nadawcy (SPF, DKIM, DMARC)
 - [ ] GA4 + Consent Mode v2: zero żądań do Google przed zgodą (DevTools →
       Network)

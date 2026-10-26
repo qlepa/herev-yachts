@@ -66,10 +66,10 @@ zmiana w Studio przeładowuje podgląd. Bez cookie `cms.herev.com` pokazuje
 tylko opublikowaną treść.
 
 Lokalnie: `SANITY_PREVIEW=true pnpm dev` → `http://localhost:4321/admin`.
-`SANITY_PREVIEW=true pnpm build` na Windows kończy się błędem `EPERM symlink`
-w ostatnim kroku adaptera (brak uprawnień do symlinków bez trybu dewelopera) —
-ograniczenie lokalne; kompilacja Astro przechodzi przed tym krokiem, a build
-na Vercelu (Linux) jest pełny.
+Build z adapterem na Windows wymaga `nodeLinker: hoisted` w
+`pnpm-workspace.yaml` (jest od kroku 5; wcześniej w `.npmrc`, którego pnpm 11
+już nie czyta) — przy symlinkach pnpm adapter kończył się błędem `EPERM symlink`.
+Po zmianie linkera: `pnpm install`.
 
 ## Dla edytora treści (jak dodać/edytować post)
 

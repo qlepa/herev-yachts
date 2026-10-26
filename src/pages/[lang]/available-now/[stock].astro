@@ -176,21 +176,18 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
     </div>
 
     <YachtLeadModule
+      lang={lang}
+      t={t}
+      source="stock"
+      brand={data.brand}
+      stockKey={data.translationKey}
       eyebrow={t.yachtPage.leadEyebrow}
       heading={`${t.stock.page.enquireHeadingPrefix} ${fullName}`}
       brandLine={t.stock.page.brandLine}
-      ctaLabel={t.yachtPage.sendEnquiry}
       image={leadImage}
       imageAlt={`${fullName} yacht`}
       fallbackContact={Astro.locals.siteSettings.email}
-      orCallLabel={t.lead.orCall}
-      namePlaceholder={t.lead.namePlaceholder}
-      emailPlaceholder={t.yachtPage.emailPlaceholder}
-      phonePlaceholder={t.yachtPage.phonePlaceholder}
       modelValue={`${fullName} (${data.year})`}
-      messagePlaceholder={t.lead.messagePlaceholder}
-      financingLabel={t.yachtPage.financingCheckbox}
-      privacyLabel={t.yachtPage.privacyCheckbox}
     />
 
     <MobileCta enquireLabel={t.yachtPage.mobileCta.enquire} />

@@ -45,8 +45,9 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 - [ ] `README-CONTENT.md` przestaje obowiązywać po krokach 9.4–9.5 (zespół
       treści przechodzi z plików na CMS). Zmiana kontraktu — wymaga zgody
       i uprzedzenia klienta.
-- [ ] Krok 5 backlogu: `output: 'static'` + adapter (endpointy z
-      `prerender = false`) zamiast `output: 'server'` — strony zostają statyczne.
+- [x] Krok 5 backlogu: `output: 'static'` + adapter (endpointy z
+      `prerender = false`) zamiast `output: 'server'` — strony zostają statyczne
+      (**tak**, 2026-10-26; zrobione razem z `/api/lead`).
 - [x] Usunięcie pola `draft` z posta — **tak** (2026-10-07, zrobione)
 - [ ] `public/700 SKY-20260725T204625Z-1-001/` (41 zdjęć + PDF klienta,
       nieużywane, a publicznie dostępne) — wgrać do CMS jako jacht czy usunąć?
@@ -66,8 +67,9 @@ Jeden krok = jeden PR (zasady w `CLAUDE.md`).
 
 ## Architektura
 
-- **Produkcja (`herev.com`):** `output: 'static'`, na razie bez adaptera
-  (dojdzie z endpointami w kroku 5). Build czyta wyłącznie opublikowaną treść
+- **Produkcja (`herev.com`):** `output: 'static'` + adapter Vercela
+  wyłącznie dla `src/pages/api/*` (`prerender = false`; od kroku 5,
+  2026-10-26). Build czyta wyłącznie opublikowaną treść
   (`perspective: 'published'`, `useCdn: false`). Webhook Sanity → Deploy
   Hook → rebuild.
 - **CMS (`cms.herev.com`):** drugi projekt Vercel na tym samym repo,
@@ -420,6 +422,8 @@ Odhaczać przy migracji. Lista z przeglądu komponentów, stron i wysp.
 - [x] Brak `/og.jpg` (domyślny obrazek do udostępnień) — pole w Kontakt
       i SEO; obrazek do wgrania przed startem (`docs/launch-checklist.md`)
 - [ ] Stopka: „LEGAL · PRIVACY · COOKIES” jako zwykły tekst
+- [ ] Komunikaty formularza leada (`leadForm` w `i18n-strings.ts`: wysyłanie,
+      sukces, błąd, walidacja) — dodane w kroku 5 (2026-10-26) tylko w kodzie
 - [ ] Teksty sekcji „egzemplarz od ręki” na stronie modelu i checkboxa
       opt-in (`stock.modelOffer.*`) oraz link „Zobacz {name} w katalogu”
       (`stock.page.viewModel`) — w kodzie (2026-10-20), do dodania do
@@ -597,3 +601,13 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   przekroczyć ~1 800 → Growth wcześniej niż przy starcie. Nowe zależności:
   `sanity-plugin-internationalized-array` 5.3.4, `@sanity/language-filter`
   5.0.21 (starsze niż najnowsze przez `minimumReleaseAge`).
+- **2026-10-26** — Krok 5 backlogu (PR 1): `/api/lead` + wyspa formularza.
+  Produkcja: `output: 'static'` + adapter Vercela na stałe, tylko trasa
+  `/api/lead` jest funkcją (sprawdzone w `.vercel/output/config.json`:
+  361 stron statycznych, jedna trasa serwerowa). Decyzja „static + adapter”
+  z „Do potwierdzenia” zamknięta. Lokalny build na Windows: `nodeLinker:
+  hoisted` w `pnpm-workspace.yaml` (pnpm 11 nie czyta `.npmrc`) usuwa
+  błąd `EPERM symlink` adaptera. Uwaga: lokalny `.env` ma
+  `SANITY_PREVIEW=true`, więc zwykły `pnpm build` buduje wariant CMS —
+  produkcję sprawdza się `SANITY_PREVIEW=false pnpm build`. Komunikaty
+  formularza (`leadForm`) tylko w kodzie — dopisane do inwentaryzacji.

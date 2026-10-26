@@ -9,7 +9,8 @@ import { parseEnv } from 'node:util';
 import { cmsPreview } from './src/cms/integration';
 
 // CMS deployment (cms.herev.com): Studio + draft preview, see docs/cms-plan.md.
-// Production stays a plain static build without an adapter.
+// Production is a static build; the Vercel adapter only serves the routes
+// marked `prerender = false` (src/pages/api/*).
 // The flag comes from the process env (Vercel) or .env (local) — Astro
 // loads .env only after the config is evaluated, so read it here.
 const dotenv = existsSync('.env') ? parseEnv(readFileSync('.env', 'utf8')) : {};
@@ -17,7 +18,7 @@ const cmsMode = (process.env.SANITY_PREVIEW ?? dotenv.SANITY_PREVIEW) === 'true'
 
 export default defineConfig({
   site: 'https://herev.com',
-  ...(cmsMode && { adapter: vercel() }),
+  adapter: vercel(),
   // CMS images are fetched from Sanity at build time and optimised like local ones.
   image: { domains: ['cdn.sanity.io'] },
   vite: {

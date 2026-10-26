@@ -72,20 +72,24 @@ adresy, zapisuje, formularz wysyła na wszystkie trzy bez rebuilda.
 
 ## Krok 5 — wyspy + endpoint
 
-- Przywrócić @astrojs/vercel adapter (usunięty w kroku 1 dla
-  static-only buildu; wymagany dla endpointów SSR) + output: 'server'.
+Postęp: PR 1 (2026-10-26) = adapter + `/api/lead` + wyspa formularza na
+wszystkich stronach. Zostały: porównywarka, `/api/geo` + pasek geo.
+
+- ✅ Adapter @astrojs/vercel włączony na stałe; `output: 'static'` zostaje,
+  adapter obsługuje tylko `src/pages/api/*` (`prerender = false`) —
+  zamiast planowanego `output: 'server'` (decyzja 2026-10-26).
 - Filtr jachtów: client:visible, dane jako props z builda, stan w URL
   query params; facety: brand / category / lengthM / cabins / year.
   Pole tekstowe wyszukiwania: dopasowanie po name/brand (placeholder
   funkcjonalny, bez rozbudowy).
-- Formularz leadowy: kontekst brand/jacht pre-filled, Turnstile,
-  walidacja współdzielona z serwerem. Checkbox `stockInterest` (strona
+- ✅ Formularz leadowy (`src/islands/LeadForm.tsx`): kontekst brand/jacht
+  pre-filled, Turnstile, walidacja współdzielona z serwerem (`src/lib/lead.ts`). Checkbox `stockInterest` (strona
   modelu, gdy jest nowy egzemplarz) i klucz egzemplarza (strona
   `available-now/[stock]`) trafiają do dealu — patrz kontrakt.
   Sekcja „egzemplarz od ręki” na stronie modelu + link zwrotny zrobione
   statycznie 2026-10-20 (`modelKey` + `condition: new`).
-- /api/lead: docs/kontrakt-api-lead.md (w tym odbiorcy z Sanity
-  i wariant leada z porównywarki).
+- ✅ /api/lead: docs/kontrakt-api-lead.md (w tym odbiorcy z Sanity
+  i wariant leada z porównywarki — endpoint gotowy, UI porównywarki nie).
 - Porównywarka: do 3 jachtów, stan w URL (shareable), widok
   zestawienia + textarea zapytania -> ten sam endpoint z listą
   porównywanych jachtów.

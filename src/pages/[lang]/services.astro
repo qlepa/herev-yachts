@@ -47,19 +47,16 @@ const pageDescription = t.servicesPage.hero.subtext;
     />
 
     <LeadModule
+      lang={lang}
+      t={t}
+      source="services"
       eyebrow={t.lead.eyebrow}
       heading={t.servicesPage.cta.heading}
       subtext={t.lead.subtext}
-      ctaLabel={t.lead.cta}
       image={leadPic}
       imageAlt="Private yacht viewing"
-      orCallLabel={t.lead.orCall}
       fallbackContact={Astro.locals.siteSettings.email}
       callNumber={Astro.locals.siteSettings.phone}
-      namePlaceholder={t.lead.namePlaceholder}
-      contactPlaceholder={t.lead.contactPlaceholder}
-      modelPlaceholder={t.lead.modelPlaceholder}
-      messagePlaceholder={t.lead.messagePlaceholder}
     />
 
   </main>

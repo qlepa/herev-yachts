@@ -333,22 +333,19 @@ const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${
 
     <!-- 11 Ready to experience — lead form -->
     <YachtLeadModule
+      lang={lang}
+      t={t}
+      source="yacht"
+      brand={data.brand}
+      yachtKey={data.translationKey}
       eyebrow={tp.leadEyebrow}
       heading={withName(tp.readyHeading)}
       brandLine={`AUTHORISED ${brandDisplay} REPRESENTATIVE`}
-      ctaLabel={tp.sendEnquiry}
       image={leadImage}
       imageAlt={`${data.name} yacht`}
       fallbackContact={Astro.locals.siteSettings.email}
-      orCallLabel={t.lead.orCall}
-      namePlaceholder={t.lead.namePlaceholder}
-      emailPlaceholder={tp.emailPlaceholder}
-      phonePlaceholder={tp.phonePlaceholder}
       modelValue={fullName}
-      messagePlaceholder={t.lead.messagePlaceholder}
-      financingLabel={tp.financingCheckbox}
-      stockInterestLabel={stockCards.length > 0 ? t.stock.modelOffer.interestCheckbox : undefined}
-      privacyLabel={tp.privacyCheckbox}
+      showStockInterest={stockCards.length > 0}
       brochureHref={brochureHref}
       brochureLabel={tp.brochureCta}
     />
