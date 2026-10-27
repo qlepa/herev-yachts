@@ -68,10 +68,18 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
     deps.log.warn(`lead: duplicate submit ignored for ${key}`);
     return { status: 200, body: { ok: true, duplicate: true } };
   }
+  // Reserve the key before the first await below — two concurrent submits
+  // of the same contact would otherwise both pass the check above.
+  recent.set(key, now());
 
   // 3. CRM. The form sends `brand` only when every compared yacht shares
   // one marque — a cross-marque comparison has no dealer (manual routing).
-  const dealer = lead.brand ? await deps.resolveDealer(lead.brand).catch(() => undefined) : undefined;
+  const dealer = lead.brand
+    ? await deps.resolveDealer(lead.brand).catch((err) => {
+        deps.log.error(`lead: dealer lookup failed for ${lead.brand} — ${err instanceof Error ? err.message : err}`);
+        return undefined;
+      })
+    : undefined;
   let deal: DealResult | undefined;
   let dealError: string | undefined;
   try {
@@ -111,6 +119,7 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
   // 6. The lead is safe if it reached at least one place.
   if (!deal && !mailed) {
     deps.log.error(`lead: LOST — neither Pipedrive nor e-mail accepted it. Payload: ${JSON.stringify(lead)}`);
+    recent.delete(key); // a retry must go through
     return { status: 502, body: { ok: false, error: 'delivery' } };
   }
 
@@ -123,6 +132,5 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
       deps.log.warn(`lead: confirmation to ${lead.email} failed — ${err instanceof Error ? err.message : err}`);
     }
   }
-  recent.set(key, now());
   return { status: 200, body: { ok: true } };
 }

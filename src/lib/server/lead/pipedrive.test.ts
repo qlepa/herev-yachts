@@ -134,4 +134,33 @@ describe('createDeal', () => {
     const { fetchFn } = fakeFetch({ '/dealFields': [] });
     await expect(createDeal(lead, dealer, 'now', { apiToken: 't', fetchFn })).rejects.toThrow(/Pipedrive \/persons\/search 404/);
   });
+
+  test('`success: false` with HTTP 200 is still an error', async () => {
+    const fetchFn = vi.fn(async () => new Response(JSON.stringify({ success: false, error: 'invalid token' }), { status: 200 }));
+    await expect(createDeal(lead, dealer, 'now', { apiToken: 't', fetchFn: fetchFn as unknown as typeof fetch })).rejects.toThrow(
+      /\/dealFields: success=false/,
+    );
+  });
+
+  test('deal fields are fetched once per 5 minutes per instance', async () => {
+    const { fetchFn, calls } = fakeFetch({
+      '/dealFields': fields,
+      '/persons/search': { items: [{ item: { id: 1 } }] },
+      '/deals': { id: 1 },
+      '/notes': { id: 1 },
+    });
+    const config = { apiToken: 't', fetchFn };
+    await createDeal(lead, dealer, 'now', config);
+    await createDeal(lead, dealer, 'now', config);
+    expect(calls.filter((c) => c.url.includes('/dealFields'))).toHaveLength(1);
+
+    vi.useFakeTimers();
+    try {
+      vi.setSystemTime(Date.now() + 5 * 60_000 + 1);
+      await createDeal(lead, dealer, 'now', config);
+      expect(calls.filter((c) => c.url.includes('/dealFields'))).toHaveLength(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
 });

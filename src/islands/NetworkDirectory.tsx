@@ -2,6 +2,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import { useState, useEffect, useMemo, useRef } from 'react';
 import type { DirectoryStrings } from '../lib/i18n-strings';
+import { haversineKm, nearestLocation } from '../lib/geo';
 
 /**
  * Network page island: Mapbox GL map + filter panel + dealer list.
@@ -42,16 +43,6 @@ const GILT = '#C9A45E';
 
 type SortKey = 'country' | 'name' | 'nearest';
 type LocateState = 'idle' | 'loading' | 'located' | 'denied';
-
-function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number): number {
-  const R = 6371;
-  const dLat = ((lat2 - lat1) * Math.PI) / 180;
-  const dLng = ((lng2 - lng1) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-}
 
 function buildGeoJSON(locs: NetworkLocation[]) {
   return {
@@ -286,11 +277,10 @@ export default function NetworkDirectory({ locations, brands, regions, accessTok
         const { latitude, longitude } = pos.coords;
         setUserPos({ lat: latitude, lng: longitude });
         setSort('nearest');
-        const nearest = locations.reduce((best, l) =>
-          haversineKm(latitude, longitude, l.lat, l.lng) < haversineKm(latitude, longitude, best.lat, best.lng) ? l : best,
-        );
-        setLocatedCountry(nearest.countryName);
+        const nearest = nearestLocation(latitude, longitude, locations);
         setLocateState('located');
+        if (!nearest) return;
+        setLocatedCountry(nearest.countryName);
         mapRef.current?.flyTo({ center: [nearest.lng, nearest.lat], zoom: 6, speed: 1.2 });
       },
       () => setLocateState('denied'),

@@ -194,4 +194,20 @@ describe('handleLead', () => {
     expect(d.log.warn).toHaveBeenCalledWith(expect.stringContaining('confirmation to jan@example.com failed'));
     expect(d.log.error).not.toHaveBeenCalled();
   });
+
+  test('two concurrent submits of the same contact create one deal (B1)', async () => {
+    const d = deps();
+    const [a, b] = await Promise.all([handleLead(validBody, d), handleLead(validBody, d)]);
+    expect(d.createDeal).toHaveBeenCalledTimes(1);
+    expect([a.body, b.body]).toContainEqual({ ok: true, duplicate: true });
+    expect([a.body, b.body]).toContainEqual({ ok: true });
+  });
+
+  test('a failing dealer lookup is logged, the deal is still created without a dealer (B4)', async () => {
+    const d = deps({ resolveDealer: vi.fn(async () => Promise.reject(new Error('collection unavailable'))) });
+    const res = await handleLead(validBody, d);
+    expect(res).toEqual({ status: 200, body: { ok: true } });
+    expect(d.createDeal).toHaveBeenCalledWith(expect.anything(), undefined, expect.any(String));
+    expect(d.log.error).toHaveBeenCalledWith(expect.stringContaining('dealer lookup failed for galeon'));
+  });
 });

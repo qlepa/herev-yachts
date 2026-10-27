@@ -55,13 +55,16 @@ src/lib/          isomorphic helpers (i18n, images, seo)
 src/lib/server/   SERVER ONLY: pipedrive, resend, turnstile, cms/ (Sanity)
 src/cms/          CMS-deployment-only routes (Studio, draft mode) + integration
 src/styles/       global.css with @theme — single source of truth for tokens
-scripts/          import-locations (CSV -> JSON + geocoding)
-docs/             backlog, contracts, design-handoff/
+src/test/         test helpers (fakeFetch), architecture tests, dist/ + content/ projects
+scripts/          one-off Sanity migrations, compare-dist, verify
+                  (import-locations: planned, not written yet — docs/kontrakt-locations.md)
+docs/             backlog, contracts, testing-strategy, design-handoff/
 ```
 
 ## NEVER
 
-- Never commit/push without `build` + `typecheck` passing locally
+- Never commit/push without `pnpm verify` passing locally (typecheck +
+  unit + production build + dist tests)
 - Never import from `src/lib/server/` into components, islands, or
   anything that ends up in the client bundle
 - Never add `client:*` without justification in the PR description;
@@ -104,12 +107,31 @@ for logic in `src/lib/server/` (Vitest) + integration failure paths
 never lose a lead
 **Content/schema change:** build validates (build error, not silent
 fallback) + user approval if an external format is affected
+**Every change:** tests per the matrix in `docs/testing-strategy.md` §7
++ `pnpm verify` green before push
 
 ## Testing
 
-Vitest for logic in `src/lib/server/` and `scripts/`. Bugfix = write
-a reproducing test first. Static pages: `astro check` + build as the
-gate, no snapshot tests.
+Strategy, layers and the **"what you change → what you test" matrix:
+`docs/testing-strategy.md`** (§7 is mandatory for every change; §10 logs
+new invariants). In short:
+
+- `pnpm test:unit` (Vitest, `unit` project) on every commit: logic in
+  `src/lib`, `src/lib/server`, `scripts`, endpoint wiring
+  (`src/test/api/` — never put `*.test.ts` under `src/pages`, the build
+  would treat it as a route), architecture rules (`src/test/architecture.test.ts`).
+  `astro:content` works in tests (global setup runs `astro sync`).
+- `pnpm test:dist` (`dist` project) after `pnpm build`: invariants of the
+  built HTML (SEO, i18n, business rules). `pnpm test:content`: live Sanity
+  content health, nightly only.
+- `pnpm verify` = typecheck + unit + production build (`SANITY_PREVIEW=false`
+  forced) + dist tests. Runs on `git push` (`.githooks/`, installed by
+  `pnpm install`). `pnpm vitest run --changed HEAD` runs on commit.
+- Bugfix = reproducing test first, same commit as the fix. Integrations are
+  faked with `src/test/fakeFetch.ts` (fixtures of real responses), never
+  called from tests. Static pages: `astro check` + build as the gate, no
+  snapshot tests; `scripts/compare-dist.ts` for migrations (HTML before =
+  HTML after).
 
 ## Escalation
 
@@ -128,6 +150,8 @@ rule from this file, open questions for the user.
 pnpm dev
 pnpm build             # build + collection validation
 pnpm typecheck         # astro check
-pnpm test              # vitest (lib/server, scripts)
-pnpm import:locations  # CSV -> src/data/locations.json
+pnpm test              # = test:unit (Vitest `unit` project)
+pnpm test:watch        # unit project in watch mode while coding
+pnpm test:dist         # invariants of dist/ — after pnpm build
+pnpm verify            # typecheck + unit + production build + dist (pre-push gate)
 ```

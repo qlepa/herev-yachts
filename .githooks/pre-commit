@@ -1,0 +1,4 @@
+#!/bin/sh
+# Fast gate: unit tests touching the files changed since HEAD
+# (docs/testing-strategy.md §6). The full gate is `pnpm verify` on push.
+pnpm vitest run --project unit --changed HEAD --passWithNoTests

@@ -12,7 +12,13 @@
     "preview": "astro preview",
     "astro": "astro",
     "typecheck": "astro check",
-    "test": "vitest run"
+    "test": "vitest run --project unit",
+    "test:unit": "vitest run --project unit",
+    "test:watch": "vitest --project unit",
+    "test:dist": "vitest run --project dist --passWithNoTests",
+    "test:content": "vitest run --project content --passWithNoTests",
+    "verify": "node scripts/verify.ts",
+    "prepare": "node scripts/setup-hooks.ts"
   },
   "dependencies": {
     "@astrojs/react": "^6.0.1",

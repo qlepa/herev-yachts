@@ -1,0 +1,4 @@
+#!/bin/sh
+# CLAUDE.md: never push without build + typecheck passing locally.
+# `pnpm verify` = typecheck + unit tests + production build + dist tests.
+pnpm verify

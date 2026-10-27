@@ -1,9 +1,11 @@
 # Strategia testów i uszczelnienia — Herev Yachts
 
-Status: **propozycja do akceptacji** (2026-10-27). Po akceptacji ten plik
-staje się trackerem: sekcja „Plan wdrożenia” dostaje odhaczane zadania,
-a sekcja „Macierz: co zmieniasz → co testujesz” jest obowiązkowa dla
-każdego agenta (link z `CLAUDE.md`).
+Status: **zaakceptowana 2026-10-27** (decyzje §9 wg rekomendacji). Ten plik
+jest trackerem: sekcja „Plan wdrożenia” ma odhaczane zadania, sekcja
+„Macierz: co zmieniasz → co testujesz” obowiązuje każdego agenta (link
+z `CLAUDE.md`), „Dziennik testów” zbiera nowe niezmienniki.
+
+**Stan:** T1 zrobione (2026-10-27). Następny: T2 (kontrakt builda + CI).
 
 ## 1. Po co i przed czym
 
@@ -319,7 +321,7 @@ przed deployem produkcji — do włączenia w ustawieniach repo.
 | Zmieniasz | Dopisujesz / uruchamiasz | Warstwa |
 |---|---|---|
 | Czystą funkcję w `src/lib`, `src/lib/server`, `scripts` | test jednostkowy obok pliku (`x.test.ts`), fixture inline lub z `src/test/` | L1 |
-| Endpoint w `src/pages/api` | test handlera z wstrzykniętymi zależnościami + jeden test okablowania przez `POST(Request)`; każda ścieżka awarii dostaje test „lead nie ginie” | L1 + L2 |
+| Endpoint w `src/pages/api` | test handlera z wstrzykniętymi zależnościami + test okablowania przez `POST(Request)` w `src/test/api/` (nigdy `*.test.ts` w `src/pages`); każda ścieżka awarii dostaje test „lead nie ginie” | L1 + L2 |
 | Loader Sanity / zapytanie GROQ | test mapowania dokument → model (`vi.mock('./client')`), przypadek „brak dokumentu” i „draft z pustymi polami”; nowy typ dokumentu → probe w `content` + webhook filter w `docs/cms-plan.md` | L1 + L6 |
 | Nową stronę lub trasę | sprawdź, że L3 widzi ją automatycznie (glob); dopisz do L3 regułę specyficzną dla szablonu, jeśli ma własny niezmiennik (np. cena, formularz, JSON-LD) | L3 |
 | `Layout.astro`, head, SEO, hreflang, sitemapę | uruchom `test:dist` lokalnie; każda nowa reguła SEO = asercja w L3 | L3 |
@@ -338,20 +340,38 @@ w `docs/testing-strategy.md` §7; `pnpm verify` zielone”.
 
 ## 8. Plan wdrożenia — jeden krok = jeden PR
 
-**PR T1 — fundament + dziury jednostkowe** (zero nowych zależności —
-tylko konfiguracja i testy)
-- [ ] `vitest.config.ts` (`getViteConfig`, projekty `unit`/`dist`/`content`,
-      `coverage.include`), skrypty `test:unit`, `test:dist`, `verify`
-- [ ] `src/test/` z helperami: `fakeFetch`, `STEGA`, buildery dokumentów
-- [ ] testy architektury (granice importów, `client:*`, `.env.example`,
-      `pipedriveOptionLabel`)
-- [ ] testy L1 z listy §3 + L2 okablowanie endpointu
-- [ ] B1 (test wyścigu → fix), B4 (log), B5 (test → fix)
-- [ ] `.githooks/` + `prepare`; `typescript` `^6`
-- [ ] `CLAUDE.md`: sekcja Testing → link do macierzy, DoD, usunięcie
-      nieistniejącego `import:locations` i „compare” z listy wysp (albo
-      decyzja usera, że wracają)
-- [ ] ten plik → tracker
+**PR T1 — fundament + dziury jednostkowe** ✅ 2026-10-27 (zero nowych
+zależności)
+- [x] `vitest.config.ts` (`getViteConfig`, projekty `unit`/`dist`/`content`),
+      skrypty `test:unit`, `test:watch`, `test:dist`, `test:content`, `verify`.
+      `astro:content` w testach: `src/test/globalSetup.ts` robi `astro sync`
+      i kopiuje data store do `.astro/` (Vite w trybie „serve” czyta stamtąd).
+      Coverage → T2 (wymaga `@vitest/coverage-v8`)
+- [x] `src/test/fakeFetch.ts` (router po hoście+ścieżce, rejestr wywołań);
+      buildery dokumentów Sanity nie były potrzebne — `toDocumentFields`
+      ze skryptu migracji daje kompletny `uiStrings`
+- [x] testy architektury `src/test/architecture.test.ts`: granice importów
+      (`lib/server` poza komponentami/wyspami/lib, `import type` dozwolony),
+      `client:*` tylko dla `src/islands`, `src/cms` tylko z integracji,
+      `pipedriveOptionLabel` bez normalizacji, każda zmienna env
+      w `.env.example`, zero TODO/FIXME w `src/`
+- [x] L1: `resend`, `notificationRecipients`, `uiStrings`, loadery `blog`,
+      `i18n`, `regions`, `stock` (na prawdziwej kolekcji), `lead-strings`,
+      `geo`, `pipedrive` (TTL, `success:false`), `draft-mode-disable`
+      (open redirect). L2: `src/test/api/lead.test.ts` — 8 scenariuszy
+      przez prawdziwe moduły i kolekcje, sieć przez `fakeFetch` (test nie
+      może leżeć w `src/pages` — build robi z niego trasę).
+      Pominięte świadomie: `middleware.ts` (3 linie delegacji),
+      `draft-mode-enable` (cała logika w `@sanity/preview-url-secret`)
+- [x] B1 (rezerwacja klucza dedupe przed pierwszym `await`, zwalniana przy
+      502), B4 (błąd `resolveDealer` logowany), B5 (`nearestLocation`
+      w `src/lib/geo.ts`, pusta lista = brak akcji). B2/B3/B6/B7 → T2/T4
+- [x] `.githooks/pre-commit` (`vitest --changed HEAD`), `pre-push`
+      (`pnpm verify`), `scripts/setup-hooks.ts` w `prepare`;
+      `typescript` już `^6`
+- [x] `CLAUDE.md`: Testing → macierz, DoD, komendy, `import:locations`
+      oznaczone jako nienapisane, `src/test/` w strukturze
+- [x] ten plik → tracker. Wynik: 28 plików / 171 testów (było 16 / 115)
 
 **PR T2 — kontrakt builda + CI**
 - [ ] `node-html-parser`; projekt `dist` z regułami §3 L3 (najpierw te,
