@@ -429,6 +429,14 @@ Odhaczać przy migracji. Lista z przeglądu komponentów, stron i wysp.
       (`stock.page.viewModel`) — w kodzie (2026-10-20), do dodania do
       `uiStringsSpec` razem z migracją (`migrate-settings` bez
       `--replace` nie uzupełnia pól w istniejących dokumentach)
+- [ ] Porównywarka (2026-10-27): `comparePage.*` (nagłówki, kontrolki,
+      szablony zdań-werdyktu z `{a}`/`{b}`/`{n}`/`{m}`, sekcja zapytania),
+      `nav.compare` (wyłączony ze spec przez `Omit` — reszta `nav` jest
+      w Sanity) i `yachtsPage.compare` (checkbox + pasek na liście floty)
+      — w kodzie; etykiety specyfikacji bierze z `yachtPage.specs` /
+      `specsGroups` (już w Sanity). Przy migracji: nowe pola w spec +
+      uzupełnienie 4 dokumentów, inaczej build produkcyjny padnie na
+      „has empty texts”
 
 Poza zakresem CMS, do odnotowania: brak `/favicon.ico`; domena
 `https://herev.com` wpisana na sztywno w stronach network (alternates,
@@ -616,3 +624,7 @@ curl -s -H "Authorization: Bearer $SANITY_API_READ_TOKEN" \
   `uiStrings` (to nie UI strony) — jeśli klient ma je edytować, osobna
   pozycja w inwentaryzacji. Integracje skonfigurowane na kontach
   dewelopera, lead przetestowany end-to-end. Dalej: porównywarka (PR 2).
+- **2026-10-27** — Krok 5 (PR 2): porównywarka. Teksty tylko w kodzie
+  (pozycja w inwentaryzacji wyżej); `nav.compare` celowo poza spec
+  (`Omit`), bo dodanie pola do `nav` bez uzupełnienia 4 dokumentów
+  `uiStrings-*` wywaliłoby build produkcyjny. Bez zmian w Sanity.

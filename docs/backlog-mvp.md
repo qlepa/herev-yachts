@@ -76,8 +76,8 @@ Postęp: PR 1 (2026-10-26) = adapter + `/api/lead` + wyspa formularza na
 wszystkich stronach; tego samego dnia szablony HTML obu maili +
 potwierdzenie do leada (en/pl/es/it). Konta Turnstile / Resend /
 Pipedrive skonfigurowane (konta dewelopera), testowy lead przeszedł
-end-to-end (deal #2 w Pipedrive, mail powiadomienia). Zostały:
-porównywarka (PR 2), `/api/geo` + pasek geo (PR 3).
+end-to-end (deal #2 w Pipedrive, mail powiadomienia). PR 2 (2026-10-27)
+= porównywarka. Zostało: `/api/geo` + pasek geo (PR 3).
 
 - ✅ Adapter @astrojs/vercel włączony na stałe; `output: 'static'` zostaje,
   adapter obsługuje tylko `src/pages/api/*` (`prerender = false`) —
@@ -99,9 +99,22 @@ porównywarka (PR 2), `/api/geo` + pasek geo (PR 3).
 - ✅ Maile: szablony HTML + tekst (`src/lib/server/lead/templates.ts`),
   potwierdzenie do leada w jego języku, `Reply-To` = dealer. Potwierdzenia
   na obce adresy działają dopiero po weryfikacji domeny w Resend.
-- Porównywarka: do 3 jachtów, stan w URL (shareable), widok
-  zestawienia + textarea zapytania -> ten sam endpoint z listą
-  porównywanych jachtów.
+- ✅ Porównywarka (`/[lang]/compare`, wyspa `src/islands/CompareTool.tsx`,
+  logika `src/lib/compare.ts` + testy): do 3 jachtów dowolnych marek, stan
+  w URL (`?y=a,b,c`, shareable, „kopiuj link”), dane wszystkich jachtów
+  jako propsy z builda. Zakres po researchu rynku (Baymard, Azimut,
+  Jeanneau, YachtBuyer): specyfikacja w grupach, sticky nagłówek z nazwą
+  i miniaturą, przełącznik „tylko różnice”, zdania-werdykt generowane
+  regułowo z liczb (szablony per język, bez odmiany), sylwetki w skali
+  (SVG z lengthM/beamM), plany pokładów obok siebie, wiersze „dostępny od
+  ręki” i „broszura”, arkusz druku (`print:`). Formularz pod zestawieniem
+  = ta sama wyspa `LeadForm` w wariancie compare. Wejścia: pozycja
+  „Compare” w nawigacji, checkbox na kafelkach floty (`YachtFilter`)
+  + pasek „Porównaj (n)”, link ze strony modelu pod tabelą „compare the
+  range”. Teksty w kodzie (`comparePage`, `nav.compare`,
+  `yachtsPage.compare`) — patrz inwentaryzacja w `docs/cms-plan.md`.
+  Na później (decyzja po starcie, wg popytu w wyszukiwarce): statyczne
+  strony „A vs B” dla par-rywali.
 - Wdrożyć /api/geo (Vercel geo headers: x-vercel-ip-country) i podpiąć
   do paska personalizacji na /network + geo-IP country focus na mapie.
 

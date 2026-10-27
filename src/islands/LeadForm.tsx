@@ -41,6 +41,8 @@ export interface LeadFormContext {
   brand?: string;
   yachtKey?: string;
   stockKey?: string;
+  /** Compare variant: translationKeys of the compared yachts. */
+  comparedKeys?: string[];
   /** Page's model/unit name — shown read-only in the yacht variant. */
   model?: string;
 }
@@ -187,6 +189,7 @@ export default function LeadForm({
       brand: context.brand,
       yachtKey: context.yachtKey,
       stockKey: context.stockKey,
+      comparedKeys: context.comparedKeys,
       financing: data.get('financing') === 'on',
       stockInterest: data.get('stockInterest') === 'on',
       consent: (data.get('privacy') === 'on') as true,

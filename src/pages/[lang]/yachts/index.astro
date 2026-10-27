@@ -95,6 +95,7 @@ const pageDescription = t.yachtsPage.subheading;
       <YachtFilter
         yachts={yachtCards}
         filterT={t.yachtsPage.filter}
+        compare={{ lang, ...t.yachtsPage.compare }}
         client:visible
       />
     </section>

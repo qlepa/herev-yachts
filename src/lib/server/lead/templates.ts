@@ -201,6 +201,8 @@ interface ConfirmationCopy {
   intro: string;
   /** Shown when the enquiry names a model or compared yachts. */
   about: string;
+  /** Compare variant: label of the link back to the comparison. */
+  comparisonLink: string;
   promise: string;
   yourMessage: string;
   closing: string;
@@ -215,6 +217,7 @@ const COPY: Record<Lead['lang'], ConfirmationCopy> = {
     heading: 'Thank you — we have your enquiry.',
     intro: 'Dear {name},',
     about: 'Thank you for your interest in',
+    comparisonLink: 'Your comparison',
     promise: 'An advisor will come back to you within one working day to arrange the next step.',
     yourMessage: 'Your message',
     closing: 'Kind regards,',
@@ -227,6 +230,7 @@ const COPY: Record<Lead['lang'], ConfirmationCopy> = {
     heading: 'Dziękujemy — mamy Twoje zapytanie.',
     intro: 'Dzień dobry, {name},',
     about: 'Dziękujemy za zainteresowanie:',
+    comparisonLink: 'Twoje porównanie',
     promise: 'Doradca odezwie się w ciągu jednego dnia roboczego, aby ustalić kolejny krok.',
     yourMessage: 'Twoja wiadomość',
     closing: 'Z wyrazami szacunku,',
@@ -239,6 +243,7 @@ const COPY: Record<Lead['lang'], ConfirmationCopy> = {
     heading: 'Gracias — hemos recibido su consulta.',
     intro: 'Estimado/a {name},',
     about: 'Gracias por su interés en',
+    comparisonLink: 'Su comparación',
     promise: 'Un asesor se pondrá en contacto con usted en el plazo de un día laborable para acordar el siguiente paso.',
     yourMessage: 'Su mensaje',
     closing: 'Atentamente,',
@@ -251,6 +256,7 @@ const COPY: Record<Lead['lang'], ConfirmationCopy> = {
     heading: 'Grazie — abbiamo ricevuto la sua richiesta.',
     intro: 'Gentile {name},',
     about: 'Grazie per il suo interesse per',
+    comparisonLink: 'Il suo confronto',
     promise: 'Un consulente la ricontatterà entro un giorno lavorativo per concordare il passo successivo.',
     yourMessage: 'Il suo messaggio',
     closing: 'Cordiali saluti,',
@@ -259,20 +265,34 @@ const COPY: Record<Lead['lang'], ConfirmationCopy> = {
   },
 };
 
+/** The shareable /compare URL the enquiry came from — only an http(s) URL is ever linked. */
+function comparisonLink(lead: Lead): string | undefined {
+  if (!lead.comparedKeys || !lead.pageUrl) return undefined;
+  try {
+    const url = new URL(lead.pageUrl);
+    return url.protocol === 'https:' || url.protocol === 'http:' ? url.href : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function firstName(name: string): string {
   return name.trim().split(/\s+/)[0] ?? name;
 }
 
 export function renderConfirmationMail(lead: Lead): RenderedMail {
   const copy = COPY[lead.lang];
-  const what = lead.comparedKeys ? lead.comparedKeys.join(' · ') : lead.model;
+  // The compare form sends the model names in `model`; the keys are the fallback.
+  const what = lead.model ?? lead.comparedKeys?.join(' · ');
   const intro = copy.intro.replace('{name}', firstName(lead.name));
+  const comparisonUrl = comparisonLink(lead);
 
   const text = [
     intro,
     '',
     copy.heading,
     what ? `${copy.about} ${what}.` : undefined,
+    comparisonUrl ? `${copy.comparisonLink}: ${comparisonUrl}` : undefined,
     copy.promise,
     lead.message ? `\n${copy.yourMessage}:\n${lead.message}` : undefined,
     '',
@@ -290,6 +310,9 @@ export function renderConfirmationMail(lead: Lead): RenderedMail {
     paragraph(escapeHtml(intro)),
     what
       ? paragraph(`${escapeHtml(copy.about)} <strong style="font-weight:600;color:${PALETTE.teal};">${escapeHtml(what)}</strong>.`)
+      : '',
+    comparisonUrl
+      ? paragraph(`${escapeHtml(copy.comparisonLink)}: <a href="${escapeHtml(comparisonUrl)}" style="color:${PALETTE.teal};">${escapeHtml(comparisonUrl)}</a>`)
       : '',
     paragraph(escapeHtml(copy.promise)),
     lead.message

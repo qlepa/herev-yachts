@@ -137,7 +137,7 @@ describe('handleLead', () => {
     expect(d.createDeal).toHaveBeenCalledTimes(2);
   });
 
-  test('compare variant: no dealer lookup, compared yachts in the mail', async () => {
+  test('compare variant across marques: no dealer, manual routing noted in the mail', async () => {
     const d = deps();
     const res = await handleLead(
       { ...validBody, source: 'compare', brand: undefined, yachtKey: undefined, model: undefined, comparedKeys: ['galeon-500-fly', 'saxdor-400-gtc'] },
@@ -149,6 +149,19 @@ describe('handleLead', () => {
     const mail = (d.sendMail as ReturnType<typeof vi.fn>).mock.calls[0][0];
     expect(mail.subject).toContain('compare');
     expect(mail.text).toContain('manual routing');
+  });
+
+  test('compare variant within one marque: routed to that marque\'s default dealer', async () => {
+    const d = deps();
+    const res = await handleLead(
+      { ...validBody, source: 'compare', brand: 'galeon', yachtKey: undefined, model: 'GALEON 500 FLY · GALEON 420 FLY', comparedKeys: ['galeon-500-fly', 'galeon-420-fly'] },
+      d,
+    );
+    expect(res.status).toBe(200);
+    expect(d.resolveDealer).toHaveBeenCalledWith('galeon');
+    expect(d.createDeal).toHaveBeenCalledWith(expect.anything(), dealer, expect.any(String));
+    const confirmation = (d.sendMail as ReturnType<typeof vi.fn>).mock.calls[1][0];
+    expect(confirmation.replyTo).toBe('info@herev.com');
   });
 
   test('phone-only contact from the compact form is accepted — no confirmation possible', async () => {

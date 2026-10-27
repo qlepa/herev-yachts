@@ -10,7 +10,8 @@ import type { Translations } from '../lib/i18n-strings';
  * and the migration script.
  */
 export type UiStrings = {
-  nav: Translations['nav'];
+  /** `compare` stays in code until the tool's texts move to the CMS. */
+  nav: Omit<Translations['nav'], 'compare'>;
   footer: Translations['footer'];
   categories: Translations['categories'];
   fleet: Translations['fleet'];

@@ -74,10 +74,16 @@ describe('renderConfirmationMail', () => {
     expect(html).not.toContain('Your message');
   });
 
-  test('compare variant lists the yachts', () => {
-    expect(renderConfirmationMail({ ...lead, model: undefined, comparedKeys: ['Galeon 500', 'Saxdor 400'] }).subject).toBe(
-      'We have your enquiry — Galeon 500 · Saxdor 400',
-    );
+  test('compare variant lists the yachts and links back to the comparison', () => {
+    const compare = { ...lead, model: undefined, comparedKeys: ['galeon-500-fly', 'saxdor-400-gtc'], pageUrl: 'https://herev.com/en/compare/?y=galeon-500-fly,saxdor-400-gtc' };
+    const { subject, text, html } = renderConfirmationMail(compare);
+    expect(subject).toBe('We have your enquiry — galeon-500-fly · saxdor-400-gtc');
+    expect(text).toContain('Your comparison: https://herev.com/en/compare/?y=galeon-500-fly,saxdor-400-gtc');
+    expect(html).toContain('<a href="https://herev.com/en/compare/?y=galeon-500-fly,saxdor-400-gtc"');
+    // The form sends the model names — they win over the keys.
+    expect(renderConfirmationMail({ ...compare, model: 'GALEON 500 FLY · SAXDOR 400 GTC' }).subject).toBe('We have your enquiry — GALEON 500 FLY · SAXDOR 400 GTC');
+    // A page URL that is not http(s) is never linked.
+    expect(renderConfirmationMail({ ...compare, pageUrl: 'javascript:alert(1)' }).html).not.toContain('javascript:');
   });
 
   test('never contains a hardcoded recipient address', () => {

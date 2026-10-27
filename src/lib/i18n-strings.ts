@@ -51,6 +51,7 @@ export interface NavStrings {
   services: string;
   network: string;
   blog: string;
+  compare: string;
   enquire: string;
 }
 
@@ -163,6 +164,8 @@ export interface Translations {
       viewLabel: string;
       noResults: string;
     };
+    /** Fleet list: "add to comparison" checkbox on the cards and the sticky bar. {n} = count. */
+    compare: { label: string; cta: string };
   };
   yachtPage: {
     enquireCta: string;
@@ -221,6 +224,33 @@ export interface Translations {
     steps: Array<{ number: string; title: string; body: string }>;
     cta: { heading: string };
   };
+  /** Comparison tool (/compare) — code-only until the CMS step covers it. */
+  comparePage: {
+    eyebrow: string;
+    heading: string;
+    subheading: string;
+    addLabel: string;
+    addPlaceholder: string;
+    slotHint: string;
+    remove: string;
+    emptyHeading: string;
+    emptyBody: string;
+    oneMore: string;
+    onlyDifferences: string;
+    copyLink: string;
+    linkCopied: string;
+    print: string;
+    viewModel: string;
+    /** Model page: link into the tool with this model preselected. */
+    fromModel: string;
+    /** Sentences: {a} = yacht with the highest value, {b} = lowest, {n}/{m} their values. */
+    verdict: { eyebrow: string; heading: string; longer: string; moreCabins: string; moreGuests: string; faster: string; moreFuel: string; allClose: string };
+    scale: { eyebrow: string; heading: string };
+    specs: { eyebrow: string; heading: string };
+    extras: { title: string; availableNow: string; viewUnit: string; brochure: string; download: string };
+    deckPlans: { eyebrow: string; heading: string };
+    lead: { eyebrow: string; heading: string; body: string; cta: string };
+  };
   notFound: {
     heading: string;
     subtext: string;
@@ -269,6 +299,7 @@ const en: Translations = {
     services: 'Services',
     network: 'Our Network',
     blog: 'Blog',
+    compare: 'Compare',
     enquire: 'Enquire',
   },
   hero: {
@@ -428,6 +459,7 @@ const en: Translations = {
       viewLabel: 'View →',
       noResults: 'No yachts match your filters.',
     },
+    compare: { label: 'Compare', cta: 'Compare ({n}) →' },
   },
   yachtPage: {
     enquireCta: 'Request an offer →',
@@ -557,6 +589,45 @@ const en: Translations = {
       heading: 'Begin the conversation.',
     },
   },
+  comparePage: {
+    eyebrow: 'COMPARE',
+    heading: 'Compare yachts side by side',
+    subheading:
+      'Up to three models from any of our five marques — specifications, deck plans and a plain-language verdict. Then ask one advisor about all of them.',
+    addLabel: 'Add a yacht',
+    addPlaceholder: 'Choose a model…',
+    slotHint: 'Up to three yachts',
+    remove: 'Remove',
+    emptyHeading: 'Start with any model',
+    emptyBody: 'Pick a first yacht above, or tick "Compare" on the cards in the fleet list.',
+    oneMore: 'Add a second yacht to see the comparison.',
+    onlyDifferences: 'Only differences',
+    copyLink: 'Copy link',
+    linkCopied: 'Link copied',
+    print: 'Print',
+    viewModel: 'View model →',
+    fromModel: 'Compare with models from other marques →',
+    verdict: {
+      eyebrow: 'AT A GLANCE',
+      heading: 'The verdict',
+      longer: '{a} is longer than {b} — {n} m vs {m} m.',
+      moreCabins: '{a} has more cabins than {b} — {n} vs {m}.',
+      moreGuests: '{a} sleeps more guests than {b} — {n} vs {m}.',
+      faster: '{a} is faster than {b} — {n} kn vs {m} kn.',
+      moreFuel: '{a} carries more fuel than {b} — {n} l vs {m} l.',
+      allClose: 'On the numbers these yachts are closely matched — the deck plans and the way you cruise will decide.',
+    },
+    scale: { eyebrow: 'TO SCALE', heading: 'Length and beam, side by side' },
+    specs: { eyebrow: 'SPECIFICATIONS', heading: 'The full measure' },
+    extras: { title: 'AVAILABILITY & DOCUMENTS', availableNow: 'Available now', viewUnit: 'View unit →', brochure: 'Brochure', download: 'Download PDF →' },
+    deckPlans: { eyebrow: 'DECK PLANS', heading: 'Layouts, side by side' },
+    lead: {
+      eyebrow: 'ASK AN ADVISOR',
+      heading: 'Undecided between them? Ask one advisor about all of them.',
+      body: 'Your enquiry goes out with the yachts you are comparing — one conversation, every answer.',
+      cta: 'Send enquiry',
+    },
+  },
   notFound: {
     heading: 'Page not found.',
     subtext: 'The page you are looking for does not exist or has been moved.',
@@ -658,6 +729,7 @@ const pl: Translations = {
     services: 'Usługi',
     network: 'Nasza Sieć',
     blog: 'Blog',
+    compare: 'Porównaj',
     enquire: 'Zapytaj',
   },
   hero: {
@@ -817,6 +889,7 @@ const pl: Translations = {
       viewLabel: 'Zobacz →',
       noResults: 'Brak jachtów spełniających kryteria.',
     },
+    compare: { label: 'Porównaj', cta: 'Porównaj ({n}) →' },
   },
   yachtPage: {
     enquireCta: 'Zapytaj o ofertę →',
@@ -946,6 +1019,45 @@ const pl: Translations = {
       heading: 'Rozpocznij rozmowę.',
     },
   },
+  comparePage: {
+    eyebrow: 'PORÓWNAJ',
+    heading: 'Porównaj jachty obok siebie',
+    subheading:
+      'Do trzech modeli z dowolnej z naszych pięciu marek — dane techniczne, plany pokładów i werdykt prostym językiem. Potem jedno pytanie do doradcy o wszystkie.',
+    addLabel: 'Dodaj jacht',
+    addPlaceholder: 'Wybierz model…',
+    slotHint: 'Maksymalnie trzy jachty',
+    remove: 'Usuń',
+    emptyHeading: 'Zacznij od dowolnego modelu',
+    emptyBody: 'Wybierz pierwszy jacht powyżej albo zaznacz „Porównaj” na kafelkach w liście floty.',
+    oneMore: 'Dodaj drugi jacht, aby zobaczyć porównanie.',
+    onlyDifferences: 'Tylko różnice',
+    copyLink: 'Kopiuj link',
+    linkCopied: 'Link skopiowany',
+    print: 'Drukuj',
+    viewModel: 'Zobacz model →',
+    fromModel: 'Porównaj z modelami innych marek →',
+    verdict: {
+      eyebrow: 'W SKRÓCIE',
+      heading: 'Werdykt',
+      longer: '{a} jest dłuższy niż {b} — {n} m wobec {m} m.',
+      moreCabins: '{a} ma więcej kabin niż {b} — {n} wobec {m}.',
+      moreGuests: '{a} pomieści więcej gości niż {b} — {n} wobec {m}.',
+      faster: '{a} jest szybszy niż {b} — {n} kn wobec {m} kn.',
+      moreFuel: '{a} zabiera więcej paliwa niż {b} — {n} l wobec {m} l.',
+      allClose: 'Liczbowo te jachty są bardzo wyrównane — zdecydują plany pokładów i sposób, w jaki pływasz.',
+    },
+    scale: { eyebrow: 'W SKALI', heading: 'Długość i szerokość obok siebie' },
+    specs: { eyebrow: 'DANE TECHNICZNE', heading: 'Pełna miara' },
+    extras: { title: 'DOSTĘPNOŚĆ I DOKUMENTY', availableNow: 'Dostępny od ręki', viewUnit: 'Zobacz egzemplarz →', brochure: 'Broszura', download: 'Pobierz PDF →' },
+    deckPlans: { eyebrow: 'PLANY POKŁADÓW', heading: 'Układy obok siebie' },
+    lead: {
+      eyebrow: 'ZAPYTAJ DORADCĘ',
+      heading: 'Nie możesz się zdecydować? Zapytaj jednego doradcę o wszystkie.',
+      body: 'Zapytanie wychodzi razem z listą porównywanych jachtów — jedna rozmowa, wszystkie odpowiedzi.',
+      cta: 'Wyślij zapytanie',
+    },
+  },
   notFound: {
     heading: 'Strona nie znaleziona.',
     subtext: 'Strona, której szukasz, nie istnieje lub została przeniesiona.',
@@ -1047,6 +1159,7 @@ const es: Translations = {
     services: 'Servicios',
     network: 'Nuestra Red',
     blog: 'Blog',
+    compare: 'Comparar',
     enquire: 'Consultar',
   },
   hero: {
@@ -1206,6 +1319,7 @@ const es: Translations = {
       viewLabel: 'Ver →',
       noResults: 'Ningún yate coincide con los filtros.',
     },
+    compare: { label: 'Comparar', cta: 'Comparar ({n}) →' },
   },
   yachtPage: {
     enquireCta: 'Solicitar oferta →',
@@ -1335,6 +1449,45 @@ const es: Translations = {
       heading: 'Comienza la conversación.',
     },
   },
+  comparePage: {
+    eyebrow: 'COMPARAR',
+    heading: 'Compare yates lado a lado',
+    subheading:
+      'Hasta tres modelos de cualquiera de nuestras cinco marcas: especificaciones, planos de cubierta y un veredicto en lenguaje claro. Después, una sola consulta a un asesor sobre todos ellos.',
+    addLabel: 'Añadir un yate',
+    addPlaceholder: 'Elija un modelo…',
+    slotHint: 'Hasta tres yates',
+    remove: 'Quitar',
+    emptyHeading: 'Empiece con cualquier modelo',
+    emptyBody: 'Elija un primer yate arriba o marque «Comparar» en las tarjetas de la lista de la flota.',
+    oneMore: 'Añada un segundo yate para ver la comparación.',
+    onlyDifferences: 'Solo diferencias',
+    copyLink: 'Copiar enlace',
+    linkCopied: 'Enlace copiado',
+    print: 'Imprimir',
+    viewModel: 'Ver modelo →',
+    fromModel: 'Comparar con modelos de otras marcas →',
+    verdict: {
+      eyebrow: 'DE UN VISTAZO',
+      heading: 'El veredicto',
+      longer: '{a} es más largo que {b}: {n} m frente a {m} m.',
+      moreCabins: '{a} tiene más camarotes que {b}: {n} frente a {m}.',
+      moreGuests: '{a} aloja a más invitados que {b}: {n} frente a {m}.',
+      faster: '{a} es más rápido que {b}: {n} kn frente a {m} kn.',
+      moreFuel: '{a} lleva más combustible que {b}: {n} l frente a {m} l.',
+      allClose: 'En cifras, estos yates están muy igualados: decidirán los planos de cubierta y su forma de navegar.',
+    },
+    scale: { eyebrow: 'A ESCALA', heading: 'Eslora y manga, lado a lado' },
+    specs: { eyebrow: 'ESPECIFICACIONES', heading: 'La medida completa' },
+    extras: { title: 'DISPONIBILIDAD Y DOCUMENTOS', availableNow: 'Disponible ahora', viewUnit: 'Ver unidad →', brochure: 'Catálogo', download: 'Descargar PDF →' },
+    deckPlans: { eyebrow: 'PLANOS DE CUBIERTA', heading: 'Distribuciones, lado a lado' },
+    lead: {
+      eyebrow: 'CONSULTE A UN ASESOR',
+      heading: '¿Indeciso entre ellos? Pregunte a un solo asesor por todos.',
+      body: 'Su consulta sale junto con los yates que está comparando: una conversación, todas las respuestas.',
+      cta: 'Enviar consulta',
+    },
+  },
   notFound: {
     heading: 'Página no encontrada.',
     subtext: 'La página que busca no existe o ha sido movida.',
@@ -1436,6 +1589,7 @@ const it: Translations = {
     services: 'Servizi',
     network: 'La Nostra Rete',
     blog: 'Blog',
+    compare: 'Confronta',
     enquire: 'Richiedi',
   },
   hero: {
@@ -1595,6 +1749,7 @@ const it: Translations = {
       viewLabel: 'Vedi →',
       noResults: 'Nessuno yacht corrisponde ai filtri.',
     },
+    compare: { label: 'Confronta', cta: 'Confronta ({n}) →' },
   },
   yachtPage: {
     enquireCta: 'Richiedi un\'offerta →',
@@ -1722,6 +1877,45 @@ const it: Translations = {
     ],
     cta: {
       heading: 'Inizia la conversazione.',
+    },
+  },
+  comparePage: {
+    eyebrow: 'CONFRONTA',
+    heading: 'Confronta gli yacht fianco a fianco',
+    subheading:
+      'Fino a tre modelli di uno qualsiasi dei nostri cinque marchi: specifiche, piani di coperta e un verdetto in parole semplici. Poi una sola richiesta a un consulente per tutti.',
+    addLabel: 'Aggiungi uno yacht',
+    addPlaceholder: 'Scegli un modello…',
+    slotHint: 'Fino a tre yacht',
+    remove: 'Rimuovi',
+    emptyHeading: 'Inizia da un modello qualsiasi',
+    emptyBody: 'Scegli un primo yacht qui sopra oppure spunta «Confronta» sulle schede della lista della flotta.',
+    oneMore: 'Aggiungi un secondo yacht per vedere il confronto.',
+    onlyDifferences: 'Solo differenze',
+    copyLink: 'Copia link',
+    linkCopied: 'Link copiato',
+    print: 'Stampa',
+    viewModel: 'Vedi modello →',
+    fromModel: 'Confronta con modelli di altri marchi →',
+    verdict: {
+      eyebrow: 'IN SINTESI',
+      heading: 'Il verdetto',
+      longer: '{a} è più lungo di {b}: {n} m contro {m} m.',
+      moreCabins: '{a} ha più cabine di {b}: {n} contro {m}.',
+      moreGuests: '{a} ospita più persone di {b}: {n} contro {m}.',
+      faster: '{a} è più veloce di {b}: {n} kn contro {m} kn.',
+      moreFuel: '{a} imbarca più carburante di {b}: {n} l contro {m} l.',
+      allClose: 'Nei numeri questi yacht sono molto vicini: decideranno i piani di coperta e il modo in cui navighi.',
+    },
+    scale: { eyebrow: 'IN SCALA', heading: 'Lunghezza e larghezza, fianco a fianco' },
+    specs: { eyebrow: 'SPECIFICHE', heading: 'La misura completa' },
+    extras: { title: 'DISPONIBILITÀ E DOCUMENTI', availableNow: 'Disponibile subito', viewUnit: 'Vedi unità →', brochure: 'Brochure', download: 'Scarica PDF →' },
+    deckPlans: { eyebrow: 'PIANI DI COPERTA', heading: 'Layout, fianco a fianco' },
+    lead: {
+      eyebrow: 'CHIEDI A UN CONSULENTE',
+      heading: 'Indeciso tra loro? Chiedi a un solo consulente di tutti.',
+      body: 'La tua richiesta parte insieme agli yacht che stai confrontando: una conversazione, tutte le risposte.',
+      cta: 'Invia richiesta',
     },
   },
   notFound: {

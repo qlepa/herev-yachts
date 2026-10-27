@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
+import { COMPARE_MAX, compareHref } from '../lib/compare';
 
 export interface YachtCardData {
   translationKey: string;
@@ -27,9 +28,18 @@ export interface FilterStrings {
   noResults: string;
 }
 
+/** "Add to comparison" on the cards + the bar linking to /compare (Step 5, PR 2). */
+export interface CompareEntry {
+  lang: string;
+  label: string;
+  /** {n} = number of selected yachts. */
+  cta: string;
+}
+
 interface Props {
   yachts: YachtCardData[];
   filterT: FilterStrings;
+  compare: CompareEntry;
 }
 
 const LENGTH_BUCKETS = [
@@ -61,10 +71,18 @@ function YachtCard({
   yacht,
   viewLabel,
   cabinsLabel,
+  compareLabel,
+  compared,
+  compareDisabled,
+  onCompare,
 }: {
   yacht: YachtCardData;
   viewLabel: string;
   cabinsLabel: string;
+  compareLabel: string;
+  compared: boolean;
+  compareDisabled: boolean;
+  onCompare: () => void;
 }) {
   return (
     <article className="flex flex-col shadow-card bg-white w-full">
@@ -117,12 +135,26 @@ function YachtCard({
           ) : (
             <span />
           )}
-          <a
-            href={yacht.href}
-            className="font-mono text-[11px] tracking-label text-teal hover:text-ink transition-colors uppercase"
-          >
-            {viewLabel}
-          </a>
+          <span className="flex items-center gap-4">
+            <label
+              className={`flex items-center gap-1.5 font-mono text-[10px] tracking-mono uppercase transition-colors ${compareDisabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:text-teal'} ${compared ? 'text-teal' : 'text-[var(--color-ink-55)]'}`}
+            >
+              <input
+                type="checkbox"
+                checked={compared}
+                disabled={compareDisabled}
+                onChange={onCompare}
+                className="w-3 h-3 accent-[var(--color-teal)]"
+              />
+              {compareLabel}
+            </label>
+            <a
+              href={yacht.href}
+              className="font-mono text-[11px] tracking-label text-teal hover:text-ink transition-colors uppercase"
+            >
+              {viewLabel}
+            </a>
+          </span>
         </div>
       </div>
     </article>
@@ -252,8 +284,10 @@ function FilterSections({
   );
 }
 
-export default function YachtFilter({ yachts, filterT }: Props) {
+export default function YachtFilter({ yachts, filterT, compare }: Props) {
   const [search, setSearch] = useState('');
+  // Comparison shortlist — page-local; the /compare URL carries it onwards.
+  const [compared, setCompared] = useState<string[]>([]);
   const [cats, setCats] = useState<Set<string>>(new Set());
   const [brands, setBrands] = useState<Set<string>>(new Set());
   const [lengthBucket, setLengthBucket] = useState<string | null>(null);
@@ -452,6 +486,14 @@ export default function YachtFilter({ yachts, filterT }: Props) {
                     yacht={y}
                     viewLabel={filterT.viewLabel}
                     cabinsLabel={filterT.cabins}
+                    compareLabel={compare.label}
+                    compared={compared.includes(y.translationKey)}
+                    compareDisabled={!compared.includes(y.translationKey) && compared.length >= COMPARE_MAX}
+                    onCompare={() =>
+                      setCompared((prev) =>
+                        prev.includes(y.translationKey) ? prev.filter((k) => k !== y.translationKey) : [...prev, y.translationKey],
+                      )
+                    }
                   />
                 ))}
               </div>
@@ -460,6 +502,18 @@ export default function YachtFilter({ yachts, filterT }: Props) {
 
         </div>
       </div>
+
+      {/* ─── Compare bar: above the mobile filter buttons, bottom-right on desktop ─── */}
+      {compared.length > 0 && (
+        <div className="fixed left-0 right-0 bottom-[52px] md:bottom-6 md:left-auto md:right-6 z-40 flex justify-end px-4 md:px-0 pointer-events-none">
+          <a
+            href={compareHref(compare.lang, compared)}
+            className="pointer-events-auto inline-flex items-center gap-3 px-[22px] py-3.5 font-mono font-bold text-[11px] tracking-mono uppercase bg-teal text-white shadow-panel hover:bg-ink transition-colors"
+          >
+            {compare.cta.replace('{n}', String(compared.length))}
+          </a>
+        </div>
+      )}
 
       {/* ─── Mobile floating action buttons ─── */}
       <div className="fixed bottom-0 left-0 right-0 md:hidden z-40 flex items-stretch">

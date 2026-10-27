@@ -1,0 +1,140 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SectionLabel from '../../components/ui/SectionLabel.astro';
+import CompareTool from '../../islands/CompareTool';
+import { getLocalePaths, type Locale } from '../../lib/i18n';
+import type { CategoryKey } from '../../content.config';
+import { loadTranslations } from '../../lib/server/cms/uiStrings';
+import { getYachtBrochure, getYachtHero, getYachtLayouts } from '../../lib/images';
+import { brandDisplayMap, getStockEntries } from '../../lib/stock';
+import { leadFormStrings } from '../../lib/lead-strings';
+import { staticPathProps } from '../../lib/staticPaths';
+import type { CompareYacht } from '../../lib/compare';
+
+export function getStaticPaths() {
+  return getLocalePaths();
+}
+
+const { lang } = Astro.params as { lang: Locale };
+// Rendered on demand on the CMS deployment, where getStaticPaths does not run.
+if (!(await staticPathProps(Astro, getStaticPaths))) return new Response(null, { status: 404 });
+const t = await loadTranslations(lang, Astro);
+const tc = t.comparePage;
+
+const yachtEntries = await getCollection(
+  'yachts',
+  (e) => e.id.startsWith(`${lang}/`) && !e.data.draft,
+);
+yachtEntries.sort((a, b) => b.data.lengthM - a.data.lengthM);
+
+// Factory-new units available now, by model — the "available now" row.
+const newStock = (await getStockEntries(lang)).filter((e) => e.data.condition === 'new' && e.data.modelKey);
+const stockHrefByModel = new Map<string, string>();
+for (const e of newStock) {
+  if (!stockHrefByModel.has(e.data.modelKey!)) {
+    stockHrefByModel.set(e.data.modelKey!, `/${lang}/available-now/${e.data.translationKey}/`);
+  }
+}
+
+// Every yacht of the locale as build-time props: thumbnails and deck plans
+// resolved through astro:assets, nothing fetched on the client.
+const yachts: CompareYacht[] = await Promise.all(
+  yachtEntries.map(async ({ data }) => {
+    const hero = await getYachtHero(data.translationKey, data.draft);
+    const thumb = hero ? await getImage({ src: hero, width: 480, format: 'webp' }) : null;
+    const layoutImages = await getYachtLayouts(data.translationKey);
+    const layouts = await Promise.all(
+      layoutImages.map(async (img, i) => ({
+        src: (await getImage({ src: img, width: 900, format: 'webp' })).src,
+        title: data.layouts?.[i] ?? `${t.yachtPage.deckFallback} ${i + 1}`,
+      })),
+    );
+    const brandDisplay = brandDisplayMap[data.brand];
+    return {
+      translationKey: data.translationKey,
+      name: data.name,
+      brand: data.brand,
+      brandDisplay,
+      fullName: `${brandDisplay} ${data.name}`,
+      categoryLabel: data.category ? t.categories[data.category as CategoryKey] : undefined,
+      href: `/${lang}/yachts/${data.brand}/${data.translationKey}/`,
+      imageSrc: thumb?.src ?? null,
+      year: data.year,
+      lengthM: data.lengthM,
+      beamM: data.beamM,
+      draftM: data.draftM,
+      cabins: data.cabins,
+      berths: data.berths,
+      engines: data.engines,
+      maxSpeedKn: data.maxSpeedKn,
+      cruiseSpeedKn: data.cruiseSpeedKn,
+      fuelL: data.fuelL,
+      waterL: data.waterL,
+      ceCategory: data.ceCategory,
+      layouts,
+      brochureHref: await getYachtBrochure(data.translationKey),
+      stockHref: stockHrefByModel.get(data.translationKey),
+    };
+  }),
+);
+
+const pageTitle = `${tc.heading} ${Astro.locals.siteSettings.titleSuffix}`;
+const pageDescription = tc.subheading;
+---
+
+<Layout lang={lang} title={pageTitle} description={pageDescription}>
+
+  <div class="print:hidden">
+    <SiteHeader
+      lang={lang}
+      variant="ink"
+      currentPath={`/${lang}/compare/`}
+      nav={t.nav}
+    />
+  </div>
+
+  <main>
+
+    <!-- Page header -->
+    <section class="bg-paper pt-14 pb-10">
+      <div class="max-w-[1440px] mx-auto px-gutter">
+        <SectionLabel text={tc.eyebrow} class="mb-4" />
+        <h1
+          class="font-display text-h1 text-ink mb-4 max-w-[640px]"
+          style="font-weight: 400; letter-spacing: var(--tracking-tight);"
+        >
+          {tc.heading}
+        </h1>
+        <p class="text-body text-[var(--color-ink-70)] leading-relaxed max-w-[560px]">
+          {tc.subheading}
+        </p>
+      </div>
+    </section>
+
+    <!-- Island: selection in the URL, all yachts as build-time props. At the
+         top of the page, so client:visible hydrates it straight away. -->
+    <section class="bg-paper pb-section">
+      <CompareTool
+        client:visible
+        lang={lang}
+        yachts={yachts}
+        strings={tc}
+        specLabels={t.yachtPage.specs}
+        specGroupLabels={t.yachtPage.specsGroups}
+        leadStrings={leadFormStrings(t, tc.lead.cta)}
+        turnstileSiteKey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}
+        fallbackContact={Astro.locals.siteSettings.email}
+      />
+    </section>
+
+  </main>
+
+  <div class="print:hidden">
+    <SiteFooter lang={lang} t={t.footer} />
+  </div>
+
+</Layout>

@@ -69,9 +69,9 @@ export async function handleLead(rawBody: unknown, deps: LeadDeps): Promise<Lead
     return { status: 200, body: { ok: true, duplicate: true } };
   }
 
-  // 3. CRM. The compare variant has no dealer (yachts may span brands).
-  const dealer =
-    lead.brand && !lead.comparedKeys ? await deps.resolveDealer(lead.brand).catch(() => undefined) : undefined;
+  // 3. CRM. The form sends `brand` only when every compared yacht shares
+  // one marque — a cross-marque comparison has no dealer (manual routing).
+  const dealer = lead.brand ? await deps.resolveDealer(lead.brand).catch(() => undefined) : undefined;
   let deal: DealResult | undefined;
   let dealError: string | undefined;
   try {

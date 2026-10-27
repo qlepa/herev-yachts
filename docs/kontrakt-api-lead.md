@@ -30,9 +30,18 @@ Egzemplarz od ręki (decyzje Tomasza 2026-10-20):
   tego modelu) -> flaga w dealu. Brak pola = false, nie błąd.
 
 Routing dealera: lead ze strony jachtu/brandu -> defaultDealer brandu;
-lead z porównywarki (jachty mogą być z różnych brandów) -> bez
+lead z porównywarki: gdy wszystkie porównywane jachty są jednej marki,
+formularz wysyła `brand` i lead idzie do defaultDealer tej marki
+(decyzja Tomasza 2026-10-27); porównanie między markami -> bez
 przypisania, obsługa ręczna w Pipedrive. Mapowanie dealerId ->
 pipedriveOptionLabel wyłącznie po stronie serwera.
+
+Porównywarka (2026-10-27): `comparedKeys` = translationKeys (2–3),
+`model` = pełne nazwy porównywanych modeli („GALEON 500 FLY · SAXDOR
+400 GTC”) — używane w potwierdzeniu do leada; `pageUrl` = shareable URL
+porównania (`/{lang}/compare/?y=a,b,c`), w potwierdzeniu dołączany jako
+link „Twoje porównanie” (tylko http(s)). Tytuł dealu i pole „Compared
+yachts” nadal po kluczach.
 
 UTM: capture do sessionStorage inline skryptem w layoucie, dołączane
 do submitu. Brak UTM = pola puste, nie błąd.

@@ -127,6 +127,9 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
 - [ ] Lighthouse mobile ≥ 95: strona główna, marka, jacht
 - [ ] Formularz leada w 4 językach: dociera do Pipedrive i na e-maile;
       awaria integracji nie gubi leada
+- [ ] Porównywarka w 4 językach: link z `?y=` otwiera to samo zestawienie,
+      zapytanie spod porównania niesie listę jachtów (pole „Compared
+      yachts”), jedna marka → dealer marki, wiele marek → bez dealera
 - [ ] Stare URL-e (przekierowania w `vercel.json`) działają na nowej
       domenie; brak martwych linków (np. `npx linkinator https://herev.com`)
 
