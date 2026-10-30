@@ -153,5 +153,8 @@ pnpm typecheck         # astro check
 pnpm test              # = test:unit (Vitest `unit` project)
 pnpm test:watch        # unit project in watch mode while coding
 pnpm test:dist         # invariants of dist/ — after pnpm build
+pnpm test:coverage     # unit + coverage threshold on src/lib/server (CI)
 pnpm verify            # typecheck + unit + production build + dist (pre-push gate)
+pnpm compare:master    # migrations: HTML of master vs working tree (two builds)
+pnpm knip              # dead code / unused deps (warning in CI)
 ```

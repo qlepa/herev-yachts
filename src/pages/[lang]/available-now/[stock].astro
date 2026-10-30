@@ -10,7 +10,7 @@ import YachtSpecs from '../../../components/sections/YachtSpecs.astro';
 import YachtLeadModule from '../../../components/sections/YachtLeadModule.astro';
 import TextLink from '../../../components/ui/TextLink.astro';
 import MobileCta from '../../../components/ui/MobileCta.astro';
-import { LOCALES, type Locale } from '../../../lib/i18n';
+import { entryLocales, LOCALES, type Locale } from '../../../lib/i18n';
 import type { CategoryKey } from '../../../content.config';
 import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getStockHero, getStockGallery } from '../../../lib/images';
@@ -76,7 +76,9 @@ const model = data.modelKey
   : undefined;
 const modelHref = model ? `/${lang}/yachts/${model.data.brand}/${model.data.translationKey}/` : undefined;
 
-const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/available-now/${slug}/` }));
+// hreflang and language switcher only to locales where this unit is published (B2)
+const translations = await getCollection('stock', (e) => e.data.translationKey === slug && !e.data.draft && !e.data.sold);
+const alternates = entryLocales(translations.map((e) => e.id)).map((l) => ({ lang: l, href: `/${l}/available-now/${slug}/` }));
 
 const seoTitle       = data.seo?.title       ?? `${fullName} ${data.year} ${Astro.locals.siteSettings.titleSuffix}`;
 const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${priceLabel} ${taxLabel}.`;
@@ -89,6 +91,7 @@ const seoDescription = data.seo?.description ?? `${fullName} (${data.year}), ${p
     variant="ink"
     currentPath={`/${lang}/available-now/${slug}/`}
     nav={t.nav}
+    alternates={alternates}
   />
 
   <main>

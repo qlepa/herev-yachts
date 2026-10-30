@@ -1,3 +1,6 @@
+# Gate before production (docs/testing-strategy.md §5). Vercel only runs
+# `astro build`, so branch protection requiring this job is the real gate.
+# Order is fail-fast: cheap checks first, the build and its contract last.
 name: CI
 
 on:
@@ -5,9 +8,22 @@ on:
   push:
     branches: [master]
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      SANITY_PREVIEW: 'false'
+      # Project id and dataset are public (they reach the client bundle);
+      # the fallback goes away once the two repository secrets exist
+      # (docs/launch-checklist.md §4).
+      PUBLIC_SANITY_PROJECT_ID: ${{ secrets.PUBLIC_SANITY_PROJECT_ID || '9djarxf8' }}
+      PUBLIC_SANITY_DATASET: ${{ secrets.PUBLIC_SANITY_DATASET || 'production' }}
+      SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -21,15 +37,28 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build
-        run: pnpm build
-        env:
-          PUBLIC_SANITY_PROJECT_ID: 9djarxf8
-          PUBLIC_SANITY_DATASET: production
-          SANITY_API_READ_TOKEN: ${{ secrets.SANITY_API_READ_TOKEN }}
-
       - name: Typecheck
         run: pnpm typecheck
 
-      - name: Test
-        run: pnpm test
+      - name: Unit tests + coverage
+        run: pnpm test:coverage
+
+      - name: Build (production variant)
+        run: pnpm build
+
+      - name: Build contract (dist tests)
+        run: pnpm test:dist
+
+      # Dead code / unused dependencies — a warning until the baseline is clean.
+      - name: Knip
+        run: pnpm knip --no-progress
+        continue-on-error: true
+
+      - name: Coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+          retention-days: 14

@@ -8,8 +8,8 @@
     { "source": "/:lang(en|pl|es|it)/admin", "destination": "/admin", "permanent": false },
     { "source": "/:lang(en|pl|es|it)/admin/:path*", "destination": "/admin/:path*", "permanent": false },
 
-    { "source": "/:lang/yachts/aurora-42",          "destination": "/:lang/yachts/chris-craft/aurora-42",          "permanent": true },
-    { "source": "/:lang/yachts/aurora-42/",         "destination": "/:lang/yachts/chris-craft/aurora-42/",         "permanent": true },
+    { "source": "/:lang/yachts/aurora-42",          "destination": "/:lang/yachts/galeon/aurora-42",          "permanent": true },
+    { "source": "/:lang/yachts/aurora-42/",         "destination": "/:lang/yachts/galeon/aurora-42/",         "permanent": true },
     { "source": "/:lang/yachts/chris-craft-corsair-25",   "destination": "/:lang/yachts/chris-craft/chris-craft-corsair-25",   "permanent": true },
     { "source": "/:lang/yachts/chris-craft-corsair-25/",  "destination": "/:lang/yachts/chris-craft/chris-craft-corsair-25/",  "permanent": true },
     { "source": "/:lang/yachts/chris-craft-launch-25",    "destination": "/:lang/yachts/chris-craft/chris-craft-launch-25",    "permanent": true },

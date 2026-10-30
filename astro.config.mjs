@@ -37,7 +37,8 @@ export default defineConfig({
         defaultLocale: 'en',
         locales: { en: 'en', pl: 'pl', es: 'es', it: 'it' },
       },
-      filter: (page) => !page.includes('/404') && !page.includes('/admin'),
+      // `/` is only a redirect stub to /en/ — not a page for crawlers.
+      filter: (page) => !page.includes('/404') && !page.includes('/admin') && page !== 'https://herev.com/',
     }),
     ...(cmsMode ? [cmsPreview()] : []),
   ],

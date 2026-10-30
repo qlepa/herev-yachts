@@ -1,5 +1,5 @@
-# build output
-dist/
+# build output (root only — src/test/dist/ holds the build-contract tests)
+/dist/
 
 # generated types
 .astro/
@@ -26,3 +26,8 @@ pnpm-debug.log*
 
 # import caches (scripts/import-yachts24-blog.ts)
 .cache/
+
+# test output
+coverage/
+# scratch builds (scripts/compare-master.ts)
+tmp/

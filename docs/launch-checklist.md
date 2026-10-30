@@ -75,10 +75,11 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
       albo wklejone gdziekolwiek → nowe wartości w Vercelu / GitHubie, stare
       unieważnione (Sanity, Resend, Pipedrive, Turnstile — co istnieje
       w danym momencie)
-- [ ] CI (`.github/workflows/ci.yml`): `PUBLIC_SANITY_PROJECT_ID`
-      i `PUBLIC_SANITY_DATASET` są wpisane na sztywno (tymczasowo, bo
-      brakowało secretów) → przenieść do GitHub Secrets i wrócić do
-      `${{ secrets.… }}`
+- [ ] CI (`.github/workflows/ci.yml`): dodać GitHub Secrets
+      `PUBLIC_SANITY_PROJECT_ID` i `PUBLIC_SANITY_DATASET`, potem usunąć
+      fallback `|| '…'` z `env:` joba
+- [ ] GitHub → Settings → Branches: ochrona `master` wymagająca joba `ci`
+      (Vercel buduje bez testów; to jedyna bramka przed produkcją)
 - [ ] Skan historii gita na sekrety (np. `gitleaks detect`) — przed
       udostępnieniem repo komukolwiek
 - [ ] Mapbox: token `pk.` z ograniczeniem URL tylko do `https://herev.com`
@@ -119,6 +120,9 @@ Nowe rzeczy „do zrobienia przed startem” dopisywać tutaj.
 
 - [ ] `public/700 SKY-…/` (zdjęcia + PDF klienta, publicznie dostępne) —
       usunięte albo przeniesione do CMS (decyzja w `docs/cms-plan.md`)
+- [ ] `public/favicon.ico` (przeglądarki i czytniki RSS proszą o niego bez
+      linku w HTML; link usunięty w T2, bo plik nie istniał) — wygenerować
+      z `favicon-32.png`, bez przywracania linku
 - [ ] **Polityka prywatności i polityka cookies od klienta** (we wszystkich
       językach startu) — wpisane w Studio jako „Strona tekstowa”
       i opublikowane; link w stopce pojawia się dopiero po publikacji.

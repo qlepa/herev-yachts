@@ -6,6 +6,15 @@ export function getLocalePaths() {
   return LOCALES.map((lang) => ({ params: { lang } }));
 }
 
+/**
+ * Locales in which an entry exists, from collection ids of the form
+ * `lang/key`. Pages build hreflang and the language switcher from this —
+ * a locale without the entry gets no alternate (never a fallback).
+ */
+export function entryLocales(ids: readonly string[]): Locale[] {
+  return LOCALES.filter((l) => ids.some((id) => id.startsWith(`${l}/`)));
+}
+
 export function buildAlternates(
   pathname: string,
   absoluteBase = '',

@@ -5,7 +5,8 @@ jest trackerem: sekcja „Plan wdrożenia” ma odhaczane zadania, sekcja
 „Macierz: co zmieniasz → co testujesz” obowiązuje każdego agenta (link
 z `CLAUDE.md`), „Dziennik testów” zbiera nowe niezmienniki.
 
-**Stan:** T1 zrobione (2026-10-27). Następny: T2 (kontrakt builda + CI).
+**Stan:** T1 zrobione (2026-10-27, na masterze). T2 zrobione (2026-10-30).
+Następny: T3 (zdrowie integracji: `/api/health`, nightly, projekt `content`).
 
 ## 1. Po co i przed czym
 
@@ -284,12 +285,16 @@ i `scripts/**` (linie 80 %), raportowany w CI, bez progu globalnego.
 
 `ci.yml` (PR + push master), jeden job, kolejność po czasie:
 
-1. install → `typecheck` → `test:unit` (szybkie fail-fast, bez Sanity)
-2. `build` (`SANITY_PREVIEW=false`) → `test:dist` → `lychee --offline dist`
-3. `knip` (najpierw `continue-on-error`, po oczyszczeniu bramka)
+1. install → `typecheck` → `test:coverage` (unit + próg pokrycia
+   `src/lib/server/**`, bez Sanity) ✅ T2
+2. `build` (`SANITY_PREVIEW=false`) → `test:dist` ✅ T2. Linki wewnętrzne
+   sprawdza `src/test/dist/links.test.ts`, nie `lychee --offline`: tylko
+   test zna przekierowania z `vercel.json` (lychee zostaje w nightly, do
+   linków zewnętrznych)
+3. `knip` (`continue-on-error`; po oczyszczeniu bramka) ✅ T2
 4. `test:e2e` (Playwright, cache przeglądarek po wersji pakietu)
 5. `test:lighthouse` (tylko gdy diff dotyka `src/**`; ostrzeżenie)
-6. artefakty: raport Playwright, raport LHCI, `coverage/`
+6. artefakty: `coverage/` ✅ T2, raport Playwright, raport LHCI
 
 `nightly.yml` (schedule 05:00 UTC + ręczny `workflow_dispatch`): health
 na prod i CMS, build na żywej treści, `content` project, Playwright
@@ -297,7 +302,8 @@ z mapą, `lychee` z siecią, Lighthouse twardo.
 
 Sekrety: `SANITY_API_READ_TOKEN` (jest), `HEALTH_KEY` (nowy),
 `PUBLIC_MAPBOX_TOKEN` (nightly). Zgodnie z checklistą §4: `PROJECT_ID`
-i `DATASET` wracają do secrets. Vercel buduje tylko `astro build`, więc
+i `DATASET` czytane z secrets z fallbackiem na obecne wartości
+(`${{ secrets.X || '…' }}`) — fallback znika, gdy secrets istnieją. Vercel buduje tylko `astro build`, więc
 ochrona gałęzi `master` wymagająca joba `ci` to jedyna prawdziwa bramka
 przed deployem produkcji — do włączenia w ustawieniach repo.
 
@@ -328,10 +334,11 @@ przed deployem produkcji — do włączenia w ustawieniach repo.
 | Schemat kolekcji / content format / `locations.json` | zgoda usera (CLAUDE.md); dopisz asercję referencji w L3; build na pełnej treści | L0 + L3 |
 | Wyspę w `src/islands` | logikę wyciągnij do czystej funkcji (test L1); interakcję = scenariusz Playwright z mockiem `/api/lead`; props z builda, bez fetcha | L1 + L4 |
 | Reguły biznesowe (ceny, języki, dealer, zgoda, sprzedany) | asercja w L3 **przed** zmianą kodu (czerwona → zielona) + wpis w Dzienniku | L3 |
-| Migrację treści do CMS (9.3b–9.5) | `compare-dist` master vs gałąź = 0 różnic poza listą w opisie PR; test loadera; probe `content`; `test:dist` zielony | L1 + L3 + L6 |
+| Migrację treści do CMS (9.3b–9.5) | `pnpm compare:master` (master vs drzewo robocze) = 0 różnic poza listą w opisie PR; test loadera; probe `content`; `test:dist` zielony | L1 + L3 + L6 |
 | Integrację zewnętrzną (nowa lub zmiana API) | fixture odpowiedzi w `src/test/fixtures/<usługa>/`, test klienta z `fetchFn`, probe w `/api/health`, zmienna w `.env.example` (test L0 to sprawdzi) | L1 + L0 + L6 |
 | `global.css` `@theme`, tokeny | zgoda usera; Lighthouse lokalnie na 3 szablonach | L5 |
-| `vercel.json` przekierowania | asercja w L3: każde `destination` istnieje w `dist` | L3 |
+| `vercel.json` przekierowania | `test:dist` (`links`): każde `destination` istnieje w `dist`, a `source` liczy się jako poprawny link wewnętrzny | L3 |
+| Stronę z własnymi `alternates` (jacht, stock, marka, blog) | te same `alternates` do `Layout` **i** `SiteHeader`; locale bez wpisu = brak alternatu (`entryLocales`), nigdy fallback | L3 |
 | Dokumentację kontraktów (`docs/kontrakt-*`) | jeśli kontrakt ma odpowiednik w kodzie (pola dealu, schemat leada), test porównuje tabelę z kodem | L0 |
 | Usuwasz feature / plik | `knip` czysty; grep po `CLAUDE.md` i `docs/` za nazwą | L0 |
 
@@ -373,13 +380,41 @@ zależności)
       oznaczone jako nienapisane, `src/test/` w strukturze
 - [x] ten plik → tracker. Wynik: 28 plików / 171 testów (było 16 / 115)
 
-**PR T2 — kontrakt builda + CI**
-- [ ] `node-html-parser`; projekt `dist` z regułami §3 L3 (najpierw te,
-      które dziś przechodzą; B2/B3/B6 jako testy czerwone → fix w tym PR)
-- [ ] `ci.yml`: nowa kolejność, `test:dist`, `lychee --offline`, `knip`
-      (continue-on-error), artefakty, secrets zamiast hardcode
-- [ ] `scripts/compare-dist.ts`: test jednostkowy normalizacji + skrypt
-      `pnpm compare:master` (build master do `tmp/`, build HEAD, diff)
+**PR T2 — kontrakt builda + CI** ✅ 2026-10-30 (zależności: `node-html-parser`,
+`knip`, `@vitest/coverage-v8`)
+- [x] projekt `dist` (`src/test/dist/`, 30 testów na 365 stronach, ~5 s):
+      `structure` (atrapy przekierowań, `html[lang]`, canonical/og:url,
+      hreflang istnieje + symetria + x-default, robots wg
+      `PUBLIC_INDEXING_ENABLED`, sitemap = strony − 404 i alternaty
+      zgodne z `<head>`, title/description unikalne), `business` (ceny
+      tylko w kontekście stocku, kontekst formularza z `props` wyspy,
+      sekcja „od ręki” ⇔ nowy egzemplarz, kolekcja dealerów prywatna,
+      sekrety i moduły serwerowe poza bundlem, strony marek kompletne),
+      `links` (każdy `href`/`src`/`srcset` → plik albo przekierowanie
+      z `vercel.json`, przełącznik języka, `alt`/`width`/`height`, LCP,
+      JSON-LD, `LocalBusiness` per showroom). Pierwszy bieg na starym
+      buildzie: 15/30 czerwonych → znalezione B8, B9, B10 (dziennik §10)
+- [x] B2 (`entryLocales` w `src/lib/i18n.ts`; hreflang i przełącznik
+      języka tylko do istniejących wersji na stronach jachtu, stocku,
+      marki), B3 (strony marek z wpisów kolekcji, brak wpisu = 404
+      w buildzie, nie redirect), B6 (`src/test/references.test.ts`:
+      id = `lang/key`, `defaultDealer`, `modelKey`, marka spójna między
+      językami, `locations.json` → marki/dealer; `dealerId` opcjonalny
+      wg kontraktu)
+- [x] `ci.yml`: typecheck → `test:coverage` → build → `test:dist` → `knip`
+      (warn) → artefakt `coverage/`; `concurrency`, timeout, secrets
+      z fallbackiem. Bez `lychee --offline` (patrz §5)
+- [x] `scripts/compare-dist.ts` eksportuje `compareDist`/`normalize`
+      (test: `scripts/compare-dist.test.ts`); `pnpm compare:master [ref]`
+      = `scripts/compare-master.ts` (build drzewa roboczego + build `ref`
+      w worktree pod `tmp/`, diff)
+- [x] pokrycie: `pnpm test:coverage`, próg 80 % linii na `src/lib/server/**`
+      (stan: 94,8 %)
+- [x] `knip.json` (wejścia: testy i skrypty). Baseline do sprzątnięcia
+      osobno: 5 nieużywanych plików (`visual-editing.ts`, `SpecTable`,
+      `TrustBand`, `StickyMobileCta`, `AnchorNav`), `tslib`,
+      `@fontsource/ibm-plex-mono`; `tailwindcss` to fałszywy alarm (import
+      z CSS)
 
 **PR T3 — zdrowie integracji**
 - [ ] `src/lib/server/health/` + `/api/health` + testy
@@ -416,3 +451,11 @@ ESLint/Prettier przy drugim deweloperze.
 | Data | Co doszło | PR |
 |---|---|---|
 | 2026-10-27 | Strategia spisana; baza: 16 plików / 106 testów | — |
+| 2026-10-27 | T1: projekty Vitest, testy architektury, L1/L2, B1/B4/B5. 28 plików / 171 testów | T1 |
+| 2026-10-30 | **B10** (prod): wszystkie 20 stron marek `/{lang}/brands/{brand}/` było atrapami przekierowania — `[brand].astro` szukało wpisu po id z sufiksem `.md`, którego loader `glob` nie dodaje; `Astro.redirect` w buildzie statycznym = strona z `meta refresh`. Test: `structure` „never a redirect stub” + `business` „brand pages”. Fix: id bez rozszerzenia, brak wpisu → 404 | T2 |
+| 2026-10-30 | **B8**: przełącznik języka na `/en/blog/page/N/` linkował do `/es|it|pl/blog/page/N/`, których nie ma (`BlogListing` nie przekazywał `alternates` do `SiteHeader`). Test: `links` „language switcher”. Reguła: każda strona przekazuje te same `alternates` do `Layout` i `SiteHeader` | T2 |
+| 2026-10-30 | **B9**: `<link rel="icon" href="/favicon.ico">` bez pliku w `public/` (404 na każdej stronie). Test: `links` „every href/src resolves”. Usunięty link; plik `.ico` → `docs/launch-checklist.md` | T2 |
+| 2026-10-30 | Sitemapa zawierała `https://herev.com/` (atrapa przekierowania). Test: `structure` „URL set”. Fix: filtr w `astro.config.mjs` | T2 |
+| 2026-10-30 | Listingi marek `/{lang}/yachts/{brand}/` miały identyczny `meta description` (sam podtytuł floty). Test: `structure` „unique within a locale”. Fix: prefiks z nazwą marki | T2 |
+| 2026-10-30 | **B11**: `vercel.json` kierował stare URL-e `aurora-42` na `/yachts/chris-craft/aurora-42/`, a wpis ma `brand: galeon` (po publikacji szkicu = 301 na 404). Test: `links` „every vercel.json redirect lands on a built page” (szkic liczy się tylko pod URL-em, który dostanie). Fix: marka w `destination` | T2 |
+| 2026-10-30 | Nie testowane świadomie: obrazy z Sanity w listingu bloga bez `width`/`height` (CLS; `sanityImage.ts`, do decyzji przy blogu), opisy postów z CMS mogą się powtarzać (→ projekt `content`), `public/700 SKY-…/` w buildzie (→ checklist) | T2 |

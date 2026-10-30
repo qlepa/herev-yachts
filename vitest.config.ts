@@ -9,6 +9,14 @@ import { getViteConfig } from 'astro/config';
 export default getViteConfig(
   {
     test: {
+      // `pnpm test:coverage` — server-side logic must stay covered (§3 L1).
+      coverage: {
+        provider: 'v8',
+        include: ['src/lib/server/**/*.ts'],
+        exclude: ['**/*.test.ts'],
+        reporter: ['text-summary', 'lcov'],
+        thresholds: { lines: 80 },
+      },
       projects: [
         {
           extends: true,

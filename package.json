@@ -15,9 +15,11 @@
     "test": "vitest run --project unit",
     "test:unit": "vitest run --project unit",
     "test:watch": "vitest --project unit",
-    "test:dist": "vitest run --project dist --passWithNoTests",
+    "test:dist": "vitest run --project dist",
     "test:content": "vitest run --project content --passWithNoTests",
+    "test:coverage": "vitest run --project unit --coverage",
     "verify": "node scripts/verify.ts",
+    "compare:master": "node scripts/compare-master.ts",
     "prepare": "node scripts/setup-hooks.ts"
   },
   "dependencies": {
@@ -53,7 +55,10 @@
   "devDependencies": {
     "@astrojs/check": "^0.9.9",
     "@types/jsdom": "^30.0.0",
+    "@vitest/coverage-v8": "4.1.10",
     "jsdom": "^29.1.1",
+    "knip": "6.43.0",
+    "node-html-parser": "9.0.5",
     "typescript": "^6.0.3",
     "vitest": "^4.1.10"
   }

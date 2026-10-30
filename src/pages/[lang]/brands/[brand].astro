@@ -7,8 +7,7 @@ import HeroSection from '../../../components/sections/HeroSection.astro';
 import FleetStrip from '../../../components/sections/FleetStrip.astro';
 import LeadModule from '../../../components/sections/LeadModule.astro';
 import SectionLabel from '../../../components/ui/SectionLabel.astro';
-import { LOCALES, type Locale } from '../../../lib/i18n';
-import { BRAND_KEYS } from '../../../content.config';
+import { entryLocales, type Locale } from '../../../lib/i18n';
 import type { BrandKey, CategoryKey } from '../../../content.config';
 import { loadTranslations } from '../../../lib/server/cms/uiStrings';
 import { getBrandHero, getYachtHero } from '../../../lib/images';
@@ -16,14 +15,10 @@ import { metresToFeet } from '../../../lib/format';
 import leadPic from '../../../assets/site/lead-image.avif';
 import { staticPathProps } from '../../../lib/staticPaths';
 
+// One page per brand entry: a locale without the entry has no page (B3).
 export async function getStaticPaths() {
-  const paths = [];
-  for (const lang of LOCALES) {
-    for (const brand of BRAND_KEYS) {
-      paths.push({ params: { lang, brand } });
-    }
-  }
-  return paths;
+  const entries = await getCollection('brands');
+  return entries.map((e) => ({ params: { lang: e.id.split('/')[0], brand: e.data.brandKey } }));
 }
 
 const { lang, brand } = Astro.params as { lang: Locale; brand: BrandKey };
@@ -39,13 +34,10 @@ const brandDisplayMap: Record<BrandKey, string> = {
   'chris-craft': 'CHRIS-CRAFT',
 };
 
-// Fetch brand entry for this locale
-const brandEntries = await getCollection(
-  'brands',
-  (e) => e.id === `${lang}/${brand}.md`,
-);
-const brandEntry = brandEntries[0];
-if (!brandEntry) return Astro.redirect(`/${lang}/brands/`);
+// Fetch brand entry for this locale (ids are `lang/key`, without extension)
+const brandEntries = await getCollection('brands', (e) => e.data.brandKey === brand);
+const brandEntry = brandEntries.find((e) => e.id === `${lang}/${brand}`);
+if (!brandEntry) return new Response(null, { status: 404 });
 
 const { Content } = await render(brandEntry);
 
@@ -76,7 +68,7 @@ const yachtCards = await Promise.all(
 
 const seoTitle = brandEntry.data.seo?.title ?? `${brandEntry.data.name} ${Astro.locals.siteSettings.titleSuffix}`;
 const seoDescription = brandEntry.data.seo?.description ?? brandEntry.data.tagline;
-const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/brands/${brand}/` }));
+const alternates = entryLocales(brandEntries.map((e) => e.id)).map((l) => ({ lang: l, href: `/${l}/brands/${brand}/` }));
 
 ---
 
@@ -87,6 +79,7 @@ const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/brands/${brand}/`
     variant="ink"
     currentPath={`/${lang}/brands/${brand}/`}
     nav={t.nav}
+    alternates={alternates}
   />
 
   <main>

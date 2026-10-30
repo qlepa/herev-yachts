@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { buildAlternates, getLocalePaths, LOCALES } from './i18n';
+import { buildAlternates, entryLocales, getLocalePaths, LOCALES } from './i18n';
 
 describe('i18n', () => {
   test('getLocalePaths: one static path per locale, en first (x-default)', () => {
@@ -18,5 +18,12 @@ describe('i18n', () => {
 
   test('buildAlternates: locale root and relative output', () => {
     expect(buildAlternates('/it/').map((a) => a.href)).toEqual(['/en/', '/pl/', '/es/', '/it/']);
+  });
+
+  test('entryLocales: only the locales that have the entry, in LOCALES order, never a fallback (B2)', () => {
+    expect(entryLocales(['it/galeon-500-fly', 'en/galeon-500-fly'])).toEqual(['en', 'it']);
+    expect(entryLocales(['en/x', 'en/y'])).toEqual(['en']);
+    expect(entryLocales([])).toEqual([]);
+    expect(entryLocales(['english/x', 'xen/y'])).toEqual([]);
   });
 });

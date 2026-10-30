@@ -63,7 +63,8 @@ const alternates = LOCALES.map((l) => ({
 }));
 
 const pageTitle       = `${brandDisplay} — ${t.brandPage.fleetHeading} ${Astro.locals.siteSettings.titleSuffix}`;
-const pageDescription = t.brandPage.fleetSubheading;
+// Prefixed with the brand: the fleet subheading alone is the same on every brand listing.
+const pageDescription = `${brandDisplay} — ${t.brandPage.fleetSubheading}`;
 ---
 
 <Layout lang={lang} title={pageTitle} description={pageDescription} alternates={alternates}>

@@ -19,7 +19,7 @@ import RecommendedYachts from '../../../../components/sections/RecommendedYachts
 import StockStrip from '../../../../components/sections/StockStrip.astro';
 import YachtLeadModule from '../../../../components/sections/YachtLeadModule.astro';
 import MobileCta from '../../../../components/ui/MobileCta.astro';
-import { LOCALES, type Locale } from '../../../../lib/i18n';
+import { entryLocales, LOCALES, type Locale } from '../../../../lib/i18n';
 import type { BrandKey, CategoryKey } from '../../../../content.config';
 import { loadTranslations } from '../../../../lib/server/cms/uiStrings';
 import {
@@ -168,7 +168,12 @@ const recommendedCards = await Promise.all(
 const stockCards = await toStockCards(await getNewStockForModel(lang, data.translationKey), lang, t);
 
 // --- SEO -------------------------------------------------------------------
-const alternates = LOCALES.map((l) => ({ lang: l, href: `/${l}/yachts/${brand}/${yachtSlug}/` }));
+// hreflang and language switcher only to locales where this model is published (B2)
+const translations = await getCollection('yachts', (e) => e.data.translationKey === yachtSlug && !e.data.draft);
+const alternates = entryLocales(translations.map((e) => e.id)).map((l) => ({
+  lang: l,
+  href: `/${l}/yachts/${brand}/${yachtSlug}/`,
+}));
 const seoTitle       = data.seo?.title       ?? `${fullName} ${Astro.locals.siteSettings.titleSuffix}`;
 const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${data.lengthM}m.`;
 ---
@@ -180,6 +185,7 @@ const seoDescription = data.seo?.description ?? data.tagline ?? `${fullName}, ${
     variant="ink"
     currentPath={`/${lang}/yachts/${brand}/${yachtSlug}/`}
     nav={t.nav}
+    alternates={alternates}
   />
 
   <main>
